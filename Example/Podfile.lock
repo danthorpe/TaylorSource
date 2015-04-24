@@ -1,0 +1,48 @@
+PODS:
+  - CocoaLumberjack (1.9.2):
+    - CocoaLumberjack/Extensions (= 1.9.2)
+  - CocoaLumberjack/Core (1.9.2)
+  - CocoaLumberjack/Extensions (1.9.2):
+    - CocoaLumberjack/Core
+  - DateTools (1.5.0)
+  - TaylorSource/Base (0.9.0)
+  - TaylorSource/YapDatabase (0.9.0):
+    - TaylorSource/Base
+    - YapDatabase (~> 2.6)
+    - YapDatabaseExtensions (~> 1)
+  - YapDatabase (2.6.1):
+    - YapDatabase/standard (= 2.6.1)
+  - YapDatabase/common (2.6.1):
+    - CocoaLumberjack (~> 1)
+  - YapDatabase/standard (2.6.1):
+    - YapDatabase/common
+  - YapDatabaseExtensions (1.2.0):
+    - YapDatabase (~> 2.6)
+    - YapDatabaseExtensions/Common (= 1.2.0)
+  - YapDatabaseExtensions/Common (1.2.0):
+    - YapDatabase (~> 2.6)
+
+DEPENDENCIES:
+  - DateTools (from `https://github.com/yakatak/DateTools.git`, branch `bug/DT-56_import_bundle_from_framework`)
+  - TaylorSource/YapDatabase (from `../`)
+
+EXTERNAL SOURCES:
+  DateTools:
+    :branch: bug/DT-56_import_bundle_from_framework
+    :git: https://github.com/yakatak/DateTools.git
+  TaylorSource:
+    :path: "../"
+
+CHECKOUT OPTIONS:
+  DateTools:
+    :commit: 62000aa443e1a275073c25d0fff03d1ec81d1a53
+    :git: https://github.com/yakatak/DateTools.git
+
+SPEC CHECKSUMS:
+  CocoaLumberjack: 628fca2e88ef06f7cf6817309aa405f325d9a6fa
+  DateTools: b93a2c2017747329c6077c7d7e8a75106e23d0d7
+  TaylorSource: 02056c03a23398baacf381611fac182f45b986a6
+  YapDatabase: 13566c87dc9226a0f15d755edba08e8ad94cac9f
+  YapDatabaseExtensions: 4af2509fcf9c368468c7dc1c0362fe05c4e20c3c
+
+COCOAPODS: 0.36.4

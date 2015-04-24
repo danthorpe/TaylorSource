@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="uIc-65-Fah">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="Yqh-US-Efu">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uIc-65-Fah" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xJI-TI-ZiA">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Mb1-30-b97" kind="relationship" relationship="rootViewController" id="sOP-ZY-KV1"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4ca-hD-cQu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="522" y="735"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="tRa-IC-tZ6">
+            <objects>
+                <viewController id="Mb1-30-b97" customClass="ViewController" customModule="Datasources" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="13W-Ki-LbH"/>
+                        <viewControllerLayoutGuide type="bottom" id="W9A-ge-1GH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xJT-2T-4Od">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="GTO-EF-cuC">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N37-rZ-D1D">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <items>
+                                    <barButtonItem title="Remove All" id="jfa-9J-vzb">
+                                        <connections>
+                                            <action selector="removeAll:" destination="Mb1-30-b97" id="fKF-G9-4Wi"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="nvd-us-J53"/>
+                                    <barButtonItem systemItem="refresh" id="V87-Xf-rOm">
+                                        <connections>
+                                            <action selector="refreshEvents:" destination="Mb1-30-b97" id="aUr-9q-SP6"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="N37-rZ-D1D" secondAttribute="trailing" id="AvF-d9-lYV"/>
+                            <constraint firstItem="W9A-ge-1GH" firstAttribute="top" secondItem="N37-rZ-D1D" secondAttribute="bottom" id="Jnv-9q-zvd"/>
+                            <constraint firstItem="GTO-EF-cuC" firstAttribute="leading" secondItem="xJT-2T-4Od" secondAttribute="leading" id="L7c-tC-l3m"/>
+                            <constraint firstItem="N37-rZ-D1D" firstAttribute="leading" secondItem="xJT-2T-4Od" secondAttribute="leading" id="f2U-zo-pUU"/>
+                            <constraint firstItem="GTO-EF-cuC" firstAttribute="trailing" secondItem="xJT-2T-4Od" secondAttribute="trailing" id="hyf-Gf-PJa"/>
+                            <constraint firstItem="GTO-EF-cuC" firstAttribute="top" secondItem="13W-Ki-LbH" secondAttribute="bottom" constant="-64" id="oZM-vb-TPG"/>
+                            <constraint firstItem="N37-rZ-D1D" firstAttribute="top" secondItem="GTO-EF-cuC" secondAttribute="bottom" id="sdd-dr-AaX"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Aaw-W1-JSt">
+                        <nil key="title"/>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="wgp-Ma-LG6">
+                            <rect key="frame" x="180" y="7" width="240" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="First"/>
+                                <segment title="Second"/>
+                                <segment title=""/>
+                            </segments>
+                        </segmentedControl>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="0QH-F2-Wgb">
+                            <connections>
+                                <action selector="addEvent:" destination="Mb1-30-b97" id="84s-JT-hHD"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="segmentedControl" destination="wgp-Ma-LG6" id="MlQ-Pc-eXs"/>
+                        <outlet property="tableView" destination="GTO-EF-cuC" id="ngx-BF-5li"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FCT-uS-oIQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1172" y="735"/>
+        </scene>
+    </scenes>
+</document>
