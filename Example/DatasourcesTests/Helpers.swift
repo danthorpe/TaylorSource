@@ -49,6 +49,14 @@ class StubbedCollectionView: UICollectionView {
     }
 }
 
+extension NSIndexPath {
+    static var first: NSIndexPath {
+        return NSIndexPath(forItem: 0, inSection: 0)
+    }
+}
+
+// MARK: - Fake Models
+
 struct Person {
     enum Gender: Int {
         case Unknown = 1, Female, Male

@@ -9,6 +9,8 @@ import YapDatabase
 import Datasources
 import YapDatabaseExtensions
 import TaylorSource
+import Quick
+import Nimble
 
 func numberOfChangesInChangeset(changeset: YapDatabaseViewMappings.Changeset) -> Int {
     return changeset.sections.count + changeset.items.count
@@ -25,14 +27,6 @@ func numberOfItemChangesOfType(type: YapDatabaseViewChangeType, inChangeset chan
 func validateChangeset(expectation: XCTestExpectation, validations: [YapDatabaseViewMappings.Changes]) -> YapDatabaseViewMappings.Changes {
     return { changeset in
 
-        println("Number of changes: \(numberOfChangesInChangeset(changeset))")
-        println("Number of section inserts: \(numberOfSectionChangesOfType(.Insert, inChangeset: changeset))")
-        println("Number of section deletes: \(numberOfSectionChangesOfType(.Delete, inChangeset: changeset))")
-        println("Number of item inserts: \(numberOfItemChangesOfType(.Insert, inChangeset: changeset))")
-        println("Number of item deletes: \(numberOfItemChangesOfType(.Delete, inChangeset: changeset))")
-        println("Number of item moves: \(numberOfItemChangesOfType(.Move, inChangeset: changeset))")
-        println("Number of item updates: \(numberOfItemChangesOfType(.Update, inChangeset: changeset))")
-
         for validation in validations {
             validation(changeset)
         }
@@ -42,14 +36,13 @@ func validateChangeset(expectation: XCTestExpectation, validations: [YapDatabase
 
 func validateChangesetHasSectionInsert(count: Int = 1) -> YapDatabaseViewMappings.Changes {
     return { changeset in
-        println("changeset: \(changeset)")
-        XCTAssertEqual(count, numberOfSectionChangesOfType(.Insert, inChangeset: changeset), "Changeset did not have the correct number of section insets")
+        expect(numberOfSectionChangesOfType(.Insert, inChangeset: changeset)).to(equal(count))
     }
 }
 
 class ObserverTests: XCTestCase {
 
-    let configuration: Configuration<Event> = events(byColor: true)
+    let configuration: TaylorSource.Configuration<Event> = events(byColor: true)
 
     func createOneEvent(color: Event.Color = .Red) -> Event {
         return Event.create(color: color)

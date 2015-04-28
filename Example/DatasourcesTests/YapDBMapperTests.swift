@@ -9,43 +9,72 @@ import YapDatabase
 import Datasources
 import YapDatabaseExtensions
 import TaylorSource
+import Quick
+import Nimble
 
-class MapperTests: XCTestCase {
-    let event = Event.create(color: .Red)
-    let configuration: Configuration<Event> = events()
-}
+class MapperSpec: QuickSpec {
 
-extension MapperTests {
+    override func spec() {
+        describe("Mapper") {
 
-    func testMapper_EmptyDatabase_EndIndexIsZero() {
-        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
-        let mapper = Mapper(database: db, configuration: configuration)
-        XCTAssertEqual(mapper.startIndex, 0, "The start index should be zero")
-        XCTAssertEqual(mapper.endIndex, 0, "The end index should be zero")
-    }
+            var db: YapDatabase!
+            var mapper: Mapper<Event>!
 
-    func testMapper_NonEmptyDatabase_EndIndexIsCorrect() {
-        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
-        db.write(event)
-        let mapper = Mapper(database: db, configuration: configuration)
-        XCTAssertEqual(mapper.startIndex, 0, "The start index should be zero")
-        XCTAssertEqual(mapper.endIndex, 1, "The end index should be zero")
-    }
+            beforeEach { (metadata: ExampleMetadata) -> Void in
+                db = createYapDatabase(__FILE__, suffix: metadata.example.name)
+            }
 
-    func testMapper_NonEmptyDatabase_AbleToAccessByIndexPath() {
-        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
-        db.write(event)
-        let mapper = Mapper(database: db, configuration: configuration)
-        XCTAssertTrue(mapper.itemAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) != nil, "Should be able to access items by index path.")
-    }
+            context("when database is empty") {
+                beforeEach {
+                    mapper = Mapper(database: db, configuration: events())
+                }
 
-    func testMapper_NonEmptyDatabase_AbleToReverseLookupIndexPathFromKey() {
-        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
-        db.write(event)
-        let mapper = Mapper(database: db, configuration: configuration)
-        let indexPath = mapper.indexPathForKey(keyForPersistable(event), inCollection: Event.collection)
-        XCTAssertNotNil(indexPath, "Index Path should have been found.")
-        XCTAssertEqual(NSIndexPath(forRow: 0, inSection: 0), indexPath!, "Index path should be the first one.")
+                describe("initially") {
+                    describe("the endIndex") {
+                        it("is 0") {
+                            expect(mapper.startIndex).to(equal(0))
+                            expect(mapper.endIndex).to(equal(0))
+                        }
+                    }
+                }
+            }
+
+            context("when database has one item") {
+
+                var event: Event!
+
+                beforeEach {
+                    event = Event.create(color: .Red)
+                    db.write(event)
+                    mapper = Mapper(database: db, configuration: events())
+                }
+
+                describe("initially") {
+                    describe("the endIndex") {
+                        it("is 1") {
+                            expect(mapper.startIndex).to(equal(0))
+                            expect(mapper.endIndex).to(equal(1))
+                        }
+                    }
+                }
+
+                describe("lookup items by indexPath") {
+                    describe("the first index path") {
+                        it("is the item") {
+                            expect(mapper.itemAtIndexPath(NSIndexPath.first)).to(equal(event))
+                        }
+                    }
+                }
+
+                describe("reverse lookup items") {
+                    describe("the first item") {
+                        it("is the first index path") {
+                            expect(mapper.indexPathForKey(keyForPersistable(event), inCollection: Event.collection)).to(equal(NSIndexPath.first))
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
