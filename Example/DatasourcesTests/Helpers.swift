@@ -8,7 +8,9 @@ import YapDatabase
 import YapDatabaseExtensions
 import TaylorSource
 
-func createYapDatabase(file: String, suffix: String? = .None) -> YapDatabase {
+typealias DatabaseOperationsBlock = (YapDatabase) -> Void
+
+func createYapDatabase(file: String, suffix: String? = .None, operations: DatabaseOperationsBlock? = .None) -> YapDatabase {
 
     func pathToDatabase(name: String, suffix: String? = .None) -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
@@ -26,7 +28,9 @@ func createYapDatabase(file: String, suffix: String? = .None) -> YapDatabase {
     assert(!path.isEmpty, "Path should not be empty.")
     NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
 
-    return YapDatabase(path: path)
+    let db =  YapDatabase(path: path)
+    operations?(db)
+    return db
 }
 
 class StubbedTableView: UITableView {

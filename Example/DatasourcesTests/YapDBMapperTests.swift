@@ -6,9 +6,9 @@
 import UIKit
 import XCTest
 import YapDatabase
-import Datasources
 import YapDatabaseExtensions
 import TaylorSource
+import Datasources
 import Quick
 import Nimble
 

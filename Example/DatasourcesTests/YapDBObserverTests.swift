@@ -46,17 +46,17 @@ func validateChangesetHasRowInsert(count: Int = 1) -> YapDatabaseViewMappings.Ch
     }
 }
 
+func createOneEvent(color: Event.Color = .Red) -> Event {
+    return Event.create(color: color)
+}
+
+func createManyEvents(color: Event.Color = .Red) -> [Event] {
+    return map(0..<5) { _ in createOneEvent(color: color) }
+}
+
 class ObserverTests: XCTestCase {
 
     let configuration: TaylorSource.Configuration<Event> = events(byColor: true)
-
-    func createOneEvent(color: Event.Color = .Red) -> Event {
-        return Event.create(color: color)
-    }
-
-    func createManyEvents(color: Event.Color = .Red) -> [Event] {
-        return map(0..<5) { _ in self.createOneEvent(color: color) }
-    }
 }
 
 extension ObserverTests {
