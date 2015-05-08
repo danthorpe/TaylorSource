@@ -40,6 +40,12 @@ func validateChangesetHasSectionInsert(count: Int = 1) -> YapDatabaseViewMapping
     }
 }
 
+func validateChangesetHasRowInsert(count: Int = 1) -> YapDatabaseViewMappings.Changes {
+    return { changeset in
+        expect(numberOfItemChangesOfType(.Insert, inChangeset: changeset)).to(equal(count))
+    }
+}
+
 class ObserverTests: XCTestCase {
 
     let configuration: TaylorSource.Configuration<Event> = events(byColor: true)
@@ -58,8 +64,8 @@ extension ObserverTests {
     func testObserver_EmptyDatabase_EndIndexIsZero() {
         let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
         let observer = Observer(database: db, changes: { changeset in }, configuration: configuration)
-        XCTAssertEqual(observer.startIndex, 0, "The start index should be zero")
-        XCTAssertEqual(observer.endIndex, 0, "The end index should be zero")
+        expect(observer.startIndex).to(equal(0))
+        expect(observer.endIndex).to(equal(0))
     }
 
     func testObserver_WriteOneObject_ChangesetHasOneSectionInsert() {
@@ -75,6 +81,23 @@ extension ObserverTests {
         connection.write(createOneEvent())
         waitForExpectationsWithTimeout(5.0, handler: nil)
     }
+
+    func testObserver_DatabaseWithOneRow_WriteOneObject_ChangesetHasOneRowInsert() {
+        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
+        let connection = db.newConnection()
+        let expectation = expectationWithDescription("Writing one object")
+
+        connection.write(createOneEvent())
+
+        let observer = Observer(
+            database: db,
+            changes: validateChangeset(expectation, [validateChangesetHasRowInsert()]),
+            configuration: configuration)
+
+        connection.write(createOneEvent())
+        waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
 
     func testObserver_WriteManyObjectToOneGroup_ChangesetHasOneSectionInsert() {
         let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
@@ -107,7 +130,5 @@ extension ObserverTests {
         waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 }
-
-
 
 

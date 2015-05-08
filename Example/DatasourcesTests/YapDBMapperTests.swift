@@ -20,7 +20,7 @@ class MapperSpec: QuickSpec {
             var db: YapDatabase!
             var mapper: Mapper<Event>!
 
-            beforeEach { (metadata: ExampleMetadata) -> Void in
+            beforeEach { metadata in
                 db = createYapDatabase(__FILE__, suffix: metadata.example.name)
             }
 
