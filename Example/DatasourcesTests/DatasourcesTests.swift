@@ -14,7 +14,7 @@ class StaticDatasourceTests: XCTestCase {
     typealias Datasource = StaticDatasource<Factory>
 
     let view = StubbedTableView()
-    let factory = Factory(cellKey: "cell-key", supplementaryKey: "supplementary-key")
+    let factory = Factory()
     let data: [Event] = map(0..<5) { (index) -> Event in Event.create() }
     var datasource: Datasource!
 
@@ -31,20 +31,25 @@ class StaticDatasourceTests: XCTestCase {
     }
 
     override func setUp() {
-        factory.registerCell(.ClassWithIdentifier(UITableViewCell.self, "cell"), inView: view, withKey: "cell-key") { (_, _, _) in }
+        factory.registerCell(.ClassWithIdentifier(UITableViewCell.self, "cell"), inView: view) { (_, _, _) in }
         datasource = Datasource(id: "test datasource", factory: factory, items: data)
     }
 
-    func registerHeader(key: String = "supplementary-key", config: Factory.SupplementaryViewConfiguration) {
+    func registerHeader(key: String? = .None, config: Factory.SupplementaryViewConfiguration) {
         registerSupplementaryView(.Header, key: key, config: config)
     }
 
-    func registerFooter(key: String = "supplementary-key", config: Factory.SupplementaryViewConfiguration) {
+    func registerFooter(key: String? = .None, config: Factory.SupplementaryViewConfiguration) {
         registerSupplementaryView(.Footer, key: key, config: config)
     }
 
-    func registerSupplementaryView(kind: SupplementaryElementKind, key: String = "supplementary-key", config: Factory.SupplementaryViewConfiguration) {
-        datasource.factory.registerSupplementaryView(.ClassWithIdentifier(UITableViewHeaderFooterView.self, "\(kind)"), kind: kind, inView: view, withKey: key, configuration: config)
+    func registerSupplementaryView(kind: SupplementaryElementKind, key: String? = .None, config: Factory.SupplementaryViewConfiguration) {
+        if let key = key {
+            datasource.factory.registerSupplementaryView(.ClassWithIdentifier(UITableViewHeaderFooterView.self, "\(kind)"), kind: kind, inView: view, withKey: key, configuration: config)
+        }
+        else {
+            datasource.factory.registerSupplementaryView(.ClassWithIdentifier(UITableViewHeaderFooterView.self, "\(kind)"), kind: kind, inView: view, configuration: config)
+        }
     }
 
     func validateSupplementaryView(kind: SupplementaryElementKind, exists: Bool, atIndexPath indexPath: NSIndexPath) {

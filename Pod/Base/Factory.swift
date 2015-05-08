@@ -272,23 +272,39 @@ public class Factory<
 
     typealias ReuseIdentifier = String
 
-    let getCellKey: GetCellKey
-    let getSupplementaryKey: GetSupplementaryKey
+    static var defaultCellKey: String {
+        return "Default Cell Key"
+    }
+
+    static var defaultSuppplementaryViewKey: String {
+        return "Default Suppplementary View Key"
+    }
+
+    let getCellKey: GetCellKey?
+    let getSupplementaryKey: GetSupplementaryKey?
 
     var cells = [String: (ReuseIdentifier, CellConfig)]()
     var views = [SupplementaryElementIndex: (ReuseIdentifier, SupplementaryViewConfig)]()
     var texts = [SupplementaryElementKind: SupplementaryTextConfig]()
 
-    init(cell: GetCellKey, supplementary: GetSupplementaryKey) {
+    init(cell: GetCellKey? = .None, supplementary: GetSupplementaryKey? = .None) {
         getCellKey = cell
         getSupplementaryKey = supplementary
     }
 
     // Registration
 
+    public func registerCell(descriptor: ReusableViewDescriptor, inView view: View, configuration: CellConfig) {
+        registerCell(descriptor, inView: view, withKey: self.dynamicType.defaultCellKey, configuration: configuration)
+    }
+
     public func registerCell(descriptor: ReusableViewDescriptor, inView view: View, withKey key: String, configuration: CellConfig) {
         descriptor.registerInView(view)
         cells[key] = (descriptor.identifier, configuration)
+    }
+
+    public func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: View, configuration: SupplementaryViewConfig) {
+        registerSupplementaryView(descriptor, kind: kind, inView: view, withKey: self.dynamicType.defaultSuppplementaryViewKey, configuration: configuration)
     }
 
     public func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: View, withKey key: String, configuration: SupplementaryViewConfig) {
@@ -303,7 +319,7 @@ public class Factory<
     // Vending
 
     public func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) -> Cell {
-        let key = getCellKey(item, index)
+        let key = getCellKey?(item, index) ?? self.dynamicType.defaultCellKey
         if let (reuseIdentifier: String, configure: CellConfig) = cells[key] {
             let cell = view.dequeueCellWithIdentifier(reuseIdentifier, atIndexPath: index.indexPath) as! Cell
             configure(cell: cell, item: item, index: index)
@@ -313,7 +329,7 @@ public class Factory<
     }
 
     public func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: View, atIndex index: SupplementaryIndex) -> SupplementaryView? {
-        let key = getSupplementaryKey(index)
+        let key = getSupplementaryKey?(index) ?? self.dynamicType.defaultSuppplementaryViewKey
         if let (reuseIdentifier: String, configure: SupplementaryViewConfig) = views[SupplementaryElementIndex(kind: kind, key: key)] {
             if let supplementaryView = view.dequeueSupplementaryViewWithKind(kind, identifier: reuseIdentifier, atIndexPath: index.indexPath) as? SupplementaryView {
                 configure(supplementaryView: supplementaryView, index: index)
@@ -332,8 +348,16 @@ public class Factory<
 
     // Convenience
 
+    public func registerHeaderView(descriptor: ReusableViewDescriptor, inView view: View, configuration: SupplementaryViewConfig) {
+        registerSupplementaryView(descriptor, kind: .Header, inView: view, configuration: configuration)
+    }
+
     public func registerHeaderView(descriptor: ReusableViewDescriptor, inView view: View, withKey key: String, configuration: SupplementaryViewConfig) {
         registerSupplementaryView(descriptor, kind: .Header, inView: view, withKey: key, configuration: configuration)
+    }
+
+    public func registerFooterView(descriptor: ReusableViewDescriptor, inView view: View, configuration: SupplementaryViewConfig) {
+        registerSupplementaryView(descriptor, kind: .Footer, inView: view, configuration: configuration)
     }
 
     public func registerFooterView(descriptor: ReusableViewDescriptor, inView view: View, withKey key: String, configuration: SupplementaryViewConfig) {
@@ -357,15 +381,8 @@ public class BasicFactory<
     where
     View: CellBasedView>: Factory<Item, Cell, SupplementaryView, View, NSIndexPath, NSIndexPath> {
 
-    public override init(cell: GetCellKey, supplementary: GetSupplementaryKey) {
+    public override init(cell: GetCellKey? = .None, supplementary: GetSupplementaryKey? = .None) {
         super.init(cell: cell, supplementary: supplementary)
-    }
-
-    public convenience init(cellKey: String, supplementaryKey: String) {
-        self.init(
-            cell: { (_, _) in cellKey },
-            supplementary: { _ in supplementaryKey }
-        )
     }
 }
 
