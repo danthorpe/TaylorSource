@@ -39,12 +39,7 @@ struct EventsDatasource: DatasourceProviderType {
 
     init(color: Event.Color, db: YapDatabase, view: Factory.ViewType) {
 
-        let factory = Factory(
-            cell: { (item, index) in Event.collection },
-            supplementary: { index in Event.collection }
-        )
-
-        var ds = YapDBDatasource(id: "\(color) events datasource", database: db, factory: factory, processChanges: view.processChanges, configuration: eventsWithColor(color, byColor: true) { mappings in
+        var ds = YapDBDatasource(id: "\(color) events datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: eventsWithColor(color, byColor: true) { mappings in
             mappings.setIsReversed(true, forGroup: "\(color)")
         })
 
@@ -53,7 +48,7 @@ struct EventsDatasource: DatasourceProviderType {
         eventColor = color
         readWriteConnection = db.newConnection()
         datasource = ds
-        datasource.factory.registerCell(.ClassWithIdentifier(EventCell.self, "cell"), inView: view, withKey: Event.collection, configuration: EventCell.configuration())
+        datasource.factory.registerCell(.ClassWithIdentifier(EventCell.self, "cell"), inView: view, configuration: EventCell.configuration())
     }
 
     func addEvent(event: Event) {
