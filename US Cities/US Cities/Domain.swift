@@ -115,14 +115,15 @@ class CityArchiver: NSObject, NSCoding, Archiver {
 
 // MARK: - Database Views
 
-func cities(byState: Bool = true) -> YapDB.Fetch {
+func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0) -> YapDB.Fetch {
 
     let grouping: YapDB.View.Grouping = .ByObject({(collection, key, object) -> String! in
         if collection == City.collection {
-            if byState, let city: City = valueFromArchive(object) {
-                return city.stateId
+            if let city: City = valueFromArchive(object) {
+                if city.population > threshold {
+                    return byState ? city.stateId : collection
+                }
             }
-            return collection
         }
         return nil
     })
@@ -146,14 +147,17 @@ func cities(byState: Bool = true) -> YapDB.Fetch {
         return .OrderedSame
     })
 
-    return .View(YapDB.View(name: "cities", grouping: grouping, sorting: sorting, collections: [City.collection]))
+    let byStateName = byState ? ", by state." : "."
+    let name = "Cities above population: \(threshold)\(byStateName))"
+
+    return .View(YapDB.View(name: name, grouping: grouping, sorting: sorting, collections: [City.collection]))
 }
 
-func cities(byState: Bool = true, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> YapDB.FetchConfiguration {
-    return YapDB.FetchConfiguration(fetch: cities(byState: byState), block: mappingBlock)
+func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> YapDB.FetchConfiguration {
+    return YapDB.FetchConfiguration(fetch: cities(byState: byState, abovePopulationThreshold: threshold), block: mappingBlock)
 }
 
-func cities(byState: Bool = true, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> TaylorSource.Configuration<City> {
-    return TaylorSource.Configuration(fetch: cities(byState: byState, mappingBlock: mappingBlock), itemMapper: valueFromArchive)
+func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> TaylorSource.Configuration<City> {
+    return TaylorSource.Configuration(fetch: cities(byState: byState, abovePopulationThreshold: threshold, mappingBlock: mappingBlock), itemMapper: valueFromArchive)
 }
 

@@ -25,6 +25,7 @@ class CityCell: UITableViewCell {
         return { (cell, city, index) in
             cell.textLabel!.font = UIFont.preferredFontForTextStyle(city.capital ? UIFontTextStyleHeadline : UIFontTextStyleBody)
             cell.textLabel!.text = city.name
+            cell.detailTextLabel!.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
             cell.detailTextLabel!.text = formatter.stringFromNumber(NSNumber(integer: city.population))
         }
     }
@@ -35,10 +36,10 @@ struct CitiesDatasource: DatasourceProviderType {
     typealias Datasource = YapDBDatasource<Factory>
 
     let readWriteConnection: YapDatabaseConnection
-    let datasource: Datasource
     let formatter: NSNumberFormatter
+    var datasource: Datasource
 
-    init(db: YapDatabase, view: Factory.ViewType) {
+    init(db: YapDatabase, view: Factory.ViewType, threshold: Int) {
 
         formatter = NSNumberFormatter()
         formatter.numberStyle = .DecimalStyle
@@ -47,9 +48,7 @@ struct CitiesDatasource: DatasourceProviderType {
 
         readWriteConnection = db.newConnection()
 
-        datasource = Datasource(id: "cities datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: cities { mappings in
-
-        })
+        datasource = Datasource(id: "cities datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: cities(abovePopulationThreshold: threshold))
 
         datasource.factory.registerCell(.ClassWithIdentifier(CityCell.self, "cell"), inView: view, configuration: CityCell.configuration(formatter))
         datasource.factory.registerHeaderText { index in
@@ -68,7 +67,6 @@ struct CitiesDatasource: DatasourceProviderType {
     }
 }
 
-
 struct USStatesAndCities {
     let data: NSDictionary
 
@@ -77,27 +75,39 @@ struct USStatesAndCities {
         data = NSDictionary(contentsOfFile: path!)!
     }
 
-    func randomCity() -> (State, City) {
-        let states = data.allKeys
-        var randomIndex = Int(arc4random()) % states.count
-        let stateData = data[states[randomIndex] as! String] as! NSDictionary
-        let stateCities = stateData["StateCities"] as! [NSDictionary]
-        randomIndex = Int(arc4random()) % stateCities.count
-        let cityData = stateCities[randomIndex]
-        let state = State(name: stateData["StateName"] as! String)
+    func cityDataForState(stateName: String) -> [NSDictionary] {
+        return (data[stateName] as! NSDictionary)["StateCities"] as! [NSDictionary]
+    }
 
-        let population = (cityData["CityPopulation"] as! NSNumber).integerValue
-        let isCapital = (cityData["isCapital"] as? NSNumber)?.boolValue ?? false
+    func loadIntoDatabase(db: YapDatabase) {
+        let connection = db.newConnection()
+        var states: [State] = connection.readAll()
+        let stateNames = states.map { $0.name }
+        let remainingStateNames = (data.allKeys as! [String]).filter { contains(stateNames, $0) }
 
-        let city = City(name: cityData["CityName"] as! String, population: population, capital: isCapital, stateId: state.identifier)
+        for stateName in remainingStateNames {
 
-        return (state, city)
+            let state = State(name: stateName)
+            let cities = cityDataForState(stateName).map { (cityData: NSDictionary) -> City in
+                let cityName = cityData["CityName"] as! String
+                let population = (cityData["CityPopulation"] as! NSNumber).integerValue
+                let isCapital = (cityData["isCapital"] as? NSNumber)?.boolValue ?? false
+                return City(name: cityName, population: population, capital: isCapital, stateId: state.identifier)
+            }
+
+            connection.asyncWrite(state) { state in
+                connection.asyncWrite(cities) { cities in
+                    println("Wrote \(state.name) cities to database.")
+                }
+            }
+        }
     }
 }
 
-class ViewController: UITableViewController {
+class ViewController: UIViewController {
 
     @IBOutlet weak var addButton: UIBarButtonItem!
+    @IBOutlet weak var tableView: UITableView!
 
     lazy var data = USStatesAndCities()
     var datasource: CitiesDatasource!
@@ -105,18 +115,16 @@ class ViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = NSLocalizedString("US Cities", comment: "US Cities")
         configureDatasource()
     }
 
     func configureDatasource() {
-        datasource = CitiesDatasource(db: database, view: tableView)
+        datasource = CitiesDatasource(db: database, view: tableView, threshold: 0)
         tableViewDatasource = TableViewDataSourceProvider(datasource.datasource)
         tableView.dataSource = tableViewDatasource.tableViewDataSource
-    }
 
-    @IBAction func add(sender: AnyObject) {
-        let (state, city) = data.randomCity()
-        datasource.addCity(city, toState: state)
+        data.loadIntoDatabase(database)
     }
 }
 
