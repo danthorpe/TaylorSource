@@ -146,10 +146,10 @@
 				65FB1AC01ADFF574004FEB63 /* DatasourcesTests.swift */,
 				653B0DC51AE3E1DF00E92EA8 /* Helpers.swift */,
 				65FB1ACC1ADFF654004FEB63 /* PresentationFactoryTests.swift */,
+				65E52D171AFD0BEE007E5946 /* YapDBDatasourceTests.swift */,
 				653CADE81AEE62B3005787CC /* YapDBMapperTests.swift */,
 				653CADEA1AEFA955005787CC /* YapDBObserverTests.swift */,
 				65FB1ABE1ADFF574004FEB63 /* Supporting Files */,
-				65E52D171AFD0BEE007E5946 /* YapDBDatasourceTests.swift */,
 			);
 			path = DatasourcesTests;
 			sourceTree = "<group>";
