@@ -70,6 +70,16 @@ public protocol DatasourceType: SequenceType, CollectionType {
     :return: a Factory.Type.SupplementaryViewType instance, this should be dequeued and configured.
     */
     func viewForSupplementaryElementInView(view: FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> FactoryType.SupplementaryViewType?
+
+    /**
+    Vends a optional text for the supplementary kind
+    
+    :param: view the View which should dequeue the cell.
+    :param: kind the kind of the supplementary element. See SupplementaryElementKind
+    :param: indexPath the NSIndexPath of the item.
+    :return: a TextType?
+    */
+    func textForSupplementaryElementInView(view: FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> FactoryType.TextType?
 }
 
 /**
@@ -177,6 +187,18 @@ public final class StaticDatasource<
     */
     public func viewForSupplementaryElementInView(view: Factory.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> Factory.SupplementaryViewType? {
         return factory.supplementaryViewForKind(kind, inView: view, atIndex: indexPath)
+    }
+
+    /**
+    Will return an optional text for the supplementary kind
+
+    :param: view the View which should dequeue the cell.
+    :param: kind the kind of the supplementary element. See SupplementaryElementKind
+    :param: indexPath the NSIndexPath of the item.
+    :return: a TextType?
+    */
+    public func textForSupplementaryElementInView(view: Factory.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> Factory.TextType? {
+        return factory.supplementaryTextForKind(kind, atIndex: indexPath)
     }
 
     // SequenceType
@@ -338,6 +360,10 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
 
     public func viewForSupplementaryElementInView(view: DatasourceProvider.Datasource.FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> DatasourceProvider.Datasource.FactoryType.SupplementaryViewType? {
         return selectedDatasource.viewForSupplementaryElementInView(view, kind: kind, atIndexPath: indexPath)
+    }
+
+    public func textForSupplementaryElementInView(view: DatasourceProvider.Datasource.FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> DatasourceProvider.Datasource.FactoryType.TextType? {
+        return selectedDatasource.textForSupplementaryElementInView(view, kind: kind, atIndexPath: indexPath)
     }
 
     // SequenceType
