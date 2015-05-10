@@ -27,7 +27,7 @@ This architecture allows for different kinds of DatasourceType(s) to
 be used as the basic for a UITableViewDataSource, without the need
 to implement UITableViewDataSource on any of them.
 */
-public struct TableViewDataSourceProvider<Datasource where Datasource: DatasourceType, Datasource.FactoryType.ViewType: UITableViewType>: UITableViewDataSourceProvider {
+public struct TableViewDataSourceProvider<Datasource where Datasource: DatasourceType, Datasource.FactoryType.ViewType: UITableViewType, Datasource.FactoryType.TextType == String>: UITableViewDataSourceProvider {
 
     typealias TableView = Datasource.FactoryType.ViewType
 
@@ -41,13 +41,18 @@ public struct TableViewDataSourceProvider<Datasource where Datasource: Datasourc
     /// Initalizes with a Datasource instance.
     public init(_ d: Datasource) {
         datasource = d
+
         bridgedTableViewDataSource = TableViewDataSource(
             numberOfSections: { (view) -> Int in
                 d.numberOfSections },
             numberOfRowsInSection: { (view, section) -> Int in
                 d.numberOfItemsInSection(section) },
             cellForRowAtIndexPath: { (view, indexPath) -> UITableViewCell in
-                d.cellForItemInView(view as! TableView, atIndexPath: indexPath) as! UITableViewCell}
+                d.cellForItemInView(view as! TableView, atIndexPath: indexPath) as! UITableViewCell },
+            titleForHeaderInSection: { (view, section) -> String? in
+                d.textForSupplementaryElementInView(view as! TableView, kind: .Header, atIndexPath: NSIndexPath(forRow: 0, inSection: section)) },
+            titleForFooterInSection: { (view, section) -> String? in
+                d.textForSupplementaryElementInView(view as! TableView, kind: .Footer, atIndexPath: NSIndexPath(forRow: 0, inSection: section)) }
         )
     }
 
@@ -61,11 +66,21 @@ class TableViewDataSource: NSObject, UITableViewDataSource {
     private let numberOfSections: (UITableView) -> Int
     private let numberOfRowsInSection: (UITableView, Int) -> Int
     private let cellForRowAtIndexPath: (UITableView, NSIndexPath) -> UITableViewCell
+    private let titleForHeaderInSection: (UITableView, Int) -> String?
+    private let titleForFooterInSection: (UITableView, Int) -> String?
 
-    init(numberOfSections: (UITableView) -> Int, numberOfRowsInSection: (UITableView, Int) -> Int, cellForRowAtIndexPath: (UITableView, NSIndexPath) -> UITableViewCell) {
-        self.numberOfSections = numberOfSections
-        self.numberOfRowsInSection = numberOfRowsInSection
-        self.cellForRowAtIndexPath = cellForRowAtIndexPath
+    init(
+        numberOfSections: (UITableView) -> Int,
+        numberOfRowsInSection: (UITableView, Int) -> Int,
+        cellForRowAtIndexPath: (UITableView, NSIndexPath) -> UITableViewCell,
+        titleForHeaderInSection: (UITableView, Int) -> String?,
+        titleForFooterInSection: (UITableView, Int) -> String?) {
+
+            self.numberOfSections = numberOfSections
+            self.numberOfRowsInSection = numberOfRowsInSection
+            self.cellForRowAtIndexPath = cellForRowAtIndexPath
+            self.titleForHeaderInSection = titleForHeaderInSection
+            self.titleForFooterInSection = titleForFooterInSection
     }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -78,6 +93,14 @@ class TableViewDataSource: NSObject, UITableViewDataSource {
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         return cellForRowAtIndexPath(tableView, indexPath)
+    }
+
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return titleForHeaderInSection(tableView, section)
+    }
+
+    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return titleForFooterInSection(tableView, section)
     }
 }
 

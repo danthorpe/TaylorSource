@@ -61,6 +61,28 @@ class StaticDatasourceTests: XCTestCase {
             XCTAssertNil(supplementary, "No supplementary view should be returned.")
         }
     }
+
+    func registerHeaderText(config: Factory.SupplementaryTextConfiguration) {
+        registerSupplementaryText(.Header, config: config)
+    }
+
+    func registerFooterText(config: Factory.SupplementaryTextConfiguration) {
+        registerSupplementaryText(.Footer, config: config)
+    }
+
+    func registerSupplementaryText(kind: SupplementaryElementKind, config: Factory.SupplementaryTextConfiguration) {
+        datasource.factory.registerTextWithKind(kind, configuration: config)
+    }
+    
+    func validateSupplementaryText(kind: SupplementaryElementKind, equals test: String?, atIndexPath indexPath: NSIndexPath) {
+        let text: String? = datasource.textForSupplementaryElementInView(view, kind: kind, atIndexPath: indexPath)
+        if let test = test {
+            XCTAssertEqual(test, text!)
+        }
+        else {
+            XCTAssertNil(text)
+        }
+    }
 }
 
 extension StaticDatasourceTests {
@@ -154,6 +176,35 @@ extension StaticDatasourceTests { // Cases where supplementary view should be re
     func test_GivenCustomViewRegistered_WhenAccessingFooterAtValidIndex_ThatFooterIsReturned() {
         registerSupplementaryView(.Custom("Sidebar")) { (_, _) -> Void in }
         validateSupplementaryView(.Custom("Sidebar"), exists: true, atIndexPath: validIndexPath)
+    }
+}
+
+extension StaticDatasourceTests {
+
+    func test_GivenNoHeaderTextRegistered_WhenAccessingHeaderAtValidIndex_ThatResponseIsNone() {
+        validateSupplementaryText(.Header, equals: .None, atIndexPath: validIndexPath)
+    }
+
+    func test_GivenNoHeaderTextRegistered_WhenAccessingHeaderAtInvalidIndex_ThatResponseIsNone() {
+        validateSupplementaryText(.Header, equals: .None, atIndexPath: greaterThanEndIndexPath)
+    }
+
+    func test_GivenNoFooterTextRegistered_WhenAccessingFooterAtValidIndex_ThatResponseIsNone() {
+        validateSupplementaryText(.Footer, equals: .None, atIndexPath: validIndexPath)
+    }
+
+    func test_GivenNoFooterTextRegistered_WhenAccessingFooterAtInvalidIndex_ThatResponseIsNone() {
+        validateSupplementaryText(.Footer, equals: .None, atIndexPath: lessThanStartIndexPath)
+    }
+
+    func test_GivenHeaderTextRegistered_WhenAccessingFooterAtValidIndex_ThatResponseIsNone() {
+        registerHeaderText { index in "Hello" }
+        validateSupplementaryText(.Header, equals: "Hello", atIndexPath: validIndexPath)
+    }
+
+    func test_GivenFooterTextRegistered_WhenAccessingHeaderAtInvalidIndex_ThatResponseIsNone() {
+        registerFooterText { index in "World" }
+        validateSupplementaryText(.Footer, equals: "World", atIndexPath: validIndexPath)
     }
 }
 
