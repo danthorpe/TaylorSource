@@ -25,15 +25,8 @@ public class YapDBFactory<
     where
     View: CellBasedView>: Factory<Item, Cell, SupplementaryView, View, YapDBCellIndex, YapDBSupplementaryIndex> {
 
-    public override init(cell: GetCellKey, supplementary: GetSupplementaryKey) {
+    public override init(cell: GetCellKey? = .None, supplementary: GetSupplementaryKey? = .None) {
         super.init(cell: cell, supplementary: supplementary)
-    }
-
-    public convenience init(cellKey: String, supplementaryKey: String) {
-        self.init(
-            cell: { (_, _) in cellKey },
-            supplementary: { _ in supplementaryKey }
-        )
     }
 }
 

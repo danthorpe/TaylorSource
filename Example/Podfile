@@ -12,5 +12,7 @@ end
 
 target 'DatasourcesTests' do
   pod 'DateTools', :git => 'https://github.com/yakatak/DateTools.git', :branch => 'bug/DT-56_import_bundle_from_framework'
+  pod 'Quick'
+  pod 'Nimble'  
   pod 'TaylorSource/YapDatabase', :path => '../'
 end
