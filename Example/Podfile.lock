@@ -7,8 +7,8 @@ PODS:
   - DateTools (1.5.0)
   - Nimble (0.4.2)
   - Quick (0.3.1)
-  - TaylorSource/Base (0.9.1)
-  - TaylorSource/YapDatabase (0.9.1):
+  - TaylorSource/Base (0.10.0)
+  - TaylorSource/YapDatabase (0.10.0):
     - TaylorSource/Base
     - YapDatabase (~> 2.6)
     - YapDatabaseExtensions (~> 1)
@@ -45,7 +45,7 @@ SPEC CHECKSUMS:
   DateTools: b93a2c2017747329c6077c7d7e8a75106e23d0d7
   Nimble: 49b7a7da8919f42823d37c6d68cc6d15a7009f32
   Quick: 824572d3d198d51e52cf4aa722cebf7e59952a35
-  TaylorSource: eae71df0581b18c32f9a895d7a34d9150dac780d
+  TaylorSource: 07edfe70cd460a0fe30d468c1e70f82eadb49c04
   YapDatabase: 2898ddb5dfbef699539a2a673bf900831f4eca8b
   YapDatabaseExtensions: a0f232f023f1121666c1f11342195a627152d6e3
 
