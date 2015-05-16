@@ -263,7 +263,7 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
 
     /// The currently selected datasource
     public var selectedDatasource: DatasourceProvider.Datasource {
-        return datasources[indexOfSelectedDatasource].datasource
+        return selectedDatasourceProvider.datasource
     }
 
     /// The currently selected datasource's title
@@ -276,15 +276,7 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
         return selectedDatasource.factory
     }
 
-    /**
-    The initializer.
-
-    :param: id, a String identifier for the datasource.
-    :param: datasources, an array of DatasourceProvider instances.
-    :param: selectedIndex, the index of the initial selection.
-    :param: didSelectDatasourceCompletion, a completion block which executes when selecting the datasource has completed. This block should reload the view.
-    */
-    public init(id: String, datasources d: [DatasourceProvider], selectedIndex: Int = 0, didSelectDatasourceCompletion: UpdateBlock) {
+    init(id: String, datasources d: [DatasourceProvider], selectedIndex: Int = 0, didSelectDatasourceCompletion: UpdateBlock) {
         identifier = id
         datasources = d
         state = Protector(SegmentedDatasourceState(selectedIndex: selectedIndex))
@@ -302,6 +294,7 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
     didSelectDatasourceCompletion completion block.
     
     :param: segmentedControl the UISegmentedControl to configure.
+    
     */
     public func configureSegmentedControl(segmentedControl: UISegmentedControl) {
         segmentedControl.removeAllSegments()
@@ -387,8 +380,50 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
     }
 }
 
+public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProviderType>: DatasourceProviderType {
+
+    public typealias UpdateBlock = () -> Void
+
+    public let datasource: SegmentedDatasource<DatasourceProvider>
 
 
+    /// The index of the currently selected datasource provider
+    public var indexOfSelectedDatasource: Int {
+        return datasource.indexOfSelectedDatasource
+    }
+
+    /// The currently selected datasource provider
+    public var selectedDatasourceProvider: DatasourceProvider {
+        return datasource.selectedDatasourceProvider
+    }
+
+    /// The currently selected datasource
+    public var selectedDatasource: DatasourceProvider.Datasource {
+        return datasource.selectedDatasource
+    }
+
+    /**
+    The initializer.
+
+    :param: id, a String identifier for the datasource.
+    :param: datasources, an array of DatasourceProvider instances.
+    :param: selectedIndex, the index of the initial selection.
+    :param: didSelectDatasourceCompletion, a completion block which executes when selecting the datasource has completed. This block should reload the view.
+    */
+    public init(id: String, datasources: [DatasourceProvider], selectedIndex: Int = 0, didSelectDatasourceCompletion: () -> Void) {
+        datasource = SegmentedDatasource(id: id, datasources: datasources, selectedIndex: selectedIndex, didSelectDatasourceCompletion: didSelectDatasourceCompletion)
+    }
+
+    /**
+    Call the equivalent function on SegmentedDatasource.
+
+    :param: segmentedControl the UISegmentedControl to configure.
+
+    */
+    public func configureSegmentedControl(segmentedControl: UISegmentedControl) {
+        datasource.configureSegmentedControl(segmentedControl)
+    }
+}
 
 
 
