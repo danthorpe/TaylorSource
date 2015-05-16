@@ -97,6 +97,27 @@ public protocol DatasourceProviderType {
 }
 
 /**
+Simple wrapper for a Datasource. TaylorSource is designed for composing Datasources
+inside custom classes, referred to as *datasource providers*. There are Table View
+and Collection View data source generators which accept datasource providers.
+
+Therefore, if you absolutely don't want your own custom class to act as the datasource
+provider, this structure is available to easily wrap any DatasourceType. e.g.
+
+    let datasource: UITableViewDataSourceProvider<BasicDatasourceProvider<StaticDatasource>>
+    tableView.dataSource = datasource.tableViewDataSource
+*/
+public struct BasicDatasourceProvider<Datasource: DatasourceType>: DatasourceProviderType {
+
+    /// The wrapped Datasource
+    public let datasource: Datasource
+
+    init(_ d: Datasource) {
+        datasource = d
+    }
+}
+
+/**
 A concrete implementation of DatasourceType for simple immutable arrays of objects.
 The static datasource is initalized with the model items to display. They all 
 are in the same section.
