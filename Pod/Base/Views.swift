@@ -27,32 +27,37 @@ This architecture allows for different kinds of DatasourceType(s) to
 be used as the basic for a UITableViewDataSource, without the need
 to implement UITableViewDataSource on any of them.
 */
-public struct TableViewDataSourceProvider<Datasource where Datasource: DatasourceType, Datasource.FactoryType.ViewType: UITableViewType, Datasource.FactoryType.TextType == String>: UITableViewDataSourceProvider {
+public struct TableViewDataSourceProvider<DatasourceProvider where DatasourceProvider: DatasourceProviderType, DatasourceProvider.Datasource.FactoryType.ViewType: UITableViewType, DatasourceProvider.Datasource.FactoryType.TextType == String>: UITableViewDataSourceProvider {
 
-    typealias TableView = Datasource.FactoryType.ViewType
+    typealias TableView = DatasourceProvider.Datasource.FactoryType.ViewType
 
-    public let datasource: Datasource
-    public var factory: Datasource.FactoryType {
+    public let provider: DatasourceProvider
+
+    public var datasource: DatasourceProvider.Datasource {
+        return provider.datasource
+    }
+
+    public var factory: DatasourceProvider.Datasource.FactoryType {
         return datasource.factory
     }
     
     let bridgedTableViewDataSource: TableViewDataSource
 
     /// Initalizes with a Datasource instance.
-    public init(_ d: Datasource) {
-        datasource = d
+    public init(_ p: DatasourceProvider) {
+        provider = p
 
         bridgedTableViewDataSource = TableViewDataSource(
             numberOfSections: { (view) -> Int in
-                d.numberOfSections },
+                p.datasource.numberOfSections },
             numberOfRowsInSection: { (view, section) -> Int in
-                d.numberOfItemsInSection(section) },
+                p.datasource.numberOfItemsInSection(section) },
             cellForRowAtIndexPath: { (view, indexPath) -> UITableViewCell in
-                d.cellForItemInView(view as! TableView, atIndexPath: indexPath) as! UITableViewCell },
+                p.datasource.cellForItemInView(view as! TableView, atIndexPath: indexPath) as! UITableViewCell },
             titleForHeaderInSection: { (view, section) -> String? in
-                d.textForSupplementaryElementInView(view as! TableView, kind: .Header, atIndexPath: NSIndexPath(forRow: 0, inSection: section)) },
+                p.datasource.textForSupplementaryElementInView(view as! TableView, kind: .Header, atIndexPath: NSIndexPath(forRow: 0, inSection: section)) },
             titleForFooterInSection: { (view, section) -> String? in
-                d.textForSupplementaryElementInView(view as! TableView, kind: .Footer, atIndexPath: NSIndexPath(forRow: 0, inSection: section)) }
+                p.datasource.textForSupplementaryElementInView(view as! TableView, kind: .Footer, atIndexPath: NSIndexPath(forRow: 0, inSection: section)) }
         )
     }
 
@@ -122,25 +127,26 @@ to construct and a bridging class which implements UICollectionViewDataSource.
 
 The ViewType of the Datasource's Factory is constrained to be a UICollectionViewType
 */
-public struct CollectionViewDataSourceProvider<Datasource where Datasource: DatasourceType, Datasource.FactoryType.ViewType: UICollectionViewType>: UICollectionViewDataSourceProvider {
+public struct CollectionViewDataSourceProvider<DatasourceProvider where DatasourceProvider: DatasourceProviderType, DatasourceProvider.Datasource.FactoryType.ViewType: UICollectionViewType>: UICollectionViewDataSourceProvider {
 
-    typealias CollectionView = Datasource.FactoryType.ViewType
+    typealias CollectionView = DatasourceProvider.Datasource.FactoryType.ViewType
 
-    let datasource: Datasource
+    let provider: DatasourceProvider
+
     let bridgedDataSource: CollectionViewDataSource
 
     /// Initializes with a Datasource instance
-    public init(_ d: Datasource) {
-        datasource = d
+    public init(_ p: DatasourceProvider) {
+        provider = p
         bridgedDataSource = CollectionViewDataSource(
             numberOfSections: { (view) -> Int in
-                d.numberOfSections },
+                p.datasource.numberOfSections },
             numberOfItemsInSection: { (view, section) -> Int in
-                d.numberOfItemsInSection(section) },
+                p.datasource.numberOfItemsInSection(section) },
             cellForItemAtIndexPath: { (view, indexPath) -> UICollectionViewCell in
-                d.cellForItemInView(view as! CollectionView, atIndexPath: indexPath) as! UICollectionViewCell },
+                p.datasource.cellForItemInView(view as! CollectionView, atIndexPath: indexPath) as! UICollectionViewCell },
             viewForElementKindAtIndexPath: { (view, indexPath, element) -> UICollectionReusableView in
-                d.viewForSupplementaryElementInView(view as! CollectionView, kind: SupplementaryElementKind(element), atIndexPath: indexPath) as! UICollectionReusableView }
+                p.datasource.viewForSupplementaryElementInView(view as! CollectionView, kind: SupplementaryElementKind(element), atIndexPath: indexPath) as! UICollectionReusableView }
         )
     }
 
