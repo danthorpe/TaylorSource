@@ -80,10 +80,12 @@ struct USStatesAndCities {
     }
 
     func loadIntoDatabase(db: YapDatabase) {
+
         let connection = db.newConnection()
+
         var states: [State] = connection.readAll()
         let stateNames = states.map { $0.name }
-        let remainingStateNames = (data.allKeys as! [String]).filter { contains(stateNames, $0) }
+        let remainingStateNames = (data.allKeys as! [String]).filter { !contains(stateNames, $0) }
 
         for stateName in remainingStateNames {
 
@@ -111,7 +113,7 @@ class ViewController: UIViewController {
 
     lazy var data = USStatesAndCities()
     var datasource: CitiesDatasource!
-    var tableViewDatasource: TableViewDataSourceProvider<CitiesDatasource.Datasource>!
+    var tableViewDatasource: TableViewDataSourceProvider<CitiesDatasource>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,8 +122,9 @@ class ViewController: UIViewController {
     }
 
     func configureDatasource() {
+
         datasource = CitiesDatasource(db: database, view: tableView, threshold: 0)
-        tableViewDatasource = TableViewDataSourceProvider(datasource.datasource)
+        tableViewDatasource = TableViewDataSourceProvider(datasource)
         tableView.dataSource = tableViewDatasource.tableViewDataSource
 
         data.loadIntoDatabase(database)
