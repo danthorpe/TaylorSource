@@ -65,8 +65,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
 
-    var segmentedDatasource: SegmentedDatasource<EventsDatasource>!
-    var datasource: TableViewDataSourceProvider<SegmentedDatasource<EventsDatasource>>!
+    var segmentedDatasourceProvider: SegmentedDatasourceProvider<EventsDatasource>!
+    var datasource: TableViewDataSourceProvider<SegmentedDatasourceProvider<EventsDatasource>>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,19 +77,19 @@ class ViewController: UIViewController {
         let colors: [Event.Color] = [.Red, .Blue, .Green]
         let datasources = colors.map { EventsDatasource(color: $0, db: database, view: self.tableView) }
 
-        segmentedDatasource = SegmentedDatasource(id: "events segmented datasource", datasources: datasources, selectedIndex: 0) { [weak self] in
+        segmentedDatasourceProvider = SegmentedDatasourceProvider(id: "events segmented datasource", datasources: datasources, selectedIndex: 0) { [weak self] in
             self?.tableView.reloadData()
         }
 
-        segmentedDatasource.configureSegmentedControl(segmentedControl)
+        segmentedDatasourceProvider.configureSegmentedControl(segmentedControl)
 
-        datasource = TableViewDataSourceProvider(segmentedDatasource)
+        datasource = TableViewDataSourceProvider(segmentedDatasourceProvider)
         tableView.dataSource = datasource.tableViewDataSource
     }
 
     @IBAction func addEvent(sender: UIBarButtonItem) {
-        let color = segmentedDatasource.selectedDatasourceProvider.eventColor
-        segmentedDatasource.selectedDatasourceProvider.addEvent(Event.create(color: color))
+        let color = segmentedDatasourceProvider.selectedDatasourceProvider.eventColor
+        segmentedDatasourceProvider.selectedDatasourceProvider.addEvent(Event.create(color: color))
     }
 
     @IBAction func refreshEvents(sender: UIBarButtonItem) {
@@ -97,7 +97,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func removeAll(sender: UIBarButtonItem) {
-        segmentedDatasource.selectedDatasourceProvider.removeAllEvents()
+        segmentedDatasourceProvider.selectedDatasourceProvider.removeAllEvents()
     }
 }
 
