@@ -21,7 +21,7 @@ This protocol exists to allow for the definition of different kinds of
 datasources. Coupled with DatasourceProviderType, datasources can be
 composed and extended with ease. See SegmentedDatasource for example.
 */
-public protocol DatasourceType: SequenceType, CollectionType {
+public protocol DatasourceType {
     typealias FactoryType: _FactoryType
 
     /// Access the factory from the datasource, likely should be a stored property.
@@ -131,7 +131,7 @@ public final class StaticDatasource<
     where
     Factory: _FactoryType,
     Factory.CellIndexType == NSIndexPath,
-    Factory.SupplementaryIndexType == NSIndexPath>: DatasourceType {
+    Factory.SupplementaryIndexType == NSIndexPath>: DatasourceType, SequenceType, CollectionType {
 
     typealias FactoryType = Factory
 
