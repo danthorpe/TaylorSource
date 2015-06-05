@@ -12,12 +12,23 @@ public protocol UpdatableView {
 public struct YapDBCellIndex: IndexPathIndexType {
     public let indexPath: NSIndexPath
     public let transaction: YapDatabaseReadTransaction
+
+    public init(indexPath: NSIndexPath, transaction: YapDatabaseReadTransaction) {
+        self.indexPath = indexPath
+        self.transaction = transaction
+    }
 }
 
 public struct YapDBSupplementaryIndex: IndexPathIndexType {
     public let group: String
     public let indexPath: NSIndexPath
     public let transaction: YapDatabaseReadTransaction
+
+    public init(group: String, indexPath: NSIndexPath, transaction: YapDatabaseReadTransaction) {
+        self.group = group
+        self.indexPath = indexPath
+        self.transaction = transaction
+    }
 }
 
 public class YapDBFactory<

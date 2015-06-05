@@ -1,3 +1,7 @@
+# 0.12.0
+1. [[TAY-13](https://github.com/danthorpe/TaylorSource/pull/13)]: Make a few subtle changes to increase the ease of implementing DatasourceType from scratch outside of TaylorSource. No longer is a SequenceType and CollectionType implementation required. And `YapDBCellIndex` and `YapDBSupplementaryViewIndex` have public constructors.
+
+
 # 0.11.0
 1. [[TAY-12](https://github.com/danthorpe/TaylorSource/pull/12)]: Modifies [TableView|CollectionView]DataSourceProviders to access arguments of DatasourceProviderType instead of DatasourceType. This allows for improved composition and code re-use.
 
