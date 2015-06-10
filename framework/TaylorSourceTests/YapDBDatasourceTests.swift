@@ -8,11 +8,10 @@
 
 import UIKit
 import XCTest
+
 import YapDatabase
 import YapDatabaseExtensions
 import TaylorSource
-import Quick
-import Nimble
 
 class YapDBDatasourceTests: XCTestCase {
 
@@ -36,7 +35,7 @@ extension YapDBDatasourceTests {
     func test_GivenEmptyDatabase_ThatHasCorrectSections() {
         let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
         let datasource = datasourceWithDatabase(db)
-        expect(datasource.numberOfSections).to(equal(0))
+        XCTAssertEqual(datasource.numberOfSections, 0)
     }
 
     func test_GivenDatabaseWithOneRedEvent_ThatHasCorrectSections() {
@@ -44,8 +43,8 @@ extension YapDBDatasourceTests {
             database.write(createOneEvent())
         }
         let datasource = datasourceWithDatabase(db)
-        expect(datasource.numberOfSections).to(equal(1))
-        expect(datasource.numberOfItemsInSection(0)).to(equal(1))
+        XCTAssertEqual(datasource.numberOfSections, 1)
+        XCTAssertEqual(datasource.numberOfItemsInSection(0), 1)
     }
 
     func test_GivenDatabaseWithManyRedEvents_ThatHasCorrectSections() {
@@ -54,8 +53,8 @@ extension YapDBDatasourceTests {
             numberOfEvents = database.write(createManyEvents()).count
         }
         let datasource = datasourceWithDatabase(db)
-        expect(datasource.numberOfSections).to(equal(1))
-        expect(datasource.numberOfItemsInSection(0)).to(equal(numberOfEvents))
+        XCTAssertEqual(datasource.numberOfSections, 1)
+        XCTAssertEqual(datasource.numberOfItemsInSection(0), numberOfEvents)
     }
 
     func test_GivenDatabaseWithManyRedAndManyBlueEvents_ThatHasCorrectSections() {
@@ -66,9 +65,9 @@ extension YapDBDatasourceTests {
             numberOfBlueEvents = database.write(createManyEvents(color: .Blue)).count
         }
         let datasource = datasourceWithDatabase(db)
-        expect(datasource.numberOfSections).to(equal(2))
-        expect(datasource.numberOfItemsInSection(0)).to(equal(numberOfRedEvents))
-        expect(datasource.numberOfItemsInSection(1)).to(equal(numberOfBlueEvents))
+        XCTAssertEqual(datasource.numberOfSections, 2)
+        XCTAssertEqual(datasource.numberOfItemsInSection(0), numberOfRedEvents)
+        XCTAssertEqual(datasource.numberOfItemsInSection(1), numberOfBlueEvents)
     }
 
     func test_GivenStaticDatasource_WhenAccessingItemsAtANegativeIndex_ThatResultIsNone() {
@@ -77,7 +76,7 @@ extension YapDBDatasourceTests {
             numberOfEvents = database.write(createManyEvents()).count
         }
         let datasource = datasourceWithDatabase(db)
-        expect(datasource.itemAtIndexPath(NSIndexPath(forRow: numberOfEvents * -1, inSection: 0))).to(beNil())
+        XCTAssertTrue(datasource.itemAtIndexPath(NSIndexPath(forRow: numberOfEvents * -1, inSection: 0)) == nil)
     }
 
     func test_GivenStaticDatasource_WhenAccessingItemsGreaterThanMaxIndex_ThatResultIsNone() {
@@ -86,7 +85,7 @@ extension YapDBDatasourceTests {
             numberOfEvents = database.write(createManyEvents()).count
         }
         let datasource = datasourceWithDatabase(db)
-        expect(datasource.itemAtIndexPath(NSIndexPath(forRow: numberOfEvents * 2, inSection: 0))).to(beNil())
+        XCTAssertTrue(datasource.itemAtIndexPath(NSIndexPath(forRow: numberOfEvents * -1, inSection: 0)) == nil)
     }
 
     func test_GivenStaticDatasource_WhenAccessingItems_ThatCorrectItemIsReturned() {
@@ -95,7 +94,7 @@ extension YapDBDatasourceTests {
             events = database.write(createManyEvents())
         }
         let datasource = datasourceWithDatabase(db)
-        expect(datasource.itemAtIndexPath(NSIndexPath.first)).to(equal(events[0]))
+        XCTAssertEqual(datasource.itemAtIndexPath(NSIndexPath.first)!, events[0])
     }
 }
 

@@ -6,7 +6,6 @@
 import UIKit
 import XCTest
 import TaylorSource
-import Nimble
 
 class UITableViewTests: XCTestCase {
     typealias Factory = BasicFactory<Event, UITableViewCell, UITableViewHeaderFooterView, StubbedTableView>
@@ -28,63 +27,63 @@ class UITableViewTests: XCTestCase {
     func test_GivenRegisteredCell_WhenAccessingCellForItem_ThatCellIsReturned() {
         registerCell { (_, _, _) in }
         let cell = factory.cellForItem(Event.create(), inView: view, atIndex: validIndexPath)
-        expect(cell).to(beAnInstanceOf(UITableViewCell.self))
+        XCTAssertTrue(cell.isKindOfClass(UITableViewCell.self))
     }
 
     func test_GivenRegisteredCell_WhenAccessingCellForItem_ThatConfigurationBlockIsRun() {
         var blockDidRun = false
         registerCell { (_, _, _) in blockDidRun = true }
         let _ = factory.cellForItem(Event.create(), inView: view, atIndex: validIndexPath)
-        expect(blockDidRun).to(beTrue())
+        XCTAssertTrue(blockDidRun)
     }
 
     func test_GivenRegisteredHeaderView_WhenAccessingHeader_ThatViewIsReturned() {
         registerHeader { (_, _) in }
         let supplementary = factory.supplementaryViewForKind(.Header, inView: view, atIndex: validIndexPath)
-        expect(supplementary).to(beAnInstanceOf(UITableViewHeaderFooterView.self))
+        XCTAssertTrue(supplementary!.isKindOfClass(UITableViewHeaderFooterView.self))
     }
 
     func test_GivenRegisteredHeaderView_WhenAccessingHeader_ThatConfigurationBlockIsRun() {
         var blockDidRun = false
         registerHeader { (_, _) in blockDidRun = true }
         let _ = factory.supplementaryViewForKind(.Header, inView: view, atIndex: validIndexPath)
-        expect(blockDidRun).to(beTrue())
+        XCTAssertTrue(blockDidRun)
     }
 
     func test_GivenRegisteredHeaderView_WhenAccessingFooter_ThatViewIsNotReturned() {
         var blockDidRun = false
         registerHeader { (_, _) in blockDidRun = true }
         let supplementary = factory.supplementaryViewForKind(.Footer, inView: view, atIndex: validIndexPath)
-        expect(supplementary).to(beNil())
-        expect(blockDidRun).to(beFalse())
+        XCTAssertNil(supplementary)
+        XCTAssertFalse(blockDidRun)
     }
 
     func test_GivenRegisteredFooterView_WhenAccessingFooter_ThatViewIsReturned() {
         registerFooter { (_, _) in }
         let supplementary = factory.supplementaryViewForKind(.Footer, inView: view, atIndex: validIndexPath)
-        expect(supplementary).to(beAnInstanceOf(UITableViewHeaderFooterView.self))
+        XCTAssertTrue(supplementary!.isKindOfClass(UITableViewHeaderFooterView.self))
     }
 
     func test_GivenRegisteredFooterView_WhenAccessingHeader_ThatViewIsNotReturned() {
         var blockDidRun = false
         registerFooter { (_, _) in blockDidRun = true }
         let supplementary = factory.supplementaryViewForKind(.Header, inView: view, atIndex: validIndexPath)
-        expect(supplementary).to(beNil())
-        expect(blockDidRun).to(beFalse())
+        XCTAssertNil(supplementary)
+        XCTAssertFalse(blockDidRun)
     }
 
     func test_GivenRegisteredCustomView_WhenAccessingCustomView_ThatViewIsReturned() {
         factory.registerSupplementaryView(.ClassWithIdentifier(UITableViewHeaderFooterView.self, "sidebar"), kind: .Custom("Sidebar"), inView: view) { (_, _) in }
         let supplementary = factory.supplementaryViewForKind(.Custom("Sidebar"), inView: view, atIndex: validIndexPath)
-        expect(supplementary).to(beAnInstanceOf(UITableViewHeaderFooterView.self))
+        XCTAssertTrue(supplementary!.isKindOfClass(UITableViewHeaderFooterView.self))
     }
 
     func test_GivenRegisteredCustomView_WhenAccessingDifferentCustomView_ThatViewIsNotReturned() {
         var blockDidRun = false
         factory.registerSupplementaryView(.ClassWithIdentifier(UITableViewHeaderFooterView.self, "sidebar"), kind: .Custom("Left Sidebar"), inView: view) { (_, _) in blockDidRun = true }
         let supplementary = factory.supplementaryViewForKind(.Custom("Right Sidebar"), inView: view, atIndex: validIndexPath)
-        expect(supplementary).to(beNil())
-        expect(blockDidRun).to(beFalse())
+        XCTAssertNil(supplementary)
+        XCTAssertFalse(blockDidRun)
     }
 
     // Helpers

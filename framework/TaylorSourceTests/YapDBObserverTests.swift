@@ -5,11 +5,10 @@
 
 import UIKit
 import XCTest
+
 import YapDatabase
 import YapDatabaseExtensions
 import TaylorSource
-import Quick
-import Nimble
 
 func numberOfChangesInChangeset(changeset: YapDatabaseViewMappings.Changeset) -> Int {
     return changeset.sections.count + changeset.items.count
@@ -35,13 +34,13 @@ func validateChangeset(expectation: XCTestExpectation, validations: [YapDatabase
 
 func validateChangesetHasSectionInsert(count: Int = 1) -> YapDatabaseViewMappings.Changes {
     return { changeset in
-        expect(numberOfSectionChangesOfType(.Insert, inChangeset: changeset)).to(equal(count))
+        XCTAssertEqual(numberOfSectionChangesOfType(.Insert, inChangeset: changeset), count)
     }
 }
 
 func validateChangesetHasRowInsert(count: Int = 1) -> YapDatabaseViewMappings.Changes {
     return { changeset in
-        expect(numberOfItemChangesOfType(.Insert, inChangeset: changeset)).to(equal(count))
+        XCTAssertEqual(numberOfItemChangesOfType(.Insert, inChangeset: changeset), count)
     }
 }
 
@@ -63,8 +62,8 @@ extension ObserverTests {
     func testObserver_EmptyDatabase_EndIndexIsZero() {
         let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
         let observer = Observer(database: db, changes: { changeset in }, configuration: configuration)
-        expect(observer.startIndex).to(equal(0))
-        expect(observer.endIndex).to(equal(0))
+        XCTAssertEqual(observer.startIndex, 0)
+        XCTAssertEqual(observer.endIndex, 0)
     }
 
     func testObserver_WriteOneObject_ChangesetHasOneSectionInsert() {

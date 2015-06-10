@@ -9,7 +9,5 @@ end
 
 target 'TaylorSourceTests' do
   pod 'YapDatabaseExtensions'
-  pod 'Quick', '0.3'
-  pod 'Nimble', '1.0.0-rc.1'  
 end
 
