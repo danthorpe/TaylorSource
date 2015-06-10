@@ -39,24 +39,24 @@ public protocol DatasourceType {
     /**
     The number of items in the section.
 
-    :param: section The section index
-    :returns: An Int, the number of items.
+    - parameter section: The section index
+    - returns: An Int, the number of items.
     */
     func numberOfItemsInSection(sectionIndex: Int) -> Int
 
     /**
     Access the underlying data item at the indexPath.
     
-    :param: indexPath A NSIndexPath instance.
-    :returns: An optional Item
+    - parameter indexPath: A NSIndexPath instance.
+    - returns: An optional Item
     */
     func itemAtIndexPath(indexPath: NSIndexPath) -> FactoryType.ItemType?
 
     /**
     Vends a configured cell for the item.
     
-    :param: view the View which should dequeue the cell.
-    :param: indexPath the NSIndexPath of the item.
+    - parameter view: the View which should dequeue the cell.
+    - parameter indexPath: the NSIndexPath of the item.
     :return: a FactoryType.CellType instance, this should be dequeued and configured.
     */
     func cellForItemInView(view: FactoryType.ViewType, atIndexPath indexPath: NSIndexPath) -> FactoryType.CellType
@@ -64,9 +64,9 @@ public protocol DatasourceType {
     /**
     Vends a configured supplementary view of kind.
 
-    :param: view the View which should dequeue the cell.
-    :param: kind the kind of the supplementary element. See SupplementaryElementKind
-    :param: indexPath the NSIndexPath of the item.
+    - parameter view: the View which should dequeue the cell.
+    - parameter kind: the kind of the supplementary element. See SupplementaryElementKind
+    - parameter indexPath: the NSIndexPath of the item.
     :return: a Factory.Type.SupplementaryViewType instance, this should be dequeued and configured.
     */
     func viewForSupplementaryElementInView(view: FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> FactoryType.SupplementaryViewType?
@@ -74,9 +74,9 @@ public protocol DatasourceType {
     /**
     Vends a optional text for the supplementary kind
     
-    :param: view the View which should dequeue the cell.
-    :param: kind the kind of the supplementary element. See SupplementaryElementKind
-    :param: indexPath the NSIndexPath of the item.
+    - parameter view: the View which should dequeue the cell.
+    - parameter kind: the kind of the supplementary element. See SupplementaryElementKind
+    - parameter indexPath: the NSIndexPath of the item.
     :return: a TextType?
     */
     func textForSupplementaryElementInView(view: FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> FactoryType.TextType?
@@ -143,7 +143,7 @@ public final class StaticDatasource<
     /**
     The initializer.
     
-    :param: id a String identifier
+    - parameter id: a String identifier
     :factory: a Factory whose CellIndexType and SupplementaryIndexType must be NSIndexPath, such as BasicFactory.
     :items: an array of Factory.ItemType instances.
     */
@@ -168,8 +168,8 @@ public final class StaticDatasource<
     Will also return .None if the indexPath item index is out of bounds of the
     array of items.
     
-    :param: indexPath an NSIndexPath
-    :returns: an optional Factory.ItemType
+    - parameter indexPath: an NSIndexPath
+    - returns: an optional Factory.ItemType
     */
     public func itemAtIndexPath(indexPath: NSIndexPath) -> Factory.ItemType? {
         if items.startIndex <= indexPath.item && indexPath.item < items.endIndex {
@@ -186,9 +186,9 @@ public final class StaticDatasource<
     indexPath is out of range. Here, we fatalError which will deliberately crash the
     app.
     
-    :param: view the view instance.
-    :param: indexPath an NSIndexPath
-    :returns: an dequeued and configured Factory.CellType
+    - parameter view: the view instance.
+    - parameter indexPath: an NSIndexPath
+    - returns: an dequeued and configured Factory.CellType
     */
     public func cellForItemInView(view: Factory.ViewType, atIndexPath indexPath: NSIndexPath) -> Factory.CellType {
         if let item = itemAtIndexPath(indexPath) {
@@ -202,9 +202,9 @@ public final class StaticDatasource<
     This is the result of running any registered closure from the factory
     for this supplementary element kind.
 
-    :param: view the view instance.
-    :param: kind the SupplementaryElementKind of the supplementary view.
-    :returns: an dequeued and configured Factory.SupplementaryViewType
+    - parameter view: the view instance.
+    - parameter kind: the SupplementaryElementKind of the supplementary view.
+    - returns: an dequeued and configured Factory.SupplementaryViewType
     */
     public func viewForSupplementaryElementInView(view: Factory.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> Factory.SupplementaryViewType? {
         return factory.supplementaryViewForKind(kind, inView: view, atIndex: indexPath)
@@ -213,9 +213,9 @@ public final class StaticDatasource<
     /**
     Will return an optional text for the supplementary kind
 
-    :param: view the View which should dequeue the cell.
-    :param: kind the kind of the supplementary element. See SupplementaryElementKind
-    :param: indexPath the NSIndexPath of the item.
+    - parameter view: the View which should dequeue the cell.
+    - parameter kind: the kind of the supplementary element. See SupplementaryElementKind
+    - parameter indexPath: the NSIndexPath of the item.
     :return: a TextType?
     */
     public func textForSupplementaryElementInView(view: Factory.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> Factory.TextType? {
@@ -314,14 +314,14 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
     action will select the appropriate datasource and call the 
     didSelectDatasourceCompletion completion block.
     
-    :param: segmentedControl the UISegmentedControl to configure.
+    - parameter segmentedControl: the UISegmentedControl to configure.
     
     */
     public func configureSegmentedControl(segmentedControl: UISegmentedControl) {
         segmentedControl.removeAllSegments()
 
-        for (index, provider) in enumerate(datasources) {
-            var title = provider.datasource.title ?? "No title"
+        for (index, provider) in datasources.enumerate() {
+            let title = provider.datasource.title ?? "No title"
             segmentedControl.insertSegmentWithTitle(title, atIndex: index, animated: false)
         }
 
@@ -335,7 +335,7 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
     /**
     Programatic interface to select a datasource at a given index.
     
-    :param: index an Int index.
+    - parameter index: an Int index.
     */
     public func selectDatasourceAtIndex(index: Int) {
         precondition(0 <= index, "Index must be greater than zero.")
@@ -426,10 +426,10 @@ public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProvider
     /**
     The initializer.
 
-    :param: id, a String identifier for the datasource.
-    :param: datasources, an array of DatasourceProvider instances.
-    :param: selectedIndex, the index of the initial selection.
-    :param: didSelectDatasourceCompletion, a completion block which executes when selecting the datasource has completed. This block should reload the view.
+    - parameter id,: a String identifier for the datasource.
+    - parameter datasources,: an array of DatasourceProvider instances.
+    - parameter selectedIndex,: the index of the initial selection.
+    - parameter didSelectDatasourceCompletion,: a completion block which executes when selecting the datasource has completed. This block should reload the view.
     */
     public init(id: String, datasources: [DatasourceProvider], selectedIndex: Int = 0, didSelectDatasourceCompletion: () -> Void) {
         datasource = SegmentedDatasource(id: id, datasources: datasources, selectedIndex: selectedIndex, didSelectDatasourceCompletion: didSelectDatasourceCompletion)
@@ -438,7 +438,7 @@ public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProvider
     /**
     Call the equivalent function on SegmentedDatasource.
 
-    :param: segmentedControl the UISegmentedControl to configure.
+    - parameter segmentedControl: the UISegmentedControl to configure.
 
     */
     public func configureSegmentedControl(segmentedControl: UISegmentedControl) {

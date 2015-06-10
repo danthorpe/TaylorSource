@@ -128,7 +128,7 @@ class UICollectionViewTests: XCTestCase {
     }
 
     override func setUp() {
-        view.registerClass(UICollectionViewCell.self, withIdentifier: "cell")
+        view.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         view.registerClass(UICollectionReusableView.self, forSupplementaryViewKind: .Header, withIdentifier: "whatever")
     }
 

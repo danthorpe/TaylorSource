@@ -39,7 +39,7 @@ class StubbedTableView: UITableView {
         return UITableViewCell(style: .Default, reuseIdentifier: id)
     }
 
-    override func dequeueReusableHeaderFooterViewWithIdentifier(identifier: String) -> AnyObject? {
+    override func dequeueReusableHeaderFooterViewWithIdentifier(identifier: String) -> UITableViewHeaderFooterView? {
         return UITableViewHeaderFooterView(reuseIdentifier: identifier)
     }
 }
@@ -49,7 +49,7 @@ class StubbedCollectionView: UICollectionView {
         return UICollectionViewCell()
     }
 
-    override func dequeueReusableSupplementaryViewOfKind(elementKind: String, withReuseIdentifier identifier: String, forIndexPath indexPath: NSIndexPath!) -> AnyObject {
+    override func dequeueReusableSupplementaryViewOfKind(elementKind: String, withReuseIdentifier identifier: String, forIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         return UICollectionReusableView()
     }
 }
@@ -79,7 +79,7 @@ class PersonArchiver: NSObject, NSCoding, Archiver {
         value = v
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         if let gender = Person.Gender(rawValue: aDecoder.decodeIntegerForKey("gender")) {
             let age = aDecoder.decodeIntegerForKey("age")
             let name = aDecoder.decodeObjectForKey("name") as! String
@@ -103,7 +103,7 @@ extension Person: Saveable {
     }
 }
 
-extension Person.Gender: Printable {
+extension Person.Gender: CustomStringConvertible {
     var description: String {
         switch self {
         case .Unknown: return "Unknown"
@@ -127,7 +127,7 @@ extension Person: Persistable {
     }
 }
 
-extension Person: Printable {
+extension Person: CustomStringConvertible {
     var description: String {
         return "\(name), \(gender) \(age)"
     }

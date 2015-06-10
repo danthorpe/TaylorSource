@@ -33,7 +33,7 @@ public struct Event {
 
 // MARK: - Model Helpers
 
-extension Event.Color: Printable {
+extension Event.Color: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -87,7 +87,7 @@ public class EventColorArchiver: NSObject, NSCoding, Archiver {
         value = v
     }
 
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         if let kind = Event.Color.Kind(rawValue: aDecoder.decodeIntegerForKey("kind")) {
             switch kind {
             case .Red:
@@ -134,7 +134,7 @@ public class EventArchiver: NSObject, NSCoding, Archiver {
         value = v
     }
 
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         let color: Event.Color? = valueFromArchive(aDecoder.decodeObjectForKey("color"))
         let uuid = aDecoder.decodeObjectForKey("uuid") as? String
         let date = aDecoder.decodeObjectForKey("date") as? NSDate

@@ -32,7 +32,7 @@ class MapperTests: XCTestCase {
 
     func test__when_database_has_one_item__lookup_items_by_indexPath__the_first_indexPath__is_the_item() {
         db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
-        let event = Event.create(color: .Red)
+        let event = Event.create(.Red)
         db.write(event)
         mapper = Mapper(database: db, configuration: events())
         XCTAssertEqual(mapper.itemAtIndexPath(NSIndexPath.first)!, event)
@@ -40,7 +40,7 @@ class MapperTests: XCTestCase {
 
     func test__when_database_has_one_item__reverse_loop_items__the_first_item__is_the_first_indexPath() {
         db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
-        let event = Event.create(color: .Red)
+        let event = Event.create(.Red)
         db.write(event)
         mapper = Mapper(database: db, configuration: events())
         XCTAssertEqual(mapper.indexPathForKey(keyForPersistable(event), inCollection: Event.collection)!, NSIndexPath.first)

@@ -14,7 +14,7 @@ class StaticDatasourceTests: XCTestCase {
 
     let view = StubbedTableView()
     let factory = Factory()
-    let data: [Event] = map(0..<5) { (index) -> Event in Event.create() }
+    let data: [Event] = (0..<5).map { (index) -> Event in Event.create() }
     var datasource: Datasource!
 
     var lessThanStartIndexPath: NSIndexPath {

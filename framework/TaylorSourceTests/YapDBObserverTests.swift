@@ -45,11 +45,11 @@ func validateChangesetHasRowInsert(count: Int = 1) -> YapDatabaseViewMappings.Ch
 }
 
 func createOneEvent(color: Event.Color = .Red) -> Event {
-    return Event.create(color: color)
+    return Event.create(color)
 }
 
 func createManyEvents(color: Event.Color = .Red) -> [Event] {
-    return map(0..<5) { _ in createOneEvent(color: color) }
+    return (0..<5).map { _ in createOneEvent(color) }
 }
 
 class ObserverTests: XCTestCase {
@@ -121,7 +121,7 @@ extension ObserverTests {
             changes: validateChangeset(expectation, [validateChangesetHasSectionInsert(count: 2)]),
             configuration: configuration)
 
-        var events = createManyEvents(color: .Red)
+        var events = createManyEvents(.Red)
         events += createManyEvents(color: .Blue)
 
         connection.write(events)

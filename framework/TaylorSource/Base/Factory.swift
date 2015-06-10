@@ -47,7 +47,7 @@ public enum SupplementaryElementKind {
     case Custom(String)
 }
 
-struct SupplementaryElementIndex: Hashable {
+struct SupplementaryElementIndex {
     let kind: SupplementaryElementKind
     let key: String
 }
@@ -320,7 +320,7 @@ public class Factory<
 
     public func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) -> Cell {
         let key = getCellKey?(item, index) ?? self.dynamicType.defaultCellKey
-        if let (reuseIdentifier: String, configure: CellConfig) = cells[key] {
+        if let (reuseIdentifier, configure) = cells[key] {
             let cell = view.dequeueCellWithIdentifier(reuseIdentifier, atIndexPath: index.indexPath) as! Cell
             configure(cell: cell, item: item, index: index)
             return cell
@@ -330,7 +330,7 @@ public class Factory<
 
     public func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: View, atIndex index: SupplementaryIndex) -> SupplementaryView? {
         let key = getSupplementaryKey?(index) ?? self.dynamicType.defaultSuppplementaryViewKey
-        if let (reuseIdentifier: String, configure: SupplementaryViewConfig) = views[SupplementaryElementIndex(kind: kind, key: key)] {
+        if let (reuseIdentifier, configure) = views[SupplementaryElementIndex(kind: kind, key: key)] {
             if let supplementaryView = view.dequeueSupplementaryViewWithKind(kind, identifier: reuseIdentifier, atIndexPath: index.indexPath) as? SupplementaryView {
                 configure(supplementaryView: supplementaryView, index: index)
                 return supplementaryView
@@ -402,7 +402,7 @@ extension SupplementaryElementKind {
     }
 }
 
-extension SupplementaryElementKind: Printable {
+extension SupplementaryElementKind: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -481,7 +481,7 @@ extension UITableView: CellBasedView {
     }
 
     public func dequeueCellWithIdentifier(id: String, atIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return dequeueReusableCellWithIdentifier(id, forIndexPath: indexPath) as! UITableViewCell
+        return dequeueReusableCellWithIdentifier(id, forIndexPath: indexPath)
     }
 
     public func registerNib(nib: UINib, forSupplementaryViewKind: SupplementaryElementKind, withIdentifier id: String) {
@@ -493,7 +493,7 @@ extension UITableView: CellBasedView {
     }
 
     public func dequeueSupplementaryViewWithKind(kind: SupplementaryElementKind, identifier: String, atIndexPath: NSIndexPath) -> UITableViewHeaderFooterView? {
-        return dequeueReusableHeaderFooterViewWithIdentifier(identifier) as? UITableViewHeaderFooterView
+        return dequeueReusableHeaderFooterViewWithIdentifier(identifier)
     }
 }
 
@@ -508,7 +508,7 @@ extension UICollectionView: CellBasedView {
     }
 
     public func dequeueCellWithIdentifier(id: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        return dequeueReusableCellWithReuseIdentifier(id, forIndexPath: indexPath) as! UICollectionReusableView
+        return dequeueReusableCellWithReuseIdentifier(id, forIndexPath: indexPath)
     }
 
     public func registerNib(nib: UINib, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier id: String) {
@@ -520,6 +520,6 @@ extension UICollectionView: CellBasedView {
     }
 
     public func dequeueSupplementaryViewWithKind(kind: SupplementaryElementKind, identifier: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView? {
-        return dequeueReusableSupplementaryViewOfKind("\(kind)", withReuseIdentifier: identifier, forIndexPath: indexPath) as? UICollectionReusableView
+        return dequeueReusableSupplementaryViewOfKind("\(kind)", withReuseIdentifier: identifier, forIndexPath: indexPath)
     }
 }

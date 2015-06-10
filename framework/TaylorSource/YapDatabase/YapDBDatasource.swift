@@ -90,7 +90,7 @@ public struct YapDBDatasource<
 
     // SequenceType
 
-    public func generate() -> GeneratorOf<Factory.ItemType> {
+    public func generate() -> AnyGenerator<Factory.ItemType> {
         return observer.generate()
     }
 
