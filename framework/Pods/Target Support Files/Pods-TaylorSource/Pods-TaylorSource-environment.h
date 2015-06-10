@@ -39,12 +39,12 @@
 // YapDatabaseExtensions
 #define COCOAPODS_POD_AVAILABLE_YapDatabaseExtensions
 #define COCOAPODS_VERSION_MAJOR_YapDatabaseExtensions 1
-#define COCOAPODS_VERSION_MINOR_YapDatabaseExtensions 4
+#define COCOAPODS_VERSION_MINOR_YapDatabaseExtensions 5
 #define COCOAPODS_VERSION_PATCH_YapDatabaseExtensions 0
 
 // YapDatabaseExtensions/Common
 #define COCOAPODS_POD_AVAILABLE_YapDatabaseExtensions_Common
 #define COCOAPODS_VERSION_MAJOR_YapDatabaseExtensions_Common 1
-#define COCOAPODS_VERSION_MINOR_YapDatabaseExtensions_Common 4
+#define COCOAPODS_VERSION_MINOR_YapDatabaseExtensions_Common 5
 #define COCOAPODS_VERSION_PATCH_YapDatabaseExtensions_Common 0
 

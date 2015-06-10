@@ -8,18 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		18426AD3EEB08F1824F634B5 /* Pods_Datasources.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD884B61C9545C9DF4BAC00 /* Pods_Datasources.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		653B0DC61AE3E1DF00E92EA8 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653B0DC51AE3E1DF00E92EA8 /* Helpers.swift */; };
-		653CADE91AEE62B3005787CC /* YapDBMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653CADE81AEE62B3005787CC /* YapDBMapperTests.swift */; };
-		653CADEB1AEFA955005787CC /* YapDBObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653CADEA1AEFA955005787CC /* YapDBObserverTests.swift */; };
-		65E52D181AFD0BEE007E5946 /* YapDBDatasourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E52D171AFD0BEE007E5946 /* YapDBDatasourceTests.swift */; };
 		65FB1AAB1ADFF574004FEB63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FB1AAA1ADFF574004FEB63 /* AppDelegate.swift */; };
 		65FB1AAD1ADFF574004FEB63 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FB1AAC1ADFF574004FEB63 /* ViewController.swift */; };
 		65FB1AB01ADFF574004FEB63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65FB1AAE1ADFF574004FEB63 /* Main.storyboard */; };
 		65FB1AB21ADFF574004FEB63 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65FB1AB11ADFF574004FEB63 /* Images.xcassets */; };
 		65FB1AB51ADFF574004FEB63 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FB1AB31ADFF574004FEB63 /* LaunchScreen.xib */; };
-		65FB1AC11ADFF574004FEB63 /* DatasourcesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FB1AC01ADFF574004FEB63 /* DatasourcesTests.swift */; };
 		65FB1ACB1ADFF5FD004FEB63 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FB1ACA1ADFF5FD004FEB63 /* Models.swift */; };
-		65FB1ACD1ADFF654004FEB63 /* PresentationFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FB1ACC1ADFF654004FEB63 /* PresentationFactoryTests.swift */; };
 		BFF75C4CC8135604980F49FD /* Pods_DatasourcesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D48EB4FFC6E265B98C471A /* Pods_DatasourcesTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -36,10 +30,6 @@
 /* Begin PBXFileReference section */
 		48178EACEF4EC2F2C9EAADC1 /* Pods-Datasources.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Datasources.release.xcconfig"; path = "Pods/Target Support Files/Pods-Datasources/Pods-Datasources.release.xcconfig"; sourceTree = "<group>"; };
 		62D48EB4FFC6E265B98C471A /* Pods_DatasourcesTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DatasourcesTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		653B0DC51AE3E1DF00E92EA8 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		653CADE81AEE62B3005787CC /* YapDBMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBMapperTests.swift; sourceTree = "<group>"; };
-		653CADEA1AEFA955005787CC /* YapDBObserverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBObserverTests.swift; sourceTree = "<group>"; };
-		65E52D171AFD0BEE007E5946 /* YapDBDatasourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBDatasourceTests.swift; sourceTree = "<group>"; };
 		65FB1AA51ADFF574004FEB63 /* Datasources.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Datasources.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65FB1AA91ADFF574004FEB63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		65FB1AAA1ADFF574004FEB63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -49,9 +39,7 @@
 		65FB1AB41ADFF574004FEB63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		65FB1ABA1ADFF574004FEB63 /* DatasourcesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DatasourcesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		65FB1ABF1ADFF574004FEB63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		65FB1AC01ADFF574004FEB63 /* DatasourcesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatasourcesTests.swift; sourceTree = "<group>"; };
 		65FB1ACA1ADFF5FD004FEB63 /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		65FB1ACC1ADFF654004FEB63 /* PresentationFactoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationFactoryTests.swift; sourceTree = "<group>"; };
 		6E5CB0F02126B423866B55B3 /* Pods-Datasources.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Datasources.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Datasources/Pods-Datasources.debug.xcconfig"; sourceTree = "<group>"; };
 		7B3F4A7FA43ED04472CE2463 /* Pods-DatasourcesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DatasourcesTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DatasourcesTests/Pods-DatasourcesTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7CD884B61C9545C9DF4BAC00 /* Pods_Datasources.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Datasources.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,12 +131,6 @@
 		65FB1ABD1ADFF574004FEB63 /* DatasourcesTests */ = {
 			isa = PBXGroup;
 			children = (
-				65FB1AC01ADFF574004FEB63 /* DatasourcesTests.swift */,
-				653B0DC51AE3E1DF00E92EA8 /* Helpers.swift */,
-				65FB1ACC1ADFF654004FEB63 /* PresentationFactoryTests.swift */,
-				65E52D171AFD0BEE007E5946 /* YapDBDatasourceTests.swift */,
-				653CADE81AEE62B3005787CC /* YapDBMapperTests.swift */,
-				653CADEA1AEFA955005787CC /* YapDBObserverTests.swift */,
 				65FB1ABE1ADFF574004FEB63 /* Supporting Files */,
 			);
 			path = DatasourcesTests;
@@ -371,12 +353,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65FB1ACD1ADFF654004FEB63 /* PresentationFactoryTests.swift in Sources */,
-				653B0DC61AE3E1DF00E92EA8 /* Helpers.swift in Sources */,
-				653CADEB1AEFA955005787CC /* YapDBObserverTests.swift in Sources */,
-				653CADE91AEE62B3005787CC /* YapDBMapperTests.swift in Sources */,
-				65FB1AC11ADFF574004FEB63 /* DatasourcesTests.swift in Sources */,
-				65E52D181AFD0BEE007E5946 /* YapDBDatasourceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
