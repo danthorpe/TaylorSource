@@ -48,10 +48,10 @@ extension UITableView: UpdatableView {
     public var processChanges: YapDatabaseViewMappings.Changes {
         return { [weak self] changeset in
             if let weakSelf = self {
-                weakSelf.tay_performBatchUpdates {
-                    weakSelf.processSectionChanges(changeset.sections)
-                    weakSelf.processRowChanges(changeset.items)
-                }
+                weakSelf.beginUpdates()
+                weakSelf.processSectionChanges(changeset.sections)
+                weakSelf.processRowChanges(changeset.items)
+                weakSelf.endUpdates()
             }
         }
     }
@@ -92,10 +92,10 @@ extension UICollectionView: UpdatableView {
     public var processChanges: YapDatabaseViewMappings.Changes {
         return { [weak self] changeset in
             if let weakSelf = self {
-                weakSelf.tay_performBatchUpdates({
+                weakSelf.performBatchUpdates({
                     weakSelf.processSectionChanges(changeset.sections)
                     weakSelf.processItemChanges(changeset.items)
-                }, completion: .None)
+                }, completion: nil)
             }
         }
     }

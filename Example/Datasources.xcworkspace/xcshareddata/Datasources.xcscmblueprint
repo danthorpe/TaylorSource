@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9282C0E3896935EEA398DC416FE2183F64869184",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "9282C0E3896935EEA398DC416FE2183F64869184" : 0,
+    "5047BCC2904949AA5B4D6944B56D352271556397" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "3EDFACE6-6C08-4FEF-AD76-4BD3CF145350",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "9282C0E3896935EEA398DC416FE2183F64869184" : "TaylorSource",
+    "5047BCC2904949AA5B4D6944B56D352271556397" : "YapDatabaseExtensions"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Datasources",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Example\/Datasources.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:danthorpe\/YapDatabaseExtensions.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5047BCC2904949AA5B4D6944B56D352271556397"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:danthorpe\/TaylorSource.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9282C0E3896935EEA398DC416FE2183F64869184"
+    }
+  ]
+}
