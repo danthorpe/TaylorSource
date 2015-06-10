@@ -5,4 +5,4 @@ use_frameworks!
 
 platform :ios, "8.0"
 
-pod 'TaylorSource/YapDatabase', :path => '../'
+pod 'TaylorSource/YapDatabase', :path => '../../'
