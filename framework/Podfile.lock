@@ -15,7 +15,18 @@ PODS:
     - YapDatabase (~> 2.6)
 
 DEPENDENCIES:
-  - YapDatabaseExtensions (~> 1.5.0)
+  - YapDatabaseExtensions (from `https://github.com/danthorpe/YapDatabaseExtensions.git`,
+    branch `swift_2.0`)
+
+EXTERNAL SOURCES:
+  YapDatabaseExtensions:
+    :branch: swift_2.0
+    :git: https://github.com/danthorpe/YapDatabaseExtensions.git
+
+CHECKOUT OPTIONS:
+  YapDatabaseExtensions:
+    :commit: 82d69043aed157e8d5f7526e3ec52ec9de72ad29
+    :git: https://github.com/danthorpe/YapDatabaseExtensions.git
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 628fca2e88ef06f7cf6817309aa405f325d9a6fa
