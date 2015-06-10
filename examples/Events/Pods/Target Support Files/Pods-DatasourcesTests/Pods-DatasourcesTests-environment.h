@@ -30,28 +30,16 @@
 #define COCOAPODS_VERSION_MINOR_DateTools 5
 #define COCOAPODS_VERSION_PATCH_DateTools 0
 
-// Nimble
-#define COCOAPODS_POD_AVAILABLE_Nimble
-#define COCOAPODS_VERSION_MAJOR_Nimble 2
-#define COCOAPODS_VERSION_MINOR_Nimble 0
-#define COCOAPODS_VERSION_PATCH_Nimble 0
-
-// Quick
-#define COCOAPODS_POD_AVAILABLE_Quick
-#define COCOAPODS_VERSION_MAJOR_Quick 0
-#define COCOAPODS_VERSION_MINOR_Quick 4
-#define COCOAPODS_VERSION_PATCH_Quick 0
-
 // TaylorSource/Base
 #define COCOAPODS_POD_AVAILABLE_TaylorSource_Base
 #define COCOAPODS_VERSION_MAJOR_TaylorSource_Base 0
-#define COCOAPODS_VERSION_MINOR_TaylorSource_Base 11
+#define COCOAPODS_VERSION_MINOR_TaylorSource_Base 12
 #define COCOAPODS_VERSION_PATCH_TaylorSource_Base 0
 
 // TaylorSource/YapDatabase
 #define COCOAPODS_POD_AVAILABLE_TaylorSource_YapDatabase
 #define COCOAPODS_VERSION_MAJOR_TaylorSource_YapDatabase 0
-#define COCOAPODS_VERSION_MINOR_TaylorSource_YapDatabase 11
+#define COCOAPODS_VERSION_MINOR_TaylorSource_YapDatabase 12
 #define COCOAPODS_VERSION_PATCH_TaylorSource_YapDatabase 0
 
 // YapDatabase
@@ -69,12 +57,12 @@
 // YapDatabaseExtensions
 #define COCOAPODS_POD_AVAILABLE_YapDatabaseExtensions
 #define COCOAPODS_VERSION_MAJOR_YapDatabaseExtensions 1
-#define COCOAPODS_VERSION_MINOR_YapDatabaseExtensions 4
+#define COCOAPODS_VERSION_MINOR_YapDatabaseExtensions 5
 #define COCOAPODS_VERSION_PATCH_YapDatabaseExtensions 0
 
 // YapDatabaseExtensions/Common
 #define COCOAPODS_POD_AVAILABLE_YapDatabaseExtensions_Common
 #define COCOAPODS_VERSION_MAJOR_YapDatabaseExtensions_Common 1
-#define COCOAPODS_VERSION_MINOR_YapDatabaseExtensions_Common 4
+#define COCOAPODS_VERSION_MINOR_YapDatabaseExtensions_Common 5
 #define COCOAPODS_VERSION_PATCH_YapDatabaseExtensions_Common 0
 

@@ -50,8 +50,6 @@ code_sign() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework 'CocoaLumberjack.framework'
   install_framework 'DateTools.framework'
-  install_framework 'Nimble.framework'
-  install_framework 'Quick.framework'
   install_framework 'TaylorSource.framework'
   install_framework 'YapDatabase.framework'
   install_framework 'YapDatabaseExtensions.framework'
@@ -59,8 +57,6 @@ fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework 'CocoaLumberjack.framework'
   install_framework 'DateTools.framework'
-  install_framework 'Nimble.framework'
-  install_framework 'Quick.framework'
   install_framework 'TaylorSource.framework'
   install_framework 'YapDatabase.framework'
   install_framework 'YapDatabaseExtensions.framework'
