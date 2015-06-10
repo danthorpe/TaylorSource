@@ -23,7 +23,6 @@ DerivedData
 # you should judge for yourself, the pros and cons are mentioned at:
 # http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
 #
-Example/Pods
 
 # Carthage
 #
@@ -31,4 +30,3 @@ Example/Pods
 # Carthage/Checkouts
 
 Carthage/Build
-US Cities/Pods

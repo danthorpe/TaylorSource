@@ -1,0 +1,6 @@
+framework module YapDatabaseExtensions {
+  umbrella header "Pods-YapDatabaseExtensions-umbrella.h"
+
+  export *
+  module * { export * }
+}
