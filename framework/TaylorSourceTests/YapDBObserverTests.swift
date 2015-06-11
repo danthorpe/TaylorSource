@@ -54,6 +54,7 @@ func createManyEvents(color: Event.Color = .Red) -> [Event] {
 
 class ObserverTests: XCTestCase {
 
+    var observer: Observer<Event>!
     let configuration: TaylorSource.Configuration<Event> = events(true)
 }
 
@@ -71,7 +72,7 @@ extension ObserverTests {
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing one object")
 
-        let observer = Observer(
+        observer = Observer(
             database: db,
             changes: validateChangeset(expectation, validations: [validateChangesetHasSectionInsert()]),
             configuration: configuration)
@@ -87,7 +88,7 @@ extension ObserverTests {
 
         connection.write(createOneEvent())
 
-        let observer = Observer(
+        observer = Observer(
             database: db,
             changes: validateChangeset(expectation, validations: [validateChangesetHasRowInsert()]),
             configuration: configuration)
@@ -101,7 +102,7 @@ extension ObserverTests {
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing many object")
 
-        let observer = Observer(
+        observer = Observer(
             database: db,
             changes: validateChangeset(expectation, validations: [validateChangesetHasSectionInsert()]),
             configuration: configuration)
@@ -115,7 +116,7 @@ extension ObserverTests {
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing many object to groups")
 
-        let observer = Observer(
+        observer = Observer(
             database: db,
             changes: validateChangeset(expectation, validations: [validateChangesetHasSectionInsert(2)]),
             configuration: configuration)
