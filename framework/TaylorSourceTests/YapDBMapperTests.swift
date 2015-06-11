@@ -24,7 +24,7 @@ class MapperTests: XCTestCase {
 
     func test__when_database_has_one_item__initially__the_endIndex_is_1() {
         db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
-        db.write(Event.create(color: .Red))
+        db.write(Event.create(.Red))
         mapper = Mapper(database: db, configuration: events())
         XCTAssertEqual(mapper.startIndex, 0)
         XCTAssertEqual(mapper.endIndex, 1)

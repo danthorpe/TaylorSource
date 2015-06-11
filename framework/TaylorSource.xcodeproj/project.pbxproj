@@ -18,6 +18,11 @@
 		652DB7A01B287BAD0002F65C /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79A1B287BAD0002F65C /* Helpers.swift */; };
 		652DB7A51B287CFF0002F65C /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7A41B287CFF0002F65C /* Models.swift */; };
 		658413A51B29A9D400991C50 /* YapDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7811B2879EE0002F65C /* YapDB.swift */; };
+		658413A61B29AB7300991C50 /* YapDBDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7821B2879EE0002F65C /* YapDBDatasource.swift */; };
+		658413A71B29AB7300991C50 /* YapDBFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7831B2879EE0002F65C /* YapDBFactory.swift */; };
+		658413A81B29AB8100991C50 /* YapDBMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79C1B287BAD0002F65C /* YapDBMapperTests.swift */; };
+		658413A91B29AB8100991C50 /* YapDBObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79D1B287BAD0002F65C /* YapDBObserverTests.swift */; };
+		658413AA1B29AC1700991C50 /* YapDBDatasourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79B1B287BAD0002F65C /* YapDBDatasourceTests.swift */; };
 		CEC0879ACD7D1CCCE05E6C0B /* Pods_TaylorSourceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E45CB6825BDC28691D4F0F6C /* Pods_TaylorSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2604FB2F0CB56C5B5B81DACA /* Pods_TaylorSource.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
@@ -380,6 +385,8 @@
 				652DB7911B2879EE0002F65C /* Factory.swift in Sources */,
 				652DB7961B2879EE0002F65C /* Utilities.swift in Sources */,
 				652DB7971B2879EE0002F65C /* Views.swift in Sources */,
+				658413A61B29AB7300991C50 /* YapDBDatasource.swift in Sources */,
+				658413A71B29AB7300991C50 /* YapDBFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,7 +396,10 @@
 			files = (
 				652DB79F1B287BAD0002F65C /* FactoryTests.swift in Sources */,
 				652DB7A01B287BAD0002F65C /* Helpers.swift in Sources */,
+				658413A91B29AB8100991C50 /* YapDBObserverTests.swift in Sources */,
 				652DB79E1B287BAD0002F65C /* DatasourcesTests.swift in Sources */,
+				658413A81B29AB8100991C50 /* YapDBMapperTests.swift in Sources */,
+				658413AA1B29AC1700991C50 /* YapDBDatasourceTests.swift in Sources */,
 				652DB7A51B287CFF0002F65C /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

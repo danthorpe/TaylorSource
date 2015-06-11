@@ -10,8 +10,6 @@ public struct YapDBDatasource<
     Factory
     where
     Factory: _FactoryType,
-    Factory.ViewType: UpdatableView,
-    Factory.ViewType.ProcessChangesType == YapDatabaseViewMappings.Changes,
     Factory.CellIndexType == YapDBCellIndex,
     Factory.SupplementaryIndexType == YapDBSupplementaryIndex>: DatasourceType, SequenceType, CollectionType {
 

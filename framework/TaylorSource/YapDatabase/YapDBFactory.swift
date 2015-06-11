@@ -4,11 +4,6 @@
 
 import YapDatabase
 
-public protocol UpdatableView {
-    typealias ProcessChangesType
-    var processChanges: ProcessChangesType { get }
-}
-
 public struct YapDBCellIndex: IndexPathIndexType {
     public let indexPath: NSIndexPath
     public let transaction: YapDatabaseReadTransaction
@@ -42,8 +37,8 @@ public class YapDBFactory<
 }
 
 // MARK: - UpdatableView
-
-extension UITableView: UpdatableView {
+/*
+extension UITableView {
 
     public var processChanges: YapDatabaseViewMappings.Changes {
         return { [weak self] changeset in
@@ -85,9 +80,10 @@ extension UITableView: UpdatableView {
             }
         }
     }
+
 }
 
-extension UICollectionView: UpdatableView {
+extension UICollectionView {
 
     public var processChanges: YapDatabaseViewMappings.Changes {
         return { [weak self] changeset in
@@ -130,4 +126,6 @@ extension UICollectionView: UpdatableView {
         }
     }
 }
+
+*/
 

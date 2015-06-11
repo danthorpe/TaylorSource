@@ -62,7 +62,7 @@ extension YapDBDatasourceTests {
         var numberOfBlueEvents: Int!
         let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__) { database in
             numberOfRedEvents = database.write(createManyEvents()).count
-            numberOfBlueEvents = database.write(createManyEvents(color: .Blue)).count
+            numberOfBlueEvents = database.write(createManyEvents(.Blue)).count
         }
         let datasource = datasourceWithDatabase(db)
         XCTAssertEqual(datasource.numberOfSections, 2)
