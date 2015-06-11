@@ -283,8 +283,8 @@ public class Factory<
     let getCellKey: GetCellKey?
     let getSupplementaryKey: GetSupplementaryKey?
 
-    var cells = [String: (ReuseIdentifier, CellConfig)]()
-    var views = [SupplementaryElementIndex: (ReuseIdentifier, SupplementaryViewConfig)]()
+    var cells = [String: (reuseIdentifier: ReuseIdentifier, configure: CellConfig)]()
+    var views = [SupplementaryElementIndex: (reuseIdentifier: ReuseIdentifier, configure: SupplementaryViewConfig)]()
     var texts = [SupplementaryElementKind: SupplementaryTextConfig]()
 
     init(cell: GetCellKey? = .None, supplementary: GetSupplementaryKey? = .None) {
@@ -320,9 +320,9 @@ public class Factory<
 
     public func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) -> Cell {
         let key = getCellKey?(item, index) ?? self.dynamicType.defaultCellKey
-        if let (reuseIdentifier, configure) = cells[key] {
-            let cell = view.dequeueCellWithIdentifier(reuseIdentifier, atIndexPath: index.indexPath) as! Cell
-            configure(cell: cell, item: item, index: index)
+        if let info = cells[key] {
+            let cell = view.dequeueCellWithIdentifier(info.reuseIdentifier, atIndexPath: index.indexPath) as! Cell
+            info.configure(cell: cell, item: item, index: index)
             return cell
         }
         fatalError("No cell factory registered with key: \(key). Currently registered keys: \(([String])(cells.keys))")
@@ -330,9 +330,9 @@ public class Factory<
 
     public func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: View, atIndex index: SupplementaryIndex) -> SupplementaryView? {
         let key = getSupplementaryKey?(index) ?? self.dynamicType.defaultSuppplementaryViewKey
-        if let (reuseIdentifier, configure) = views[SupplementaryElementIndex(kind: kind, key: key)] {
-            if let supplementaryView = view.dequeueSupplementaryViewWithKind(kind, identifier: reuseIdentifier, atIndexPath: index.indexPath) as? SupplementaryView {
-                configure(supplementaryView: supplementaryView, index: index)
+        if let info = views[SupplementaryElementIndex(kind: kind, key: key)] {
+            if let supplementaryView = view.dequeueSupplementaryViewWithKind(kind, identifier: info.reuseIdentifier, atIndexPath: index.indexPath) as? SupplementaryView {
+                info.configure(supplementaryView: supplementaryView, index: index)
                 return supplementaryView
             }
         }

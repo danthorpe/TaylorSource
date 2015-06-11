@@ -2054,6 +2054,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSourceTests-YapDatabaseExtensions/Pods-TaylorSourceTests-YapDatabaseExtensions-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSourceTests-YapDatabaseExtensions/Info.plist";
@@ -2082,6 +2083,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSourceTests-YapDatabaseExtensions/Pods-TaylorSourceTests-YapDatabaseExtensions-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSourceTests-YapDatabaseExtensions/Info.plist";
@@ -2109,6 +2111,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSource-CocoaLumberjack/Pods-TaylorSource-CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSource-CocoaLumberjack/Info.plist";
@@ -2136,6 +2139,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSource/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2165,6 +2169,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSource-YapDatabase/Pods-TaylorSource-YapDatabase-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSource-YapDatabase/Info.plist";
@@ -2192,6 +2197,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSource/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2256,6 +2262,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSourceTests-CocoaLumberjack/Pods-TaylorSourceTests-CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSourceTests-CocoaLumberjack/Info.plist";
@@ -2283,6 +2290,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSource-YapDatabase/Pods-TaylorSource-YapDatabase-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSource-YapDatabase/Info.plist";
@@ -2310,6 +2318,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSource-YapDatabaseExtensions/Pods-TaylorSource-YapDatabaseExtensions-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSource-YapDatabaseExtensions/Info.plist";
@@ -2338,6 +2347,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSourceTests-CocoaLumberjack/Pods-TaylorSourceTests-CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSourceTests-CocoaLumberjack/Info.plist";
@@ -2365,6 +2375,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSource-CocoaLumberjack/Pods-TaylorSource-CocoaLumberjack-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSource-CocoaLumberjack/Info.plist";
@@ -2392,6 +2403,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSourceTests-YapDatabase/Pods-TaylorSourceTests-YapDatabase-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSourceTests-YapDatabase/Info.plist";
@@ -2419,6 +2431,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSource-YapDatabaseExtensions/Pods-TaylorSource-YapDatabaseExtensions-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSource-YapDatabaseExtensions/Info.plist";
@@ -2446,6 +2459,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSourceTests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2515,6 +2529,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_PREFIX_HEADER = "Target Support Files/Pods-TaylorSourceTests-YapDatabase/Pods-TaylorSourceTests-YapDatabase-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSourceTests-YapDatabase/Info.plist";
@@ -2542,6 +2557,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-TaylorSourceTests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

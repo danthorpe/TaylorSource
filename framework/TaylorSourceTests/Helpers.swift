@@ -9,31 +9,6 @@ import YapDatabase
 import YapDatabaseExtensions
 import TaylorSource
 
-typealias DatabaseOperationsBlock = (YapDatabase) -> Void
-
-func createYapDatabase(file: String, suffix: String? = .None, operations: DatabaseOperationsBlock? = .None) -> YapDatabase {
-
-    func pathToDatabase(name: String, suffix: String? = .None) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        let directory: String = (paths.first as? String) ?? NSTemporaryDirectory()
-        let filename: String = {
-            if let suffix = suffix {
-                return "\(name)-\(suffix).sqlite"
-            }
-            return "\(name).sqlite"
-        }()
-        return directory.stringByAppendingPathComponent(filename)
-    }
-
-    let path = pathToDatabase(file.lastPathComponent, suffix: suffix?.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "()")))
-    assert(!path.isEmpty, "Path should not be empty.")
-    NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
-
-    let db =  YapDatabase(path: path)
-    operations?(db)
-    return db
-}
-
 class StubbedTableView: UITableView {
     override func dequeueCellWithIdentifier(id: String, atIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         return UITableViewCell(style: .Default, reuseIdentifier: id)
@@ -167,7 +142,7 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
 
     let grouping: YapDB.View.Grouping = .ByObject({ (collection, key, object) -> String! in
         if collection == Person.collection {
-            if let person: Person = valueFromArchive(object) {
+            if let person = Person.unarchive(object) {
                 return createGroup(person)
             }
         }
@@ -175,8 +150,8 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
     })
 
     let sorting: YapDB.View.Sorting = .ByObject({ (group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
-        if let person1: Person = valueFromArchive(object1) {
-            if let person2: Person = valueFromArchive(object2) {
+        if  let person1 = Person.unarchive(object1),
+            let person2 = Person.unarchive(object2) {
                 let comparison = person1.name.caseInsensitiveCompare(person2.name)
                 switch comparison {
                 case .OrderedSame:
@@ -184,7 +159,6 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
                 default:
                     return comparison
                 }
-            }
         }
         return .OrderedSame
     })
@@ -198,7 +172,7 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
 }
 
 func people(name: String, byGroup createGroup: (Person) -> String) -> Configuration<Person> {
-    return Configuration(fetch: people(name, byGroup: createGroup)) { valueFromArchive($0) }
+    return Configuration(fetch: people(name, byGroup: createGroup), itemMapper: Person.unarchive)
 }
 
 

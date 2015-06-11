@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		652DB76A1B28786F0002F65C /* TaylorSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 652DB7691B28786F0002F65C /* TaylorSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		652DB7701B28786F0002F65C /* TaylorSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 652DB7641B28786F0002F65C /* TaylorSource.framework */; };
-		652DB78D1B2879EE0002F65C /* YapDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7811B2879EE0002F65C /* YapDB.swift */; };
-		652DB78E1B2879EE0002F65C /* YapDBDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7821B2879EE0002F65C /* YapDBDatasource.swift */; };
-		652DB78F1B2879EE0002F65C /* YapDBFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7831B2879EE0002F65C /* YapDBFactory.swift */; };
 		652DB7901B2879EE0002F65C /* Datasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7851B2879EE0002F65C /* Datasource.swift */; };
 		652DB7911B2879EE0002F65C /* Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7861B2879EE0002F65C /* Factory.swift */; };
 		652DB7961B2879EE0002F65C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB78B1B2879EE0002F65C /* Utilities.swift */; };
@@ -19,10 +16,8 @@
 		652DB79E1B287BAD0002F65C /* DatasourcesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7981B287BAD0002F65C /* DatasourcesTests.swift */; };
 		652DB79F1B287BAD0002F65C /* FactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7991B287BAD0002F65C /* FactoryTests.swift */; };
 		652DB7A01B287BAD0002F65C /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79A1B287BAD0002F65C /* Helpers.swift */; };
-		652DB7A11B287BAD0002F65C /* YapDBDatasourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79B1B287BAD0002F65C /* YapDBDatasourceTests.swift */; };
-		652DB7A21B287BAD0002F65C /* YapDBMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79C1B287BAD0002F65C /* YapDBMapperTests.swift */; };
-		652DB7A31B287BAD0002F65C /* YapDBObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79D1B287BAD0002F65C /* YapDBObserverTests.swift */; };
 		652DB7A51B287CFF0002F65C /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7A41B287CFF0002F65C /* Models.swift */; };
+		658413A51B29A9D400991C50 /* YapDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7811B2879EE0002F65C /* YapDB.swift */; };
 		CEC0879ACD7D1CCCE05E6C0B /* Pods_TaylorSourceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E45CB6825BDC28691D4F0F6C /* Pods_TaylorSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2604FB2F0CB56C5B5B81DACA /* Pods_TaylorSource.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
@@ -380,10 +375,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				652DB78F1B2879EE0002F65C /* YapDBFactory.swift in Sources */,
-				652DB78D1B2879EE0002F65C /* YapDB.swift in Sources */,
 				652DB7901B2879EE0002F65C /* Datasource.swift in Sources */,
-				652DB78E1B2879EE0002F65C /* YapDBDatasource.swift in Sources */,
+				658413A51B29A9D400991C50 /* YapDB.swift in Sources */,
 				652DB7911B2879EE0002F65C /* Factory.swift in Sources */,
 				652DB7961B2879EE0002F65C /* Utilities.swift in Sources */,
 				652DB7971B2879EE0002F65C /* Views.swift in Sources */,
@@ -396,10 +389,7 @@
 			files = (
 				652DB79F1B287BAD0002F65C /* FactoryTests.swift in Sources */,
 				652DB7A01B287BAD0002F65C /* Helpers.swift in Sources */,
-				652DB7A31B287BAD0002F65C /* YapDBObserverTests.swift in Sources */,
 				652DB79E1B287BAD0002F65C /* DatasourcesTests.swift in Sources */,
-				652DB7A21B287BAD0002F65C /* YapDBMapperTests.swift in Sources */,
-				652DB7A11B287BAD0002F65C /* YapDBDatasourceTests.swift in Sources */,
 				652DB7A51B287CFF0002F65C /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
