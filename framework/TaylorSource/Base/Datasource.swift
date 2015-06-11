@@ -112,7 +112,7 @@ public struct BasicDatasourceProvider<Datasource: DatasourceType>: DatasourcePro
     /// The wrapped Datasource
     public let datasource: Datasource
 
-    init(_ d: Datasource) {
+    public init(_ d: Datasource) {
         datasource = d
     }
 }
