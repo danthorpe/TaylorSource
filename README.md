@@ -1,6 +1,7 @@
 # Taylor Source
 
 [![Join the chat at https://gitter.im/danthorpe/TaylorSource](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/danthorpe/TaylorSource?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Taylor Source is a Swift framework for creating highly configurable and reusable data sources.
 
 ## Installation
@@ -89,6 +90,94 @@ For supplementary view configure blocks, the index type further has the group wh
 
 
 ## Multiple Cell & View Types
+Often it might be necessary to have different cell designs in the same screen. Or, perhaps different supplementary views. This can be achieved by registering each cell and view with the datasource’s factory. There are some caveats however.
+
+The Datasource’s Factory implements `FactoryType` which defines the generic type `CellType` and `SupplementaryViewType`. When the design encompasses more than one cell class (or supplementary view class), this generic type becomes the parent class.
+
+For a table view design, all cells inherit from `UITableView`, so given two cell subclasses, `EventCell` and `ReminderCell` the definition from the example above would be:
+
+```swift
+class EventCell: UITableViewCell {
+    // etc
+}
+
+class ReminderCell: UITableViewCell {
+    // etc
+}
+
+class EventDatasource: DatasourceProviderType {
+  typealias Factory = YapDBFactory<Event, UITableViewCell, EventHeaderFooter, UITableView>
+  typealias Datasource = YapDBDatasource<Factory>
+
+  let datasource: Datasource
+}
+```
+
+In some situations, it is often efficient to use a base cell class, for example, `ReminderCell` could in fact be a specialized `EventCell`.
+
+```swift
+class EventCell: UITableViewCell {
+    // etc
+}
+
+class ReminderCell: EventCell {
+    // etc
+}
+
+class EventDatasource: DatasourceProviderType {
+  typealias Factory = YapDBFactory<Event, EventCell, EventHeaderFooter, UITableView>
+  typealias Datasource = YapDBDatasource<Factory>
+
+  let datasource: Datasource
+}
+```
+
+The same rules apply for supplementary views e.g. section headers and footers, which inherit from `UITableHeaderFooterView` for table views, and `UICollectionReusableView` for collection views.
+
+### Registering multiple cells
+
+Registering cells requires the containing view, e.g. `UITableView` instance. So, recommended best practice is to initialise a custom datasource provider with the table view. Following on with the example:
+
+```swift
+class EventDatasource: DatasourceProviderType {
+  typealias Factory = YapDBFactory<Event, UITableViewCell, EventHeaderFooter, UITableView>
+  typealias Datasource = YapDBDatasource<Factory>
+
+  let datasource: Datasource
+
+  init(db: YapDatabase, view: Factory.ViewType) {
+		datasource = Datasource(id: “Events datasource”, database: db, factory: Factory(), processChanges: view.processChanges, configuration: eventsConfiguration())
+
+		datasource.factory.registerCell(.ClassWithIdentifier(EventCell.self, EventCell.reuseIdentifier), inView: view, configuration: EventCell.configuration())
+		datasource.factory.registerCell(.NibWithIdentifier(ReminderCell.nib, ReminderCell.reuseIdentifier), inView: view, configuration: ReminderCell.configuration())
+  }
+}
+```
+
+This requires both cell classes to implement `ReusableView` and return a configuration block. This is a feature of using TaylorSource, the configuration of cells is defined by a static  closure on the cell itself, which decouples them from view controllers.
+
+When the screen only has one cell type, the factory will vend exactly that cell class. With multiple cell types however, it will vend the correct subclass, but typed as the parent. Therefore inside the configuration closure, it must be cast. For example:
+
+```swift
+
+class EventCell: UITableViewCell {
+    class func configuration() -> EventsDatasource.Datasource.FactoryType.CellConfiguration {
+        return { (cell, event, index) in
+						/* The `cell` constant here is typed as 
+EventsDatasource.Datasource.FactoryType.CellType, 
+which in this example is UITableViewCell because we also
+have ReminderCell registered. */
+            cell.textLabel!.text = “\(event.date.timeAgoSinceNow())”
+					if let eventCell = cell as! EventCell {
+						eventCell.iconView.image = event.icon.image
+          }
+        }
+    }
+}
+
+```
+
+
 
 ## Design Goals
 1. Be D.R.Y. - I never want to have to implement `func tableView(_: UITableView, numberOfRowsInSection: Int) -> Int` ever again.
