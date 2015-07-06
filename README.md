@@ -1,4 +1,6 @@
 # Taylor Source
+
+[![Join the chat at https://gitter.im/danthorpe/TaylorSource](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/danthorpe/TaylorSource?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Taylor Source is a Swift framework for creating highly configurable and reusable data sources.
 
 ## Installation
