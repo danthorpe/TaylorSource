@@ -269,6 +269,8 @@ class EventDatasource: DatasourceProviderType {
 
 ## Contributing
 
+Until TaylorSource's APIs have stabilized (post Swift 2.0) I am not looking for contribution for code. Contributions in the form of pull requests for improvements to documentation, spelling mistakes, unit tests, integration aids are always welcome. 
+
 ## Author
 
 Daniel Thorpe - @danthorpe
