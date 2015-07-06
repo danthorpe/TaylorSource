@@ -177,7 +177,8 @@ have ReminderCell registered. */
 
 ```
 
-
+## Using enums for multiple models
+t.b.c
 
 ## Design Goals
 1. Be D.R.Y. - I never want to have to implement `func tableView(_: UITableView, numberOfRowsInSection: Int) -> Int` ever again.
