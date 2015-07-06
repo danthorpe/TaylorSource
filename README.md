@@ -204,12 +204,61 @@ class EventCell: UITableViewCell {
 
 ### How does the factory dequeue and configure the correct cell class?
 
+The example above glossed over a closure which the factory was initialized with. This is a critical detail when using multiple cell classes in the same container. In such a scenario, some cells are one design, other cells are another. The logic of this switch is provided to TaylorSource's Factory class (which is the base implementation of `FactoryType`) via closures at its initialization. These closures are typed as follows:
 
+```swift
+Factory.GetCellKey = (Item, CellIndexType) -> String
+Factory.GetSupplementaryKey = (SupplementaryIndexType) -> String
+```
+
+For cells, this means that the closure will receive the model item, and it's index inside the datasource. For YapDBDatasources, this means that the index will be a struct providing both the `NSIndexPath` but also a `YapDatabaseReadTransaction`. The closure should use this information and return a `String`, which is used as a look up key for the cell. In our example above, the `Event` model has an `isReminder` boolean property.
+
+The keys returned by the closure are used as the `withKey` argument when registering the corresponding cell.
+
+As of writing there isn't an example demonstrating this, and when using one cell class, the `withKey` argument can be ommited, along with the closure in the factory initializer. 
 
 
 
 ## Using enums for multiple models
-t.b.c
+
+If the design calls for a table view (or collection view) with multiple different cells, each with their own model, use an enum to wrap the corresponding models. For the example above, consider that `EventCell` requires an `Event` model, and `ReminderCell` requires a `Reminder` model. How would we put this into a datasource?
+
+```swift
+struct Event {}
+struct Reminder {}
+
+enum CellModel { // but come up with a better name!
+  case Event(ModuleName.Event) // Use full name definition to avoid clashes.
+  case Reminder(ModuleName.Reminder)
+}
+
+extension CellModel {
+  static var getCellKey: EventDatasource.Datasource.FactoryType.GetCellKey {
+    return { (item, _) in 
+      switch item {
+        case .Event(_): return "event"
+        case .Reminder(_): return "reminder"
+      }
+    }
+  }
+}
+
+class EventDatasource: DatasourceProviderType {
+  typealias Factory = YapDBFactory<CellModel, UITableViewCell, EventHeaderFooter, UITableView>
+  typealias Datasource = YapDBDatasource<Factory>
+
+  let datasource: Datasource
+
+  init(db: YapDatabase, view: Factory.ViewType) {
+    // Create a factory. Use the closure as defined on the cell model.
+    let factory = Factory(cell: CellModel.getCellKey)
+
+
+    // etc
+  }
+}
+```
+
 
 ## Design Goals
 1. Be D.R.Y. - I never want to have to implement `func tableView(_: UITableView, numberOfRowsInSection: Int) -> Int` ever again.
