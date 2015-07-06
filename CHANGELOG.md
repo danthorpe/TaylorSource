@@ -1,3 +1,7 @@
+# 0.13.0
+1. [[TAY-17](https://github.com/danthorpe/TaylorSource/pull/17)]: Added a bitter badge to the README.
+1. [[TAY-2](https://github.com/danthorpe/TaylorSource/pull/2)]: Improvements to the README for multiple cells and models.
+
 # 0.12.0
 1. [[TAY-13](https://github.com/danthorpe/TaylorSource/pull/13)]: Make a few subtle changes to increase the ease of implementing DatasourceType from scratch outside of TaylorSource. No longer is a SequenceType and CollectionType implementation required. And `YapDBCellIndex` and `YapDBSupplementaryViewIndex` have public constructors.
 1. [[TAY-15](https://github.com/danthorpe/TaylorSource/pull/15)]: Preparing for Xcode 7 and Swift 2.0, this PR refactors the project structure, so that there is a framework project with tests, and example projects which build the framework using Pods. The Datasources and US Cities have been moved into the examples project.
