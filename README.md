@@ -92,20 +92,17 @@ For supplementary view configure blocks, the index type further has the group wh
 ## Multiple Cell & View Types
 Often it might be necessary to have different cell designs in the same screen. Or, perhaps different supplementary views. This can be achieved by registering each cell and view with the datasource’s factory. There are some caveats however.
 
-The Datasource’s Factory implements `FactoryType` which defines the generic type `CellType` and `SupplementaryViewType`. When the design encompasses more than one cell class (or supplementary view class), this generic type becomes the parent class.
+The Datasource’s Factory implements `FactoryType` which defines the generic type `CellType` and `SupplementaryViewType`. When the design encompasses more than one cell class (or supplementary view class), this generic type becomes the common parent class.
 
-For a table view design, all cells inherit from `UITableView`, so given two cell subclasses, `EventCell` and `ReminderCell` the definition from the example above would be:
+For a table view design, all cells inherit from `UITableViewCell`, so given two cell subclasses, `EventCell` and `ReminderCell` the definition from the example above would be:
 
 ```swift
-class EventCell: UITableViewCell {
-    // etc
-}
+class EventCell: UITableViewCell { }
 
-class ReminderCell: UITableViewCell {
-    // etc
-}
+class ReminderCell: UITableViewCell { }
 
 class EventDatasource: DatasourceProviderType {
+  // Note that cell is common parent class.
   typealias Factory = YapDBFactory<Event, UITableViewCell, EventHeaderFooter, UITableView>
   typealias Datasource = YapDBDatasource<Factory>
 
@@ -113,18 +110,15 @@ class EventDatasource: DatasourceProviderType {
 }
 ```
 
-In some situations, it is often efficient to use a base cell class, for example, `ReminderCell` could in fact be a specialized `EventCell`.
+In some situations it is often efficient to use a base cell class, for example, `ReminderCell` could in fact be a specialized `EventCell`.
 
 ```swift
-class EventCell: UITableViewCell {
-    // etc
-}
+class EventCell: UITableViewCell { }
 
-class ReminderCell: EventCell {
-    // etc
-}
+class ReminderCell: EventCell { }
 
 class EventDatasource: DatasourceProviderType {
+  // Note that here EventCell is our common parent cell.
   typealias Factory = YapDBFactory<Event, EventCell, EventHeaderFooter, UITableView>
   typealias Datasource = YapDBDatasource<Factory>
 
@@ -136,7 +130,7 @@ The same rules apply for supplementary views e.g. section headers and footers, w
 
 ### Registering multiple cells
 
-Registering cells requires the containing view, e.g. `UITableView` instance. So, recommended best practice is to initialise a custom datasource provider with the table view. Following on with the example:
+Registering a cell requires the containing view, e.g. `UITableView` instance. So, recommended best practice is to initialise a custom datasource provider with the table view. Following on with the example of two cell subclasses:
 
 ```swift
 class EventDatasource: DatasourceProviderType {
@@ -146,36 +140,70 @@ class EventDatasource: DatasourceProviderType {
   let datasource: Datasource
 
   init(db: YapDatabase, view: Factory.ViewType) {
-		datasource = Datasource(id: “Events datasource”, database: db, factory: Factory(), processChanges: view.processChanges, configuration: eventsConfiguration())
+    // Create a factory. This closure is discussed below.
+    let factory = Factory(cell: { (event, index) in return event.isReminder ? "reminder" : "event" } )
+  
+    // Create the datasource
+    datasource = Datasource(
+      // this can be whatever you want, to help debugging. 
+      id: "Events datasource", 
+      // the YapDatabase instance - see YapDB from YapDatabaseExtensions.
+      database: db, 
+      // the factory we defined above.
+      factory: factory, 
+      // provided by TaylorSource to auto-update from YapDatabase changes.
+      processChanges: view.processChanges, 
+      // See example code for info on creating YapDB Configurations. Essentially this is a database fetch request for Event objects.
+      configuration: eventsConfiguration()
+    )
 
-		datasource.factory.registerCell(.ClassWithIdentifier(EventCell.self, EventCell.reuseIdentifier), inView: view, configuration: EventCell.configuration())
-		datasource.factory.registerCell(.NibWithIdentifier(ReminderCell.nib, ReminderCell.reuseIdentifier), inView: view, configuration: ReminderCell.configuration())
+    // Register the cells
+    datasource.factory.registerCell(
+      // See ReusableView in TaylorSource.
+      .ClassWithIdentifier(EventCell.self, EventCell.reuseIdentifier), 
+      inView: view, 
+      // The key used to look up the correct cell. See discussion below.
+      withKey: "event", 
+      // This is a static fnction which returns a closure. See below.
+      configuration: EventCell.configuration() 
+    )
+    
+    datasource.factory.registerCell(
+      .NibWithIdentifier(ReminderCell.nib, ReminderCell.reuseIdentifier), 
+      inView: view, 
+      withKey: "reminder",      
+      configuration: ReminderCell.configuration()
+    )
   }
 }
 ```
 
-This requires both cell classes to implement `ReusableView` and return a configuration block. This is a feature of using TaylorSource, the configuration of cells is defined by a static  closure on the cell itself, which decouples them from view controllers.
+This requires both cell classes to implement `ReusableView` and return a configuration block. This is a feature of using TaylorSource, the configuration of cells is defined by a static closure on the cell itself, which decouples them from view controllers - increasing usability.
 
-When the screen only has one cell type, the factory will vend exactly that cell class. With multiple cell types however, it will vend the correct subclass, but typed as the parent. Therefore inside the configuration closure, it must be cast. For example:
+The factory will vend an instance of the cell Therefore inside the configuration closure, it must be cast. For example:
 
 ```swift
 
 class EventCell: UITableViewCell {
-    class func configuration() -> EventsDatasource.Datasource.FactoryType.CellConfiguration {
-        return { (cell, event, index) in
-						/* The `cell` constant here is typed as 
-EventsDatasource.Datasource.FactoryType.CellType, 
-which in this example is UITableViewCell because we also
-have ReminderCell registered. */
-            cell.textLabel!.text = “\(event.date.timeAgoSinceNow())”
-					if let eventCell = cell as! EventCell {
-						eventCell.iconView.image = event.icon.image
-          }
-        }
+  class func configuration() -> EventsDatasource.Datasource.FactoryType.CellConfiguration {
+    /* The `cell` constant here is typed as EventsDatasource.Datasource.FactoryType.CellType, 
+     which in this example is UITableViewCell because we also have ReminderCell registered. */
+    return { (cell, event, index) in
+      cell.textLabel!.text = “\(event.date.timeAgoSinceNow())”
+      if let eventCell = cell as! EventCell {
+        eventCell.iconView.image = event.icon.image
+      }
+      // Note that we are only concerned with configuring the EventCell here.  
     }
+  }
 }
-
 ```
+
+### How does the factory dequeue and configure the correct cell class?
+
+
+
+
 
 ## Using enums for multiple models
 t.b.c
