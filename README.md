@@ -185,6 +185,9 @@ The factory will vend an instance of the cell Therefore inside the configuration
 ```swift
 
 class EventCell: UITableViewCell {
+
+  @IBOutlet var iconView: UIImageView!
+  
   class func configuration() -> EventsDatasource.Datasource.FactoryType.CellConfiguration {
     /* The `cell` constant here is typed as EventsDatasource.Datasource.FactoryType.CellType, 
      which in this example is UITableViewCell because we also have ReminderCell registered. */
