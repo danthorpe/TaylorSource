@@ -16,6 +16,7 @@ framework module YapDatabase {
   private header "YapDatabaseExtensionPrivate.h"
   private header "YapDatabaseRelationshipEdgePrivate.h"
   private header "YapDatabaseRelationshipPrivate.h"
+  private header "YapDatabaseRTreeIndexPrivate.h"
   private header "YapDatabaseSearchResultsViewPrivate.h"
   private header "YapDatabaseSecondaryIndexPrivate.h"
   private header "YapDatabaseViewChangePrivate.h"

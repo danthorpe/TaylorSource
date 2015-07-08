@@ -1,0 +1,10 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+inhibit_all_warnings!
+use_frameworks!
+
+platform :ios, "8.0"
+
+pod 'FlickrKit', '~> 1.0.5'
+pod 'HanekeSwift'
+pod 'TaylorSource/YapDatabase', :path => '../../'
