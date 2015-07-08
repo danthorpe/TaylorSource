@@ -33,13 +33,13 @@
 // TaylorSource/Base
 #define COCOAPODS_POD_AVAILABLE_TaylorSource_Base
 #define COCOAPODS_VERSION_MAJOR_TaylorSource_Base 0
-#define COCOAPODS_VERSION_MINOR_TaylorSource_Base 12
+#define COCOAPODS_VERSION_MINOR_TaylorSource_Base 13
 #define COCOAPODS_VERSION_PATCH_TaylorSource_Base 0
 
 // TaylorSource/YapDatabase
 #define COCOAPODS_POD_AVAILABLE_TaylorSource_YapDatabase
 #define COCOAPODS_VERSION_MAJOR_TaylorSource_YapDatabase 0
-#define COCOAPODS_VERSION_MINOR_TaylorSource_YapDatabase 12
+#define COCOAPODS_VERSION_MINOR_TaylorSource_YapDatabase 13
 #define COCOAPODS_VERSION_PATCH_TaylorSource_YapDatabase 0
 
 // YapDatabase

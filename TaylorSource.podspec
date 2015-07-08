@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name              = "TaylorSource"
-  s.version           = "0.12.0"
+  s.version           = "0.13.0"
   s.summary           = "Generic table view & collection view datasources in Swift, for use with YapDatabase."
   s.description       = <<-DESC
   

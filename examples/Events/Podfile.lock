@@ -5,8 +5,8 @@ PODS:
   - CocoaLumberjack/Extensions (1.9.2):
     - CocoaLumberjack/Core
   - DateTools (1.5.0)
-  - TaylorSource/Base (0.12.0)
-  - TaylorSource/YapDatabase (0.12.0):
+  - TaylorSource/Base (0.13.0)
+  - TaylorSource/YapDatabase (0.13.0):
     - TaylorSource/Base
     - YapDatabase (~> 2.6)
     - YapDatabaseExtensions (~> 1.5.0)
@@ -39,7 +39,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   CocoaLumberjack: 628fca2e88ef06f7cf6817309aa405f325d9a6fa
   DateTools: b93a2c2017747329c6077c7d7e8a75106e23d0d7
-  TaylorSource: 2618a171e2d16e9d8aa860d15d132d8e23bfc4dd
+  TaylorSource: fd07a1ddf1a00f4ba14272623999cc5bbb3a0d09
   YapDatabase: 814f9ff862a95c1e581d93335a4020482b69155b
   YapDatabaseExtensions: 78d968b16ac81b458f49abd976aabc0f36808e27
 
