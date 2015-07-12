@@ -190,6 +190,12 @@ class GalleryDatasource: DatasourceProviderType {
     var datasource: Datasource
     var date: NSDate
 
+    var canEditItemAtIndexPath: CanEditItemAtIndexPath? = .None
+    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? = .None
+    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? = .None
+    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? = .None
+    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? = .None
+
     init(date: NSDate, db: YapDatabase, view: Datasource.FactoryType.ViewType) {
 
         self.date = date
@@ -224,7 +230,7 @@ class ViewController: UIViewController {
 
     @IBOutlet var tableView: UITableView!
 
-    var wrapper: BasicTableViewDataSourceProvider<GalleryDatasource>!
+    var wrapper: TableViewDataSourceProvider<GalleryDatasource>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -241,7 +247,7 @@ class ViewController: UIViewController {
 
     func configureDatasource() {
         let date = NSDate().dateByAddingTimeInterval(-172_800.0)
-        wrapper = BasicTableViewDataSourceProvider(GalleryDatasource(date: date, db: database, view: tableView))
+        wrapper = TableViewDataSourceProvider(GalleryDatasource(date: date, db: database, view: tableView))
         tableView.dataSource = wrapper.tableViewDataSource
         tableView.estimatedRowHeight = 256.0
     }
