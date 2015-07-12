@@ -66,7 +66,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
 
     var segmentedDatasourceProvider: SegmentedDatasourceProvider<EventsDatasource>!
-    var datasource: TableViewDataSourceProvider<SegmentedDatasourceProvider<EventsDatasource>>!
+    var datasource: BasicTableViewDataSourceProvider<SegmentedDatasourceProvider<EventsDatasource>>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +83,7 @@ class ViewController: UIViewController {
 
         segmentedDatasourceProvider.configureSegmentedControl(segmentedControl)
 
-        datasource = TableViewDataSourceProvider(segmentedDatasourceProvider)
+        datasource = BasicTableViewDataSourceProvider(segmentedDatasourceProvider)
         tableView.dataSource = datasource.tableViewDataSource
     }
 
