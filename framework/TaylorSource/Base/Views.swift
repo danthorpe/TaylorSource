@@ -6,10 +6,15 @@ import UIKit
 
 // MARK: UITableView Support
 
+public protocol ComposableTableViewDataSource: UITableViewDataSource {
+    var underlyingDataSource: UITableViewDataSource { get }
+    init(_: UITableViewDataSource)
+}
 
 /// A provider of a UITableViewDataSource.
-public protocol UITableViewDataSourceProvider {    
-    var tableViewDataSource: UITableViewDataSource { get }
+public protocol UITableViewDataSourceProvider {
+    typealias TableViewDataSource: ComposableTableViewDataSource
+    var tableViewDataSource: TableViewDataSource { get }
 }
 
 /// An empty protocol to allow constraining a view type to UITableView.
@@ -27,11 +32,12 @@ This architecture allows for different kinds of DatasourceType(s) to
 be used as the basic for a UITableViewDataSource, without the need
 to implement UITableViewDataSource on any of them.
 */
-public struct TableViewDataSourceProvider<DatasourceProvider where DatasourceProvider: DatasourceProviderType, DatasourceProvider.Datasource.FactoryType.ViewType: UITableViewType, DatasourceProvider.Datasource.FactoryType.TextType == String>: UITableViewDataSourceProvider {
+public class TableViewDataSourceProvider<TableViewDataSource: ComposableTableViewDataSource, DatasourceProvider where DatasourceProvider: DatasourceProviderType, DatasourceProvider.Datasource.FactoryType.ViewType: UITableViewType, DatasourceProvider.Datasource.FactoryType.TextType == String>: UITableViewDataSourceProvider {
 
     typealias TableView = DatasourceProvider.Datasource.FactoryType.ViewType
 
     public let provider: DatasourceProvider
+    public let tableViewDataSource: TableViewDataSource
 
     public var datasource: DatasourceProvider.Datasource {
         return provider.datasource
@@ -41,13 +47,13 @@ public struct TableViewDataSourceProvider<DatasourceProvider where DatasourcePro
         return datasource.factory
     }
     
-    let bridgedTableViewDataSource: TableViewDataSource
+    private let bridgedTableViewDataSource: BaseTableViewDataSource
 
     /// Initalizes with a Datasource instance.
     public init(_ p: DatasourceProvider) {
         provider = p
 
-        bridgedTableViewDataSource = TableViewDataSource(
+        bridgedTableViewDataSource = BaseTableViewDataSource(
             numberOfSections: { (view) -> Int in
                 p.datasource.numberOfSections },
             numberOfRowsInSection: { (view, section) -> Int in
@@ -59,14 +65,49 @@ public struct TableViewDataSourceProvider<DatasourceProvider where DatasourcePro
             titleForFooterInSection: { (view, section) -> String? in
                 p.datasource.textForSupplementaryElementInView(view as! TableView, kind: .Footer, atIndexPath: NSIndexPath(forRow: 0, inSection: section)) }
         )
-    }
 
-    public var tableViewDataSource: UITableViewDataSource {
-        return bridgedTableViewDataSource
+        tableViewDataSource = TableViewDataSource(bridgedTableViewDataSource)
     }
 }
 
-class TableViewDataSource: NSObject, UITableViewDataSource {
+public class BasicTableViewDataSourceProvider<DatasourceProvider where DatasourceProvider: DatasourceProviderType, DatasourceProvider.Datasource.FactoryType.ViewType: UITableViewType, DatasourceProvider.Datasource.FactoryType.TextType == String>: TableViewDataSourceProvider<ComposedTableViewDataSource, DatasourceProvider> {
+
+    /// Initalizes with a Datasource instance.
+    public override init(_ p: DatasourceProvider) {
+        super.init(p)
+    }
+}
+
+class ComposedTableViewDataSource: NSObject, ComposableTableViewDataSource {
+
+    let underlyingDataSource: UITableViewDataSource
+
+    required init(_ u: UITableViewDataSource) {
+        underlyingDataSource = u
+    }
+
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return underlyingDataSource.numberOfSectionsInTableView?(tableView) ?? 1
+    }
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return underlyingDataSource.tableView(tableView, numberOfRowsInSection: section)
+    }
+
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        return underlyingDataSource.tableView(tableView, cellForRowAtIndexPath: indexPath)
+    }
+
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return underlyingDataSource.tableView?(tableView, titleForHeaderInSection: section)
+    }
+
+    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return underlyingDataSource.tableView?(tableView, titleForFooterInSection: section)
+    }
+}
+
+class BaseTableViewDataSource: NSObject, UITableViewDataSource {
 
     private let numberOfSections: (UITableView) -> Int
     private let numberOfRowsInSection: (UITableView, Int) -> Int
