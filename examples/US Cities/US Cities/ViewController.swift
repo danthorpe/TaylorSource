@@ -112,8 +112,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     lazy var data = USStatesAndCities()
-    var datasource: CitiesDatasource!
-    var tableViewDatasource: TableViewDataSourceProvider<CitiesDatasource>!
+    var wrapper: BasicTableViewDataSourceProvider<CitiesDatasource>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,10 +122,8 @@ class ViewController: UIViewController {
 
     func configureDatasource() {
 
-        datasource = CitiesDatasource(db: database, view: tableView, threshold: 0)
-        tableViewDatasource = TableViewDataSourceProvider(datasource)
-        tableView.dataSource = tableViewDatasource.tableViewDataSource
-
+        wrapper = BasicTableViewDataSourceProvider(CitiesDatasource(db: database, view: tableView, threshold: 0))
+        tableView.dataSource = wrapper.tableViewDataSource
         data.loadIntoDatabase(database)
     }
 }
