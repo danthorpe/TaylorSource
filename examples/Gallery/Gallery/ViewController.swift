@@ -224,7 +224,7 @@ class ViewController: UIViewController {
 
     @IBOutlet var tableView: UITableView!
 
-    var wrapper: TableViewDataSourceProvider<GalleryDatasource>!
+    var wrapper: BasicTableViewDataSourceProvider<GalleryDatasource>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -241,7 +241,7 @@ class ViewController: UIViewController {
 
     func configureDatasource() {
         let date = NSDate().dateByAddingTimeInterval(-172_800.0)
-        wrapper = TableViewDataSourceProvider(GalleryDatasource(date: date, db: database, view: tableView))
+        wrapper = BasicTableViewDataSourceProvider(GalleryDatasource(date: date, db: database, view: tableView))
         tableView.dataSource = wrapper.tableViewDataSource
         tableView.estimatedRowHeight = 256.0
     }
