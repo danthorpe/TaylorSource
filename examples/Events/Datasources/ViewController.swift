@@ -37,6 +37,34 @@ struct EventsDatasource: DatasourceProviderType {
     let eventColor: Event.Color
     let datasource: Datasource
 
+    var canEditItemAtIndexPath: CanEditItemAtIndexPath? {
+        return { _ in true }
+    }
+
+    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? {
+        return { (action, indexPath) in
+            switch action {
+            case .Delete:
+                if let item = self.datasource.itemAtIndexPath(indexPath) {
+                    self.readWriteConnection.remove(item)
+                }
+            default: break
+            }
+        }
+    }
+
+    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? {
+        return { _ in .Delete }
+    }
+
+    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? {
+        return { _ in false }
+    }
+
+    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? {
+        return { (_, _) in }
+    }
+
     init(color: Event.Color, db: YapDatabase, view: Factory.ViewType) {
 
         var ds = YapDBDatasource(id: "\(color) events datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: eventsWithColor(color, byColor: true) { mappings in
@@ -60,13 +88,18 @@ struct EventsDatasource: DatasourceProviderType {
     }
 }
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate {
+
+    typealias TableViewDataSource = TableViewDataSourceProvider<SegmentedDatasourceProvider<EventsDatasource>>
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
 
-    var segmentedDatasourceProvider: SegmentedDatasourceProvider<EventsDatasource>!
-    var datasource: BasicTableViewDataSourceProvider<SegmentedDatasourceProvider<EventsDatasource>>!
+    var wrapper: TableViewDataSource!
+
+    var selectedDatasourceProvider: EventsDatasource {
+        return wrapper.provider.selectedDatasourceProvider
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,19 +110,17 @@ class ViewController: UIViewController {
         let colors: [Event.Color] = [.Red, .Blue, .Green]
         let datasources = colors.map { EventsDatasource(color: $0, db: database, view: self.tableView) }
 
-        segmentedDatasourceProvider = SegmentedDatasourceProvider(id: "events segmented datasource", datasources: datasources, selectedIndex: 0) { [weak self] in
+        wrapper = TableViewDataSource(SegmentedDatasourceProvider(id: "events segmented datasource", datasources: datasources, selectedIndex: 0) { [weak self] in
             self?.tableView.reloadData()
-        }
-
-        segmentedDatasourceProvider.configureSegmentedControl(segmentedControl)
-
-        datasource = BasicTableViewDataSourceProvider(segmentedDatasourceProvider)
-        tableView.dataSource = datasource.tableViewDataSource
+        })
+        wrapper.provider.configureSegmentedControl(segmentedControl)
+        tableView.dataSource = wrapper.tableViewDataSource
+        tableView.setEditing(true, animated: false)
     }
 
     @IBAction func addEvent(sender: UIBarButtonItem) {
-        let color = segmentedDatasourceProvider.selectedDatasourceProvider.eventColor
-        segmentedDatasourceProvider.selectedDatasourceProvider.addEvent(Event.create(color: color))
+        let color = selectedDatasourceProvider.eventColor
+        selectedDatasourceProvider.addEvent(Event.create(color: color))
     }
 
     @IBAction func refreshEvents(sender: UIBarButtonItem) {
@@ -97,7 +128,13 @@ class ViewController: UIViewController {
     }
 
     @IBAction func removeAll(sender: UIBarButtonItem) {
-        segmentedDatasourceProvider.selectedDatasourceProvider.removeAllEvents()
+        selectedDatasourceProvider.removeAllEvents()
+    }
+
+    // UITableViewDelegate - Editing
+
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return selectedDatasourceProvider.editActionForItemAtIndexPath?(indexPath: indexPath).editingStyle ?? .None
     }
 }
 
