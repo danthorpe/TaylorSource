@@ -94,7 +94,7 @@ public enum EditableDatasourceAction: Int {
         }
     }
 
-    init?(editingStyle: UITableViewCellEditingStyle) {
+    public init?(editingStyle: UITableViewCellEditingStyle) {
         switch editingStyle {
         case .None:
             self = .None
