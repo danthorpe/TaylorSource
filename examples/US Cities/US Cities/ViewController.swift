@@ -39,6 +39,12 @@ struct CitiesDatasource: DatasourceProviderType {
     let formatter: NSNumberFormatter
     var datasource: Datasource
 
+    var canEditItemAtIndexPath: CanEditItemAtIndexPath? = .None
+    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? = .None
+    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? = .None
+    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? = .None
+    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? = .None
+
     init(db: YapDatabase, view: Factory.ViewType, threshold: Int) {
 
         formatter = NSNumberFormatter()
@@ -112,8 +118,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     lazy var data = USStatesAndCities()
-    var datasource: CitiesDatasource!
-    var tableViewDatasource: TableViewDataSourceProvider<CitiesDatasource>!
+    var wrapper: TableViewDataSourceProvider<CitiesDatasource>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,10 +128,8 @@ class ViewController: UIViewController {
 
     func configureDatasource() {
 
-        datasource = CitiesDatasource(db: database, view: tableView, threshold: 0)
-        tableViewDatasource = TableViewDataSourceProvider(datasource)
-        tableView.dataSource = tableViewDatasource.tableViewDataSource
-
+        wrapper = TableViewDataSourceProvider(CitiesDatasource(db: database, view: tableView, threshold: 0))
+        tableView.dataSource = wrapper.tableViewDataSource
         data.loadIntoDatabase(database)
     }
 }
