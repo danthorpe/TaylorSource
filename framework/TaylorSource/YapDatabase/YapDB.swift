@@ -45,7 +45,7 @@ It implements SequenceType, and Int based CollectionType.
 
 It has an NSIndexPath based API for accessing items.
 */
-public struct Mapper<T>: SequenceType, CollectionType {
+public struct Mapper<T>: SequenceType, CollectionType, Sliceable {
 
     let readOnlyConnection: YapDatabaseConnection
     var configuration: Configuration<T>
@@ -69,6 +69,10 @@ public struct Mapper<T>: SequenceType, CollectionType {
 
     public subscript(i: Int) -> T {
         return itemAtIndexPath(mappings[i])!
+    }
+
+    public subscript(bounds: Range<Int>) -> [T] {
+        return mappings[bounds].map { self.itemAtIndexPath($0)! }
     }
 
     /**
@@ -353,6 +357,13 @@ extension Observer: CollectionType {
     }
 }
 
+extension Observer: Sliceable {
+
+    public subscript(bounds: Range<Int>) -> [T] {
+        return mapper[bounds]
+    }
+}
+
 extension YapDatabaseViewMappings {
 
     /**
@@ -429,4 +440,18 @@ extension YapDatabaseViewMappings: CollectionType {
         }
     }
 }
+
+extension YapDatabaseViewMappings: Sliceable {
+
+    public subscript(bounds: Range<Int>) -> [NSIndexPath] {
+        return reduce(bounds, Array<NSIndexPath>()) { (var acc, index) in
+            acc.append(self[index])
+            return acc
+        }
+    }
+}
+
+
+
+
 
