@@ -215,9 +215,7 @@ For cells, this means that the closure will receive the model item, and it's ind
 
 The keys returned by the closure are used as the `withKey` argument when registering the corresponding cell.
 
-As of writing there isn't an example demonstrating this, and when using one cell class, the `withKey` argument can be ommited, along with the closure in the factory initializer. 
-
-
+See the Gallery example project for an demonstration of using multiple cell styles in the same datasource. 
 
 ## Using enums for multiple models
 
@@ -258,6 +256,15 @@ class EventDatasource: DatasourceProviderType {
   }
 }
 ```
+
+## Editable Table View Data Sources
+
+Apple’s `UITableViewDataSource` has some optional methods which support the table view when it is in editing mode. Editing a table view in general means inserting, deleting or moving rows.
+
+TaylorSource support this functionality via optional closures defined on `DatasourceProviderType`. To enable the optional methods on the generated `UITableViewDataSource` from `TableViewDatasourceProvider` all four closures must be provided, using an empty implementation if necessary.
+
+See the Events example project for how deleting rows from a `YapDatabase` backed table view works.
+
 
 
 ## Design Goals

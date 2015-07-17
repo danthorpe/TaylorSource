@@ -1,3 +1,7 @@
+# 0.14.0
+1. [[TAY-18](https://github.com/danthorpe/TaylorSource/pull/18)]: Supports the optional editing methods in `UITableViewDataSource` via optional closures in `DatasourceProviderType`.
+2. [[TAY-20](https://github.com/danthorpe/TaylorSource/pull/20)]: Supports Sliceable on Observer, Mapper and YapDatabaseViewMappings.
+
 # 0.13.0
 1. [[TAY-17](https://github.com/danthorpe/TaylorSource/pull/17)]: Added a bitter badge to the README.
 1. [[TAY-2](https://github.com/danthorpe/TaylorSource/pull/2)]: Improvements to the README for multiple cells and models.

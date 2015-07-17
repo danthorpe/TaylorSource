@@ -82,6 +82,37 @@ public protocol DatasourceType {
     func textForSupplementaryElementInView(view: FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> FactoryType.TextType?
 }
 
+
+public enum EditableDatasourceAction: Int {
+    case None = 1, Insert, Delete
+
+    public var editingStyle: UITableViewCellEditingStyle {
+        switch self {
+        case .None: return .None
+        case .Insert: return .Insert
+        case .Delete: return .Delete
+        }
+    }
+
+    public init?(editingStyle: UITableViewCellEditingStyle) {
+        switch editingStyle {
+        case .None:
+            self = .None
+        case .Insert:
+            self = .Insert
+        case .Delete:
+            self = .Delete
+        }
+    }
+}
+
+public typealias CanEditItemAtIndexPath = (indexPath: NSIndexPath) -> Bool
+public typealias CommitEditActionForItemAtIndexPath = (action: EditableDatasourceAction, indexPath: NSIndexPath) -> Void
+public typealias EditActionForItemAtIndexPath = (indexPath: NSIndexPath) -> EditableDatasourceAction
+public typealias CanMoveItemAtIndexPath = (indexPath: NSIndexPath) -> Bool
+public typealias CommitMoveItemAtIndexPathToIndexPath = (from: NSIndexPath, to: NSIndexPath) -> Void
+
+
 /**
 Suggested usage is not to use a DatasourceType directly, but instead to create
 a bespoke type which implements this protocol, DatasourceProviderType, and vend
@@ -90,10 +121,17 @@ in MVVM paradigms. But in traditional MVC, such a type is just a model, which
 the view controller initalizes and owns.
 */
 public protocol DatasourceProviderType {
+
     typealias Datasource: DatasourceType
 
     /// The underlying Datasource.
     var datasource: Datasource { get }
+
+    var canEditItemAtIndexPath: CanEditItemAtIndexPath? { get }
+    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? { get }
+    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? { get }
+    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? { get }
+    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? { get }
 }
 
 /**
@@ -111,6 +149,12 @@ public struct BasicDatasourceProvider<Datasource: DatasourceType>: DatasourcePro
 
     /// The wrapped Datasource
     public let datasource: Datasource
+
+    public let canEditItemAtIndexPath: CanEditItemAtIndexPath? = .None
+    public let commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? = .None
+    public let editActionForItemAtIndexPath: EditActionForItemAtIndexPath? = .None
+    public let canMoveItemAtIndexPath: CanMoveItemAtIndexPath? = .None
+    public let commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? = .None
 
     init(_ d: Datasource) {
         datasource = d
@@ -274,7 +318,9 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
 
     /// The index of the currently selected datasource provider
     public var indexOfSelectedDatasource: Int {
-        return state.read { state in state.selectedIndex }
+        return state.read { state in
+            state.selectedIndex
+        }
     }
 
     /// The currently selected datasource provider
@@ -407,7 +453,6 @@ public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProvider
 
     public let datasource: SegmentedDatasource<DatasourceProvider>
 
-
     /// The index of the currently selected datasource provider
     public var indexOfSelectedDatasource: Int {
         return datasource.indexOfSelectedDatasource
@@ -421,6 +466,26 @@ public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProvider
     /// The currently selected datasource
     public var selectedDatasource: DatasourceProvider.Datasource {
         return datasource.selectedDatasource
+    }
+
+    public var canEditItemAtIndexPath: CanEditItemAtIndexPath? {
+        return selectedDatasourceProvider.canEditItemAtIndexPath
+    }
+
+    public var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? {
+        return selectedDatasourceProvider.commitEditActionForItemAtIndexPath
+    }
+
+    public var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? {
+        return selectedDatasourceProvider.editActionForItemAtIndexPath
+    }
+
+    public var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? {
+        return selectedDatasourceProvider.canMoveItemAtIndexPath
+    }
+
+    public var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? {
+        return selectedDatasourceProvider.commitMoveItemAtIndexPathToIndexPath
     }
 
     /**

@@ -190,6 +190,12 @@ class GalleryDatasource: DatasourceProviderType {
     var datasource: Datasource
     var date: NSDate
 
+    var canEditItemAtIndexPath: CanEditItemAtIndexPath? = .None
+    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? = .None
+    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? = .None
+    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? = .None
+    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? = .None
+
     init(date: NSDate, db: YapDatabase, view: Datasource.FactoryType.ViewType) {
 
         self.date = date
