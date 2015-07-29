@@ -24,6 +24,8 @@
 		652DB7A31B287BAD0002F65C /* YapDBObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79D1B287BAD0002F65C /* YapDBObserverTests.swift */; };
 		652DB7A51B287CFF0002F65C /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB7A41B287CFF0002F65C /* Models.swift */; };
 		65AC884A1B54468300BFF702 /* DatasourceProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AC88491B54468300BFF702 /* DatasourceProviderTests.swift */; };
+		65F8E6F51B694AB9009C18F9 /* Basic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F8E6F41B694AB9009C18F9 /* Basic.swift */; };
+		65F8E6F71B694B07009C18F9 /* Segmented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F8E6F61B694B07009C18F9 /* Segmented.swift */; };
 		CEC0879ACD7D1CCCE05E6C0B /* Pods_TaylorSourceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E45CB6825BDC28691D4F0F6C /* Pods_TaylorSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2604FB2F0CB56C5B5B81DACA /* Pods_TaylorSource.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
@@ -62,6 +64,8 @@
 		652DB79D1B287BAD0002F65C /* YapDBObserverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBObserverTests.swift; sourceTree = "<group>"; };
 		652DB7A41B287CFF0002F65C /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Models.swift; path = ../../examples/Events/Datasources/Models.swift; sourceTree = "<group>"; };
 		65AC88491B54468300BFF702 /* DatasourceProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatasourceProviderTests.swift; sourceTree = "<group>"; };
+		65F8E6F41B694AB9009C18F9 /* Basic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Basic.swift; sourceTree = "<group>"; };
+		65F8E6F61B694B07009C18F9 /* Segmented.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Segmented.swift; sourceTree = "<group>"; };
 		7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaylorSourceTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A578C3969F628D5199729DFF /* Pods-TaylorSource.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaylorSource.release.xcconfig"; path = "Pods/Target Support Files/Pods-TaylorSource/Pods-TaylorSource.release.xcconfig"; sourceTree = "<group>"; };
 		EFDDF0CBF3053AB8936D7DBB /* Pods-TaylorSource.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaylorSource.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaylorSource/Pods-TaylorSource.debug.xcconfig"; sourceTree = "<group>"; };
@@ -179,6 +183,8 @@
 				652DB7861B2879EE0002F65C /* Factory.swift */,
 				652DB78B1B2879EE0002F65C /* Utilities.swift */,
 				652DB78C1B2879EE0002F65C /* Views.swift */,
+				65F8E6F41B694AB9009C18F9 /* Basic.swift */,
+				65F8E6F61B694B07009C18F9 /* Segmented.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -384,9 +390,11 @@
 			files = (
 				652DB78F1B2879EE0002F65C /* YapDBFactory.swift in Sources */,
 				652DB78D1B2879EE0002F65C /* YapDB.swift in Sources */,
+				65F8E6F71B694B07009C18F9 /* Segmented.swift in Sources */,
 				652DB7901B2879EE0002F65C /* Datasource.swift in Sources */,
 				652DB78E1B2879EE0002F65C /* YapDBDatasource.swift in Sources */,
 				652DB7911B2879EE0002F65C /* Factory.swift in Sources */,
+				65F8E6F51B694AB9009C18F9 /* Basic.swift in Sources */,
 				652DB7961B2879EE0002F65C /* Utilities.swift in Sources */,
 				652DB7971B2879EE0002F65C /* Views.swift in Sources */,
 			);
