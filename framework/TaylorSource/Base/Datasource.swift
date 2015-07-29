@@ -82,7 +82,6 @@ public protocol DatasourceType {
     func textForSupplementaryElementInView(view: FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> FactoryType.TextType?
 }
 
-
 public enum EditableDatasourceAction: Int {
     case None = 1, Insert, Delete
 
@@ -112,6 +111,14 @@ public typealias EditActionForItemAtIndexPath = (indexPath: NSIndexPath) -> Edit
 public typealias CanMoveItemAtIndexPath = (indexPath: NSIndexPath) -> Bool
 public typealias CommitMoveItemAtIndexPathToIndexPath = (from: NSIndexPath, to: NSIndexPath) -> Void
 
+public protocol DatasourceEditorType {
+
+    var canEditItemAtIndexPath: CanEditItemAtIndexPath? { get }
+    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? { get }
+    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? { get }
+    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? { get }
+    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? { get }
+}
 
 /**
 Suggested usage is not to use a DatasourceType directly, but instead to create
@@ -123,15 +130,60 @@ the view controller initalizes and owns.
 public protocol DatasourceProviderType {
 
     typealias Datasource: DatasourceType
+    typealias Editor: DatasourceEditorType
 
     /// The underlying Datasource.
     var datasource: Datasource { get }
 
-    var canEditItemAtIndexPath: CanEditItemAtIndexPath? { get }
-    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? { get }
-    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? { get }
-    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? { get }
-    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? { get }
+    /// An optional datasource editor
+    var editor: Editor { get }
+}
+
+public struct NoEditor: DatasourceEditorType {
+    public let canEditItemAtIndexPath: CanEditItemAtIndexPath? = .None
+    public let commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? = .None
+    public let editActionForItemAtIndexPath: EditActionForItemAtIndexPath? = .None
+    public let canMoveItemAtIndexPath: CanMoveItemAtIndexPath? = .None
+    public let commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? = .None
+}
+
+public struct Editor: DatasourceEditorType {
+
+    public let canEditItemAtIndexPath: CanEditItemAtIndexPath?
+    public let commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath?
+    public let editActionForItemAtIndexPath: EditActionForItemAtIndexPath?
+    public let canMoveItemAtIndexPath: CanMoveItemAtIndexPath?
+    public let commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath?
+
+    public init(
+        canEdit: CanEditItemAtIndexPath? = .None,
+        commitEdit: CommitEditActionForItemAtIndexPath? = .None,
+        editAction: EditActionForItemAtIndexPath? = .None,
+        canMove: CanMoveItemAtIndexPath? = .None,
+        commitMove: CommitMoveItemAtIndexPathToIndexPath? = .None) {
+            canEditItemAtIndexPath = canEdit
+            commitEditActionForItemAtIndexPath = commitEdit
+            editActionForItemAtIndexPath = editAction
+            canMoveItemAtIndexPath = canMove
+            commitMoveItemAtIndexPathToIndexPath = commitMove
+    }
+}
+
+public struct ComposedEditor: DatasourceEditorType {
+
+    public let canEditItemAtIndexPath: CanEditItemAtIndexPath?
+    public let commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath?
+    public let editActionForItemAtIndexPath: EditActionForItemAtIndexPath?
+    public let canMoveItemAtIndexPath: CanMoveItemAtIndexPath?
+    public let commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath?
+
+    public init(editor: DatasourceEditorType) {
+        canEditItemAtIndexPath = editor.canEditItemAtIndexPath
+        commitEditActionForItemAtIndexPath = editor.commitEditActionForItemAtIndexPath
+        editActionForItemAtIndexPath = editor.editActionForItemAtIndexPath
+        canMoveItemAtIndexPath = editor.canMoveItemAtIndexPath
+        commitMoveItemAtIndexPathToIndexPath = editor.commitMoveItemAtIndexPathToIndexPath
+    }
 }
 
 /**
@@ -150,11 +202,7 @@ public struct BasicDatasourceProvider<Datasource: DatasourceType>: DatasourcePro
     /// The wrapped Datasource
     public let datasource: Datasource
 
-    public let canEditItemAtIndexPath: CanEditItemAtIndexPath? = .None
-    public let commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? = .None
-    public let editActionForItemAtIndexPath: EditActionForItemAtIndexPath? = .None
-    public let canMoveItemAtIndexPath: CanMoveItemAtIndexPath? = .None
-    public let commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? = .None
+    public let editor = NoEditor()
 
     init(_ d: Datasource) {
         datasource = d
@@ -453,6 +501,10 @@ public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProvider
 
     public let datasource: SegmentedDatasource<DatasourceProvider>
 
+    public var editor: ComposedEditor {
+        return ComposedEditor(editor: selectedDatasourceProvider.editor)
+    }
+
     /// The index of the currently selected datasource provider
     public var indexOfSelectedDatasource: Int {
         return datasource.indexOfSelectedDatasource
@@ -466,26 +518,6 @@ public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProvider
     /// The currently selected datasource
     public var selectedDatasource: DatasourceProvider.Datasource {
         return datasource.selectedDatasource
-    }
-
-    public var canEditItemAtIndexPath: CanEditItemAtIndexPath? {
-        return selectedDatasourceProvider.canEditItemAtIndexPath
-    }
-
-    public var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? {
-        return selectedDatasourceProvider.commitEditActionForItemAtIndexPath
-    }
-
-    public var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? {
-        return selectedDatasourceProvider.editActionForItemAtIndexPath
-    }
-
-    public var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? {
-        return selectedDatasourceProvider.canMoveItemAtIndexPath
-    }
-
-    public var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? {
-        return selectedDatasourceProvider.commitMoveItemAtIndexPathToIndexPath
     }
 
     /**

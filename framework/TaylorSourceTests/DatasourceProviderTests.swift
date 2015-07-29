@@ -17,12 +17,7 @@ class DatasourceProviderTests: XCTestCase {
         typealias Datasource = StaticDatasource<Factory>
 
         let datasource: Datasource
-        let canEditItemAtIndexPath: CanEditItemAtIndexPath?
-        let commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath?
-        let canMoveItemAtIndexPath: CanMoveItemAtIndexPath?
-        let commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath?
-
-        let editActionForItemAtIndexPath: EditActionForItemAtIndexPath?
+        let editor: Editor
 
         init(
             data: [Event],
@@ -33,12 +28,7 @@ class DatasourceProviderTests: XCTestCase {
             editAction: EditActionForItemAtIndexPath? = .None) {
 
                 datasource = Datasource(id: "test", factory: Factory(), items: data)
-
-                canEditItemAtIndexPath = canEdit
-                commitEditActionForItemAtIndexPath = commitEdit
-                canMoveItemAtIndexPath = canMove
-                commitMoveItemAtIndexPathToIndexPath = commitMove
-                editActionForItemAtIndexPath = editAction
+                editor = Editor(canEdit: canEdit, commitEdit: commitEdit, editAction: editAction, canMove: canMove, commitMove: commitMove)
         }
     }
 
