@@ -145,6 +145,7 @@ public struct NoEditor: DatasourceEditorType {
     public let editActionForItemAtIndexPath: EditActionForItemAtIndexPath? = .None
     public let canMoveItemAtIndexPath: CanMoveItemAtIndexPath? = .None
     public let commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? = .None
+    public init() {}
 }
 
 public struct Editor: DatasourceEditorType {

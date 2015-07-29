@@ -37,13 +37,8 @@ struct CitiesDatasource: DatasourceProviderType {
 
     let readWriteConnection: YapDatabaseConnection
     let formatter: NSNumberFormatter
+    let editor = NoEditor()
     var datasource: Datasource
-
-    var canEditItemAtIndexPath: CanEditItemAtIndexPath? = .None
-    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? = .None
-    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? = .None
-    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? = .None
-    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? = .None
 
     init(db: YapDatabase, view: Factory.ViewType, threshold: Int) {
 
