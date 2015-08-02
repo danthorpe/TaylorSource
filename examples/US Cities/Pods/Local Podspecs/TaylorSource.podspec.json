@@ -2,7 +2,7 @@
   "name": "TaylorSource",
   "version": "0.14.0",
   "summary": "Generic table view & collection view datasources in Swift, for use with YapDatabase.",
-  "description": "Provides static datasource and view factory for simple \ntable views and collection views. However, real\npower comes from using YapDatabase & YapDatabaseExtensions, \nto get database driven, auto-updating table\nand collection view data sources.",
+  "description": "  \n  Provides static datasource and view factory for simple \n  table views and collection views. However, real\n  power comes from using YapDatabase & YapDatabaseExtensions, \n  to get database driven, auto-updating table\n  and collection view data sources.\n\n",
   "homepage": "https://github.com/danthorpe/Datasources",
   "license": "MIT",
   "authors": {
