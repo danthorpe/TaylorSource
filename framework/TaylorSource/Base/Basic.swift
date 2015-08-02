@@ -45,7 +45,7 @@ public final class StaticDatasource<
     where
     Factory: _FactoryType,
     Factory.CellIndexType == NSIndexPath,
-Factory.SupplementaryIndexType == NSIndexPath>: DatasourceType, SequenceType, CollectionType {
+    Factory.SupplementaryIndexType == NSIndexPath>: DatasourceType, SequenceType, CollectionType {
 
     typealias FactoryType = Factory
 
