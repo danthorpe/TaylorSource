@@ -1,6 +1,16 @@
+# 0.15.0
+1. [[TAY-21](https://github.com/danthorpe/TaylorSource/pull/21)]: Refactors the editor functionality requirements of `DatasourceProviderType` into a single property. For ease of use, read-only providers can use:
+    
+    let editor = NoEditor()
+
+2. [[TAY-24](https://github.com/danthorpe/TaylorSource/pull/24)]: Adds initial work on an “Entity Datasource”. This is the start of what I hope will become quite a significant TaylorSource feature - essentially a way to drive “detail” controllers for a single instance of a model type.
+3. [[TAY-25](https://github.com/danthorpe/TaylorSource/pull/25)]: Fixes the restrictive dependencies, this was a mistake. At the moment, YapDatabaseExtensions is pinned to version 1.4.
+
+
 # 0.14.0
 1. [[TAY-18](https://github.com/danthorpe/TaylorSource/pull/18)]: Supports the optional editing methods in `UITableViewDataSource` via optional closures in `DatasourceProviderType`.
 2. [[TAY-20](https://github.com/danthorpe/TaylorSource/pull/20)]: Supports Sliceable on Observer, Mapper and YapDatabaseViewMappings.
+
 
 # 0.13.0
 1. [[TAY-17](https://github.com/danthorpe/TaylorSource/pull/17)]: Added a bitter badge to the README.
