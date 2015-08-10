@@ -11,10 +11,10 @@ Pod::Spec.new do |s|
   and collection view data sources.
 
                        DESC
-  s.homepage          = "https://github.com/danthorpe/TaylorSource"
+  s.homepage          = "https://github.com/danthorpe/Datasources"
   s.license           = 'MIT'
   s.author            = { "Daniel Thorpe" => "@danthorpe" }
-  s.source            = { :git => "https://github.com/danthorpe/TaylorSource.git", :tag => s.version.to_s }
+  s.source            = { :git => "https://github.com/danthorpe/Datasources.git", :tag => s.version.to_s }
   s.module_name       = 'TaylorSource'
   s.social_media_url  = 'https://twitter.com/danthorpe'
   s.requires_arc      = true
