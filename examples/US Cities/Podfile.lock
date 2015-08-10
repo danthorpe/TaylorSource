@@ -4,8 +4,8 @@ PODS:
   - CocoaLumberjack/Core (1.9.2)
   - CocoaLumberjack/Extensions (1.9.2):
     - CocoaLumberjack/Core
-  - TaylorSource/Base (0.14.1)
-  - TaylorSource/YapDatabase (0.14.1):
+  - TaylorSource/Base (0.15.0)
+  - TaylorSource/YapDatabase (0.15.0):
     - TaylorSource/Base
     - YapDatabase (~> 2)
     - YapDatabaseExtensions (~> 1)
@@ -28,7 +28,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 628fca2e88ef06f7cf6817309aa405f325d9a6fa
-  TaylorSource: 966de96bc617d67a4d4a5ed3c84a9e102dd80e52
+  TaylorSource: 4a25237f9423fed3fe9bcce5922a9fb6c336f07d
   YapDatabase: 814f9ff862a95c1e581d93335a4020482b69155b
   YapDatabaseExtensions: 78d968b16ac81b458f49abd976aabc0f36808e27
 
