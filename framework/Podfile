@@ -4,10 +4,12 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'TaylorSource' do
-  pod 'YapDatabaseExtensions', '~> 1.5.0'
+  pod 'YapDatabase', '~> 2.6.5'
+  pod 'YapDatabaseExtensions', '~> 1'
 end
 
 target 'TaylorSourceTests' do
-  pod 'YapDatabaseExtensions', '~> 1.5.0'
+  pod 'YapDatabase', '~> 2.6.5'
+  pod 'YapDatabaseExtensions', '~> 1'
 end
 

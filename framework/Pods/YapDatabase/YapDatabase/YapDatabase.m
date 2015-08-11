@@ -222,6 +222,7 @@ NSString *const YapDatabaseNotificationKey           = @"notification";
 
 @dynamic options;
 @dynamic sqliteVersion;
+@dynamic sqlitePageSize;
 
 - (NSString *)databasePath_wal
 {
@@ -244,6 +245,17 @@ NSString *const YapDatabaseNotificationKey           = @"notification";
 	
 	dispatch_sync(snapshotQueue, ^{
 		result = sqliteVersion;
+	});
+	
+	return result;
+}
+
+- (NSInteger)sqlitePageSize
+{
+	__block NSInteger result = 0;
+	
+	dispatch_sync(snapshotQueue, ^{
+		result = pageSize;
 	});
 	
 	return result;
@@ -718,23 +730,6 @@ NSString *const YapDatabaseNotificationKey           = @"notification";
 		// This isn't critical, so we can continue.
 	}
 	
-	// Set mmap_size (if needed).
-	//
-	// This configures memory mapped I/O.
-	
-	if (options.pragmaMMapSize > 0)
-	{
-		NSString *pragma_mmap_size =
-		  [NSString stringWithFormat:@"PRAGMA mmap_size = %ld;", (long)options.pragmaMMapSize];
-		
-		status = sqlite3_exec(db, [pragma_mmap_size UTF8String], NULL, NULL, NULL);
-		if (status != SQLITE_OK)
-		{
-			YDBLogError(@"Error setting PRAGMA mmap_size: %d %s", status, sqlite3_errmsg(db));
-			// This isn't critical, so we can continue.
-		}
-	}
-	
 	// Disable autocheckpointing.
 	//
 	// YapDatabase has its own optimized checkpointing algorithm built-in.
@@ -865,7 +860,7 @@ NSString *const YapDatabaseNotificationKey           = @"notification";
 	return version;
 }
 
-+ (int64_t)pragma:(NSString *)pragmaSetting using:(sqlite3 *)aDb
++ (int)pragma:(NSString *)pragmaSetting using:(sqlite3 *)aDb
 {
 	if (pragmaSetting == nil) return -1;
 	
@@ -879,12 +874,12 @@ NSString *const YapDatabaseNotificationKey           = @"notification";
 		return NO;
 	}
 	
-	int64_t result = -1;
+	int result = -1;
 	
 	status = sqlite3_step(statement);
 	if (status == SQLITE_ROW)
 	{
-		result = sqlite3_column_int64(statement, SQLITE_COLUMN_START);
+		result = sqlite3_column_int(statement, SQLITE_COLUMN_START);
 	}
 	else if (status == SQLITE_ERROR)
 	{
@@ -897,7 +892,7 @@ NSString *const YapDatabaseNotificationKey           = @"notification";
 	return result;
 }
 
-+ (NSString *)pragmaValueForAutoVacuum:(int64_t)auto_vacuum
++ (NSString *)pragmaValueForAutoVacuum:(int)auto_vacuum
 {
 	switch(auto_vacuum)
 	{
@@ -908,7 +903,7 @@ NSString *const YapDatabaseNotificationKey           = @"notification";
 	}
 }
 
-+ (NSString *)pragmaValueForSynchronous:(int64_t)synchronous
++ (NSString *)pragmaValueForSynchronous:(int)synchronous
 {
 	switch(synchronous)
 	{
@@ -2664,11 +2659,11 @@ static BOOL const YDB_PRINT_WAL_SIZE = YES;
 		// The checkpoint can only write pages from snapshots if all connections are at or beyond the snapshot.
 		// Thus, this method is only called by a connection that moves the min snapshot forward.
 		
-		int totalFrameCount = 0;
+		int toalFrameCount = 0;
 		int checkpointedFrameCount = 0;
 		
 		int result = sqlite3_wal_checkpoint_v2(strongSelf->db, "main", SQLITE_CHECKPOINT_PASSIVE,
-		                                       &totalFrameCount, &checkpointedFrameCount);
+		                                       &toalFrameCount, &checkpointedFrameCount);
 		
 		// frameCount      = total number of frames in the log file
 		// checkpointCount = total number of checkpointed frames
@@ -2687,7 +2682,7 @@ static BOOL const YDB_PRINT_WAL_SIZE = YES;
 		}
 		
 		YDBLogVerbose(@"Post-checkpoint (mode=passive) (snapshot=%llu): frames(%d) checkpointed(%d)",
-		              maxCheckpointableSnapshot, totalFrameCount, checkpointedFrameCount);
+		              maxCheckpointableSnapshot, toalFrameCount, checkpointedFrameCount);
 		
 	#if (YapDatabaseLoggingTechnique != YapDatabaseLoggingTechnique_Disabled)
 		if (YDB_LOG_VERBOSE && YDB_PRINT_WAL_SIZE)
@@ -2703,15 +2698,9 @@ static BOOL const YDB_PRINT_WAL_SIZE = YES;
 		}
 	#endif
 		
-		// Check for oversized WAL file
-		
-		uint64_t walApproximateFileSize = totalFrameCount * strongSelf->pageSize;
-		
-		BOOL needsAggressiveCheckpoint = (walApproximateFileSize >= strongSelf->options.aggressiveWALTruncationSize);
-		
 		// Have we checkpointed the entire WAL yet?
 		
-		if (totalFrameCount == checkpointedFrameCount)
+		if (toalFrameCount == checkpointedFrameCount)
 		{
 			// We've checkpointed every single frame in the WAL.
 			// This means the next read-write transaction may be able to reset the WAL (instead of appending to it).
@@ -2727,7 +2716,7 @@ static BOOL const YDB_PRINT_WAL_SIZE = YES;
 			// on the same snapshot. But this time the sqlite machinery will read directly from the database,
 			// and thus unlock the WAL so it can be reset.
 			
-			dispatch_block_t block = ^{
+			dispatch_async(strongSelf->snapshotQueue, ^{
 				
 				__strong YapDatabase *strongSelf2 = weakSelf;
 				if (strongSelf2 == nil) return;
@@ -2740,20 +2729,14 @@ static BOOL const YDB_PRINT_WAL_SIZE = YES;
 						[state->connection maybeResetLongLivedReadTransaction];
 					}
 				}
-			};
-			
-			// if (needsAggressiveCheckpoint)
-			// --> sqlite3_wal_checkpoint_v2 needs all readers reading from the database file only (not WAL)
-			
-			if (needsAggressiveCheckpoint)
-				dispatch_sync(strongSelf->snapshotQueue, block);
-			else
-				dispatch_async(strongSelf->snapshotQueue, block);
+			});
 		}
 		
 		// Take steps to ensure the WAL gets reset/truncated (if needed).
 		
-		if (needsAggressiveCheckpoint)
+		uint64_t walApproximateFileSize = toalFrameCount * strongSelf->pageSize;
+		
+		if (walApproximateFileSize >= strongSelf->options.aggressiveWALTruncationSize)
 		{
 			int64_t lastCheckpointTime = mach_absolute_time();
 			[self aggressiveTryTruncateLargeWAL:lastCheckpointTime];
@@ -2818,15 +2801,15 @@ static BOOL const YDB_PRINT_WAL_SIZE = YES;
 			
 		#endif
 			
-			int totalFrameCount = 0;
+			int toalFrameCount = 0;
 			int checkpointedFrameCount = 0;
 			
 			int result = sqlite3_wal_checkpoint_v2(strongSelf->db, "main", checkpointMode,
-			                                       &totalFrameCount, &checkpointedFrameCount);
+			                                       &toalFrameCount, &checkpointedFrameCount);
 			
 			YDBLogInfo(@"Post-checkpoint (mode=%@): result(%d): frames(%d) checkpointed(%d)",
 			             (checkpointMode == SQLITE_CHECKPOINT_RESTART ? @"restart" : @"truncate"),
-			             result, totalFrameCount, checkpointedFrameCount);
+			             result, toalFrameCount, checkpointedFrameCount);
 			
 			if ((checkpointMode == SQLITE_CHECKPOINT_RESTART) && (result == SQLITE_OK))
 			{

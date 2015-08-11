@@ -606,9 +606,9 @@ static NSString *const ext_key_version_deprecated = @"version";
 	for (i = 0; i < count; i++)
 	{
 		if (i == 0)
-			[query appendString:@"?"];
+			[query appendFormat:@"?"];
 		else
-			[query appendString:@", ?"];
+			[query appendFormat:@", ?"];
 	}
 	
 	[query appendString:@");"];
