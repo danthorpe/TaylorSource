@@ -1793,9 +1793,9 @@
 		for (i = 0; i < numKeyParams; i++)
 		{
 			if (i == 0)
-				[query appendString:@"?"];
+				[query appendFormat:@"?"];
 			else
-				[query appendString:@", ?"];
+				[query appendFormat:@", ?"];
 		}
 		
 		[query appendString:@");"];
@@ -2004,9 +2004,9 @@
 		for (i = 0; i < numKeyParams; i++)
 		{
 			if (i == 0)
-				[query appendString:@"?"];
+				[query appendFormat:@"?"];
 			else
-				[query appendString:@", ?"];
+				[query appendFormat:@", ?"];
 		}
 		
 		[query appendString:@");"];
@@ -2228,9 +2228,9 @@
 		for (i = 0; i < numKeyParams; i++)
 		{
 			if (i == 0)
-				[query appendString:@"?"];
+				[query appendFormat:@"?"];
 			else
-				[query appendString:@", ?"];
+				[query appendFormat:@", ?"];
 		}
 		
 		[query appendString:@");"];
@@ -5140,9 +5140,9 @@
 			for (i = 0; i < numKeyParams; i++)
 			{
 				if (i == 0)
-					[query appendString:@"?"];
+					[query appendFormat:@"?"];
 				else
-					[query appendString:@", ?"];
+					[query appendFormat:@", ?"];
 			}
 			
 			[query appendString:@");"];
@@ -5206,9 +5206,9 @@
 			for (i = 0; i < foundCount; i++)
 			{
 				if (i == 0)
-					[query appendString:@"?"];
+					[query appendFormat:@"?"];
 				else
-					[query appendString:@", ?"];
+					[query appendFormat:@", ?"];
 			}
 			
 			[query appendString:@");"];
@@ -5496,9 +5496,9 @@
 			for (i = 0; i < foundCount; i++)
 			{
 				if (i == 0)
-					[query appendString:@"?"];
+					[query appendFormat:@"?"];
 				else
-					[query appendString:@", ?"];
+					[query appendFormat:@", ?"];
 			}
 			
 			[query appendString:@");"];
