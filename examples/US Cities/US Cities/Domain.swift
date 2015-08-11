@@ -117,7 +117,7 @@ class CityArchiver: NSObject, NSCoding, Archiver {
 
 func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0) -> YapDB.Fetch {
 
-    let grouping: YapDB.View.Grouping = .ByObject({(collection, key, object) -> String! in
+    let grouping: YapDB.View.Grouping = .ByObject({(_, collection, key, object) -> String! in
         if collection == City.collection {
             if let city: City = valueFromArchive(object) {
                 if city.population > threshold {
@@ -128,7 +128,7 @@ func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0) -
         return nil
     })
 
-    let sorting: YapDB.View.Sorting = .ByObject({(group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
+    let sorting: YapDB.View.Sorting = .ByObject({(_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
         if let city1: City = valueFromArchive(object1), city2: City = valueFromArchive(object2) {
             switch (city1.capital, city2.capital) {
             case (true, false):
