@@ -36,6 +36,7 @@ struct EventsDatasource: DatasourceProviderType {
     let readWriteConnection: YapDatabaseConnection
     let eventColor: Event.Color
     let datasource: Datasource
+    let editor: Editor
 
     var canEditItemAtIndexPath: CanEditItemAtIndexPath? {
         return { _ in true }
@@ -66,17 +67,34 @@ struct EventsDatasource: DatasourceProviderType {
     }
 
     init(color: Event.Color, db: YapDatabase, view: Factory.ViewType) {
+        eventColor = color
 
         var ds = YapDBDatasource(id: "\(color) events datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: eventsWithColor(color, byColor: true) { mappings in
             mappings.setIsReversed(true, forGroup: "\(color)")
         })
 
         ds.title = color.description
+        ds.factory.registerCell(.ClassWithIdentifier(EventCell.self, "cell"), inView: view, configuration: EventCell.configuration())
 
-        eventColor = color
-        readWriteConnection = db.newConnection()
+        let connection = db.newConnection()
+        editor = Editor(
+            canEdit: { _ in true },
+            commitEdit: { (action, indexPath) in
+                switch action {
+                case .Delete:
+                    if let item = ds.itemAtIndexPath(indexPath) {
+                        connection.remove(item)
+                    }
+                default: break
+                }
+            },
+            editAction: { _ in .Delete },
+            canMove: { _ in false },
+            commitMove: { (_, _) in }
+        )
+
         datasource = ds
-        datasource.factory.registerCell(.ClassWithIdentifier(EventCell.self, "cell"), inView: view, configuration: EventCell.configuration())
+        readWriteConnection = connection
     }
 
     func addEvent(event: Event) {
