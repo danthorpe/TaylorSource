@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name              = "TaylorSource"
-  s.version           = "0.15.0"
+  s.version           = "0.15.1"
   s.summary           = "Generic table view & collection view datasources in Swift, for use with YapDatabase."
   s.description       = <<-DESC
   
@@ -11,10 +11,10 @@ Pod::Spec.new do |s|
   and collection view data sources.
 
                        DESC
-  s.homepage          = "https://github.com/danthorpe/Datasources"
+  s.homepage          = "https://github.com/danthorpe/TaylorSource"
   s.license           = 'MIT'
   s.author            = { "Daniel Thorpe" => "@danthorpe" }
-  s.source            = { :git => "https://github.com/danthorpe/Datasources.git", :tag => s.version.to_s }
+  s.source            = { :git => "https://github.com/danthorpe/TaylorSource.git", :tag => s.version.to_s }
   s.module_name       = 'TaylorSource'
   s.social_media_url  = 'https://twitter.com/danthorpe'
   s.requires_arc      = true

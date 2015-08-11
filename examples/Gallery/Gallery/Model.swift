@@ -130,7 +130,7 @@ extension Photo: Persistable {
 
 func photosForDate(date: NSDate) -> YapDB.Fetch {
 
-    let grouping: YapDB.View.Grouping = .ByObject({ (collection, key, object) -> String! in
+    let grouping: YapDB.View.Grouping = .ByObject({ (_, collection, key, object) -> String! in
         if collection == Photo.collection {
             if let photo = object as? Photo {
                 return Photo.dateFormatter.stringFromDate(photo.date)
@@ -139,7 +139,7 @@ func photosForDate(date: NSDate) -> YapDB.Fetch {
         return .None
     })
 
-    let sorting: YapDB.View.Sorting = .ByKey({ (group, collection1, key1, collection2, key2) -> NSComparisonResult in
+    let sorting: YapDB.View.Sorting = .ByKey({ (_, group, collection1, key1, collection2, key2) -> NSComparisonResult in
         return .OrderedSame
     })
 
