@@ -50,14 +50,14 @@ public struct YapDBEntityDatasource<
         let index = indexForPersistable(e)
         let view: YapDB.View = {
 
-            let grouping = YapDB.View.Grouping.ByKey({ (_, collection, key) -> String! in
+            let grouping = YapDB.View.Grouping.ByKey({ (collection, key) -> String! in
                 if collection == index.collection && key == index.key {
                     return collection
                 }
                 return nil
             })
 
-            let sorting = YapDB.View.Sorting.ByKey({ (_, _, _, _, _, _) -> NSComparisonResult in
+            let sorting = YapDB.View.Sorting.ByKey({ (_, _, _, _, _) -> NSComparisonResult in
                 return .OrderedSame
             })
 
