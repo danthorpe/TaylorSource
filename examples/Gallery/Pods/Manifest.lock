@@ -9,8 +9,8 @@ PODS:
     - CocoaLumberjack/Default
   - FlickrKit (1.0.5)
   - HanekeSwift (0.9.1)
-  - TaylorSource/Base (0.15.0)
-  - TaylorSource/YapDatabase (0.15.0):
+  - TaylorSource/Base (0.15.1)
+  - TaylorSource/YapDatabase (0.15.1):
     - TaylorSource/Base
     - YapDatabase (~> 2)
     - YapDatabaseExtensions (~> 1)
@@ -37,7 +37,7 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 019d1361244274a6138c788c6cb80baabc13fb8f
   FlickrKit: fc0ed009c5cb69db4d82e68f7acb02002ebe1a42
   HanekeSwift: 50d37bfbc4432edc649167e538c259feccb4a2bb
-  TaylorSource: 4a25237f9423fed3fe9bcce5922a9fb6c336f07d
+  TaylorSource: 82a8b4eec19ceac52429764061a69d887e863c95
   YapDatabase: 9ec61885759a832d41f965e27f7ee08a06d4c441
   YapDatabaseExtensions: 78d968b16ac81b458f49abd976aabc0f36808e27
 
