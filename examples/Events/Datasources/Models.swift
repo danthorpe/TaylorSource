@@ -161,7 +161,7 @@ func createSomeEvents(numberOfDays: Int = 10) -> [Event] {
 
 public func events(byColor: Bool = false) -> YapDB.Fetch {
 
-    let grouping: YapDB.View.Grouping = .ByObject({ (_, collection, key, object) -> String! in
+    let grouping: YapDB.View.Grouping = .ByObject({ (collection, key, object) -> String! in
         if collection == Event.collection {
             if !byColor {
                 return collection
@@ -174,7 +174,7 @@ public func events(byColor: Bool = false) -> YapDB.Fetch {
         return .None
     })
 
-    let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
+    let sorting: YapDB.View.Sorting = .ByObject({ (group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
         if let event1: Event = valueFromArchive(object1) {
             if let event2: Event = valueFromArchive(object2) {
                 return event1.date.compare(event2.date)
@@ -198,7 +198,7 @@ public func events(byColor: Bool = false, mappingBlock: YapDB.FetchConfiguration
 
 public func eventsWithColor(color: Event.Color, byColor: Bool = false) -> YapDB.Fetch {
 
-    let filtering: YapDB.Filter.Filtering = .ByObject({ (_, group, collection, key, object) -> Bool in
+    let filtering: YapDB.Filter.Filtering = .ByObject({ (group, collection, key, object) -> Bool in
         if let event: Event = valueFromArchive(object) {
             return event.color == color
         }

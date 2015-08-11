@@ -275,7 +275,7 @@ NSUInteger YapMurmurHashData(NSData *inData)
 	}
 }
 
-uint32_t YapMurmurHashData_32(NSData *inData)
+int32_t YapMurmurHashData_32(NSData *inData)
 {
 	// MurmurHash2 (32-bit)
 	//
@@ -333,10 +333,10 @@ uint32_t YapMurmurHashData_32(NSData *inData)
 	h *= m;
 	h ^= h >> 15;
 	
-	return h;
+	return (int32_t)h;
 }
 
-uint64_t YapMurmurHashData_64(NSData *inData)
+int64_t YapMurmurHashData_64(NSData *inData)
 {
 	// MurmurHash2 (64-bit)
 	//
@@ -399,5 +399,5 @@ uint64_t YapMurmurHashData_64(NSData *inData)
 	h *= m;
 	h ^= h >> r;
 	
-	return h;
+	return (int64_t)h;
 }
