@@ -21,7 +21,7 @@ public struct YapDBDatasource<
     public let factory: Factory
     public var title: String? = .None
 
-    private let observer: Observer<Factory.ItemType>
+    public let observer: Observer<Factory.ItemType>
 
     var mappings: YapDatabaseViewMappings {
         return observer.mappings
