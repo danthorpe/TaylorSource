@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SegmentedDatasourceState {
+struct SegmentedState {
     var selectedIndex: Int = 0
 }
 
@@ -24,14 +24,15 @@ types, e.g. model type. However, typical usage would involve using the tabs to
 filter the same type of objects with some other metric. See the Example project.
 
 */
-public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderType>: DatasourceType {
+public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderType>: DatasourceType, SequenceType, CollectionType {
 
     public typealias UpdateBlock = () -> Void
 
-    private let state: Protector<SegmentedDatasourceState>
-    internal let update: UpdateBlock?
-    internal let datasources: [DatasourceProvider]
+    private let state: Protector<SegmentedState>
     private var valueChangedHandler: TargetActionHandler? = .None
+    internal let update: UpdateBlock?
+
+    public let datasources: [DatasourceProvider]
 
     public let identifier: String
 
@@ -52,20 +53,25 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
         return selectedDatasourceProvider.datasource
     }
 
-    /// The currently selected datasource's title
-    public var title: String? {
-        return selectedDatasource.title
-    }
-
     /// The currently selected datasource's factory
     public var factory: DatasourceProvider.Datasource.FactoryType {
         return selectedDatasource.factory
     }
 
+    /// The currently selected selection manager
+    public var selectionManager: SelectionManager {
+        return selectedDatasource.selectionManager
+    }
+
+    /// The currently selected datasource's title
+    public var title: String? {
+        return selectedDatasource.title
+    }
+
     init(id: String, datasources d: [DatasourceProvider], selectedIndex: Int = 0, didSelectDatasourceCompletion: UpdateBlock) {
         identifier = id
         datasources = d
-        state = Protector(SegmentedDatasourceState(selectedIndex: selectedIndex))
+        state = Protector(SegmentedState(selectedIndex: selectedIndex))
         update = didSelectDatasourceCompletion
     }
 
@@ -106,9 +112,9 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
         precondition(0 <= index, "Index must be greater than zero.")
         precondition(index < datasources.count, "Index must be less than maximum number of datasources.")
 
-        state.write({ (inout state: SegmentedDatasourceState) in
+        state.write({ (inout state: SegmentedState) in
             state.selectedIndex = index
-            }, completion: update)
+        }, completion: update)
     }
 
     func selectedSegmentedIndexDidChange(sender: AnyObject?) {
@@ -212,6 +218,8 @@ public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProvider
     public func configureSegmentedControl(segmentedControl: UISegmentedControl) {
         datasource.configureSegmentedControl(segmentedControl)
     }
+
 }
+
 
 

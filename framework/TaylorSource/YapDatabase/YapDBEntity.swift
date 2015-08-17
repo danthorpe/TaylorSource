@@ -22,8 +22,9 @@ public struct YapDBEntityDatasource<
 
     typealias FactoryType = Factory
 
-    public let identifier: String
     public let factory: Factory
+    public let identifier: String
+    public let selectionManager = SelectionManager()
     public var title: String? = .None
     public private(set) var entity: Entity
 

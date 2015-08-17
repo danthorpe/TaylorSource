@@ -70,7 +70,7 @@ extension YapDBDatasourceTests {
         XCTAssertEqual(datasource.numberOfItemsInSection(1), numberOfBlueEvents)
     }
 
-    func test_GivenStaticDatasource_WhenAccessingItemsAtANegativeIndex_ThatResultIsNone() {
+    func test_GivenDatasource_WhenAccessingItemsAtANegativeIndex_ThatResultIsNone() {
         var numberOfEvents: Int!
         let db = createYapDatabase(__FILE__, suffix: __FUNCTION__) { database in
             numberOfEvents = database.write(createManyEvents()).count
@@ -79,7 +79,7 @@ extension YapDBDatasourceTests {
         XCTAssertTrue(datasource.itemAtIndexPath(NSIndexPath(forRow: numberOfEvents * -1, inSection: 0)) == nil)
     }
 
-    func test_GivenStaticDatasource_WhenAccessingItemsGreaterThanMaxIndex_ThatResultIsNone() {
+    func test_GivenDatasource_WhenAccessingItemsGreaterThanMaxIndex_ThatResultIsNone() {
         var numberOfEvents: Int!
         let db = createYapDatabase(__FILE__, suffix: __FUNCTION__) { database in
             numberOfEvents = database.write(createManyEvents()).count
@@ -88,7 +88,7 @@ extension YapDBDatasourceTests {
         XCTAssertTrue(datasource.itemAtIndexPath(NSIndexPath(forRow: numberOfEvents * -1, inSection: 0)) == nil)
     }
 
-    func test_GivenStaticDatasource_WhenAccessingItems_ThatCorrectItemIsReturned() {
+    func test_GivenDatasource_WhenAccessingItems_ThatCorrectItemIsReturned() {
         var events: [Event]!
         let db = createYapDatabase(__FILE__, suffix: __FUNCTION__) { database in
             events = database.write(createManyEvents())
