@@ -174,6 +174,26 @@ public struct Mapper<T>: SequenceType, CollectionType, Sliceable {
         }
     }
 
+    /**
+    Reverse looks up the [NSIndexPath] for an array of keys in a collection. Only items
+    which are in this mappings are returned. No optional NSIndexPaths are returned,
+    therefore it is not guaranteed that the item index corresponds to the equivalent
+    index path. Only if the length of the resultant array is equal to the length of
+    items is this true.
+
+    :param: items An array, [T] where T: Persistable
+    :returns: An array, [NSIndexPath]
+    */
+    public func indexPathsForKeys(keys: [String], inCollection collection: String) -> [NSIndexPath] {
+        return readOnlyConnection.read { transaction in
+            if let viewTransaction = transaction.ext(self.name) as? YapDatabaseViewTransaction {
+                return keys.flatMap {
+                    flatMap(viewTransaction.indexPathForKey($0, inCollection: collection, withMappings: self.mappings), { [$0] }) ?? []
+                }
+            }
+            return []
+        }
+    }
 
     /**
     Returns a closure which will access the items at the index paths in a provided read transaction.
@@ -376,6 +396,20 @@ public struct Observer<T> {
     */
     public func indexPathForKey(key: String, inCollection collection: String) -> NSIndexPath? {
         return mapper.indexPathForKey(key, inCollection: collection)
+    }
+
+    /**
+    Reverse looks up the [NSIndexPath] for an array of keys in a collection. Only items
+    which are in this mappings are returned. No optional NSIndexPaths are returned,
+    therefore it is not guaranteed that the item index corresponds to the equivalent
+    index path. Only if the length of the resultant array is equal to the length of
+    items is this true.
+
+    :param: items An array, [T] where T: Persistable
+    :returns: An array, [NSIndexPath]
+    */
+    public func indexPathsForKeys(keys: [String], inCollection collection: String) -> [NSIndexPath] {
+        return mapper.indexPathsForKeys(keys, inCollection: collection)
     }
 
     /**
