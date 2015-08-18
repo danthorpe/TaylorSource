@@ -55,13 +55,20 @@ public struct Mapper<T>: SequenceType, CollectionType, Sliceable {
         return configuration.fetchConfiguration.name
     }
 
-    var fetch: (inTransaction: YapDatabaseReadTransaction, atIndexPath: NSIndexPath) -> T? {
-        return { (transaction, indexPath) in
+    var get: (inTransaction: YapDatabaseReadTransaction, atIndexPaths: [NSIndexPath]) -> [T] {
+        return { (transaction, indexPaths) in
             if let viewTransaction = transaction.ext(self.name) as? YapDatabaseViewTransaction {
-                return self.configuration.itemMapper(viewTransaction.objectAtIndexPath(indexPath, withMappings: self.mappings))
+                return indexPaths.flatMap {
+                    flatMap(self.configuration.itemMapper(viewTransaction.objectAtIndexPath($0, withMappings: self.mappings)), { [$0] }) ?? []
+                }
             }
-            return self.configuration.itemMapper(.None)
+            return []
         }
+    }
+
+    var fetch: (inTransaction: YapDatabaseReadTransaction, atIndexPath: NSIndexPath) -> T? {
+        let get = self.get
+        return { transaction, indexPath in get(inTransaction: transaction, atIndexPaths: [indexPath]).first }
     }
 
     public let startIndex: Int = 0
@@ -166,6 +173,49 @@ public struct Mapper<T>: SequenceType, CollectionType, Sliceable {
             return .None
         }
     }
+
+
+    /**
+    Returns a closure which will access the items at the index paths in a provided read transaction.
+
+    :param: indexPath The NSIndexPath to look up the item.
+    :returns: (YapDatabaseReadTransaction) -> [T] closure.
+    */
+    public func itemsInTransactionAtIndexPaths(indexPaths: [NSIndexPath]) -> (YapDatabaseReadTransaction) -> [T] {
+        return { self.get(inTransaction: $0, atIndexPaths: indexPaths) }
+    }
+
+    /**
+    Returns a closure which will access the items in a read transaction at the provided index paths.
+
+    :param: transaction A YapDatabaseReadTransaction
+    :returns: ([NSIndexPath]) -> [T] closure.
+    */
+    public func itemsAtIndexPathsInTransaction(transaction: YapDatabaseReadTransaction) -> ([NSIndexPath]) -> [T] {
+        return { self.get(inTransaction: transaction, atIndexPaths: $0) }
+    }
+
+    /**
+    Gets the items at the index paths, using the internal readOnlyTransaction.
+
+    :param: indexPaths An [NSIndexPath]
+    :returns: An [T]
+    */
+    public func itemsAtIndexPaths(indexPaths: [NSIndexPath]) -> [T] {
+        return readOnlyConnection.read(itemsInTransactionAtIndexPaths(indexPaths))
+    }
+
+    /**
+    Gets the items at the index paths, using a provided read transaction.
+
+    :param: indexPaths A [NSIndexPath]
+    :param: transaction A YapDatabaseReadTransaction
+    :returns: An [T]
+    */
+    public func itemsAtIndexPaths(indexPaths: [NSIndexPath], inTransaction transaction: YapDatabaseReadTransaction) -> [T] {
+        return get(inTransaction: transaction, atIndexPaths: indexPaths)
+    }
+
 
     public func generate() -> GeneratorOf<T> {
         var mappingsGenerator = mappings.generate()
@@ -326,6 +376,47 @@ public struct Observer<T> {
     */
     public func indexPathForKey(key: String, inCollection collection: String) -> NSIndexPath? {
         return mapper.indexPathForKey(key, inCollection: collection)
+    }
+
+    /**
+    Returns a closure which will access the items at the index paths in a provided read transaction.
+
+    :param: indexPath The NSIndexPath to look up the item.
+    :returns: (YapDatabaseReadTransaction) -> [T] closure.
+    */
+    public func itemsInTransactionAtIndexPaths(indexPaths: [NSIndexPath]) -> (YapDatabaseReadTransaction) -> [T] {
+        return mapper.itemsInTransactionAtIndexPaths(indexPaths)
+    }
+
+    /**
+    Returns a closure which will access the items in a read transaction at the provided index paths.
+
+    :param: transaction A YapDatabaseReadTransaction
+    :returns: ([NSIndexPath]) -> [T] closure.
+    */
+    public func itemsAtIndexPathsInTransaction(transaction: YapDatabaseReadTransaction) -> ([NSIndexPath]) -> [T] {
+        return mapper.itemsAtIndexPathsInTransaction(transaction)
+    }
+
+    /**
+    Gets the items at the index paths, using the internal readOnlyTransaction.
+
+    :param: indexPaths An [NSIndexPath]
+    :returns: An [T]
+    */
+    public func itemsAtIndexPaths(indexPaths: [NSIndexPath]) -> [T] {
+        return mapper.itemsAtIndexPaths(indexPaths)
+    }
+
+    /**
+    Gets the items at the index paths, using a provided read transaction.
+
+    :param: indexPaths A [NSIndexPath]
+    :param: transaction A YapDatabaseReadTransaction
+    :returns: An [T]
+    */
+    public func itemsAtIndexPaths(indexPaths: [NSIndexPath], inTransaction transaction: YapDatabaseReadTransaction) -> [T] {
+        return mapper.itemsAtIndexPaths(indexPaths, inTransaction: transaction)
     }
 }
 
