@@ -30,7 +30,6 @@ public struct EntityDatasource<
     typealias FactoryType = Factory
 
     public let factory: Factory
-    public let selectionManager = SelectionManager()
     public let identifier: String
     public var title: String? = .None
     public private(set) var entity: Entity

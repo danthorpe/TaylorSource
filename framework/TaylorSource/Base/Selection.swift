@@ -8,41 +8,52 @@
 
 import Foundation
 
-public class SelectionManager {
-
-    var selectedIndexPaths = Set<NSIndexPath>()
-
-    public var allowsMultipleSelection: Bool = false
-    public var enabled = false
-
-    public init() { }
-
-    public func addIndexPath(indexPath: NSIndexPath) {
-        selectedIndexPaths.insert(indexPath)
-    }
-
-    public func removeIndexPath(indexPath: NSIndexPath) {
-        selectedIndexPaths.remove(indexPath)
-    }
-
-    public func contains(itemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return selectedIndexPaths.contains(indexPath)
-    }
-
-    public func selectItemAtIndexPath(indexPath: NSIndexPath, shouldRefreshItems: ((indexPathsToRefresh: [NSIndexPath]) -> Void)? = .None) {
-        enabled = true
-        var itemsToUpdate = Set(arrayLiteral: indexPath)
-        if contains(itemAtIndexPath: indexPath) {
-            removeIndexPath(indexPath)
-        }
-        else {
-            if !allowsMultipleSelection {
-                itemsToUpdate.unionInPlace(selectedIndexPaths)
-                selectedIndexPaths.removeAll(keepCapacity: false)
-            }
-            addIndexPath(indexPath)
-        }
-        shouldRefreshItems?(indexPathsToRefresh: Array(itemsToUpdate))
+struct SelectionState<Item: Hashable> {
+    var selectedItems = Set<Item>()
+    init(initialSelection: Set<Item> = Set()) {
+        selectedItems.unionInPlace(initialSelection)
     }
 }
+
+public class SelectionManager<Item: Hashable> {
+
+    let state: Protector<SelectionState<Item>>
+
+    public var allowsMultipleSelection = false
+    public var enabled = false
+
+    public var selectedItems: Set<Item> {
+        return state.read { $0.selectedItems }
+    }
+
+    public init(initialSelection: Set<Item> = Set()) {
+        state = Protector(SelectionState(initialSelection: initialSelection))
+    }
+
+    public func contains(item: Item) -> Bool {
+        return state.read { $0.selectedItems.contains(item) }
+    }
+
+    public func selectItem(item: Item, shouldRefreshItems: ((itemsToRefresh: [Item]) -> Void)? = .None) {
+        if enabled {
+            var itemsToUpdate = Set(arrayLiteral: item)
+            state.write({ (inout state: SelectionState<Item>) in
+                if state.selectedItems.contains(item) {
+                    state.selectedItems.remove(item)
+                }
+                else {
+                    if !self.allowsMultipleSelection {
+                        itemsToUpdate.unionInPlace(state.selectedItems)
+                        state.selectedItems.removeAll(keepCapacity: true)
+                    }
+                    state.selectedItems.insert(item)
+                }
+            }, completion: {
+                shouldRefreshItems?(itemsToRefresh: Array(itemsToUpdate))
+            })
+        }
+    }
+}
+
+typealias IndexPathSelectionManager = SelectionManager<NSIndexPath>
 

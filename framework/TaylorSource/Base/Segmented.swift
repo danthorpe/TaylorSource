@@ -58,11 +58,6 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
         return selectedDatasource.factory
     }
 
-    /// The currently selected selection manager
-    public var selectionManager: SelectionManager {
-        return selectedDatasource.selectionManager
-    }
-
     /// The currently selected datasource's title
     public var title: String? {
         return selectedDatasource.title

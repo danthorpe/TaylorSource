@@ -12,12 +12,12 @@ public protocol UpdatableView {
 public struct YapDBCellIndex: IndexPathIndexType {
     public let indexPath: NSIndexPath
     public let transaction: YapDatabaseReadTransaction
-    public let isSelected: Bool?
+    public let selected: Bool?
 
-    public init(indexPath: NSIndexPath, transaction: YapDatabaseReadTransaction, isSelected: Bool? = .None) {
+    public init(indexPath: NSIndexPath, transaction: YapDatabaseReadTransaction, selected: Bool? = .None) {
         self.indexPath = indexPath
         self.transaction = transaction
-        self.isSelected = isSelected
+        self.selected = selected
     }
 }
 
