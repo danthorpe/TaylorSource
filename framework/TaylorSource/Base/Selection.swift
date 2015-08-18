@@ -8,47 +8,49 @@
 
 import Foundation
 
-public class SelectionManager {
+public class SelectionManager<Item: Hashable> {
 
-    var selectedIndexPaths = Set<NSIndexPath>()
+    var selectedItems = Set<Item>()
 
     public var allowsMultipleSelection: Bool = false
     public var enabled = false
 
-    public var indexPaths: [NSIndexPath] {
-        return Array(selectedIndexPaths)
+    public var items: [Item] {
+        return Array(selectedItems)
     }
 
-    public init() { }
-
-    public func addIndexPath(indexPath: NSIndexPath) {
-        selectedIndexPaths.insert(indexPath)
+    public init(initialSelection: Set<Item> = Set()) {
+        selectedItems.unionInPlace(initialSelection)
     }
 
-    public func removeIndexPath(indexPath: NSIndexPath) {
-        selectedIndexPaths.remove(indexPath)
+    public func addItem(item: Item) {
+        selectedItems.insert(item)
     }
 
-    public func contains(itemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return selectedIndexPaths.contains(indexPath)
+    public func removeItem(item: Item) {
+        selectedItems.remove(item)
     }
 
-    public func selectItemAtIndexPath(indexPath: NSIndexPath, shouldRefreshItems: ((indexPathsToRefresh: [NSIndexPath]) -> Void)? = .None) {
+    public func contains(item: Item) -> Bool {
+        return selectedItems.contains(item)
+    }
+
+    public func selectItem(item: Item, shouldRefreshItems: ((itemsToRefresh: [Item]) -> Void)? = .None) {
         enabled = true
-        var itemsToUpdate = Set(arrayLiteral: indexPath)
-        if contains(itemAtIndexPath: indexPath) {
-            removeIndexPath(indexPath)
+        var itemsToUpdate = Set(arrayLiteral: item)
+        if contains(item) {
+            removeItem(item)
         }
         else {
             if !allowsMultipleSelection {
-                itemsToUpdate.unionInPlace(selectedIndexPaths)
-                selectedIndexPaths.removeAll(keepCapacity: false)
+                itemsToUpdate.unionInPlace(selectedItems)
+                selectedItems.removeAll(keepCapacity: false)
             }
-            addIndexPath(indexPath)
+            addItem(item)
         }
-        shouldRefreshItems?(indexPathsToRefresh: Array(itemsToUpdate))
+        shouldRefreshItems?(itemsToRefresh: Array(itemsToUpdate))
     }
 }
 
-
+typealias IndexPathSelectionManager = SelectionManager<NSIndexPath>
 
