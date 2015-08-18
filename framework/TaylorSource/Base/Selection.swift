@@ -8,47 +8,50 @@
 
 import Foundation
 
+struct SelectionState<Item: Hashable> {
+    var selectedItems = Set<Item>()
+    init(initialSelection: Set<Item> = Set()) {
+        selectedItems.unionInPlace(initialSelection)
+    }
+}
+
 public class SelectionManager<Item: Hashable> {
 
-    var selectedItems = Set<Item>()
+    let state: Protector<SelectionState<Item>>
 
-    public var allowsMultipleSelection: Bool = false
+    public var allowsMultipleSelection = false
     public var enabled = false
 
-    public var items: [Item] {
-        return Array(selectedItems)
+    public var selectedItems: Set<Item> {
+        return state.read { $0.selectedItems }
     }
 
     public init(initialSelection: Set<Item> = Set()) {
-        selectedItems.unionInPlace(initialSelection)
-    }
-
-    public func addItem(item: Item) {
-        selectedItems.insert(item)
-    }
-
-    public func removeItem(item: Item) {
-        selectedItems.remove(item)
+        state = Protector(SelectionState(initialSelection: initialSelection))
     }
 
     public func contains(item: Item) -> Bool {
-        return selectedItems.contains(item)
+        return state.read { $0.selectedItems.contains(item) }
     }
 
     public func selectItem(item: Item, shouldRefreshItems: ((itemsToRefresh: [Item]) -> Void)? = .None) {
-        enabled = true
-        var itemsToUpdate = Set(arrayLiteral: item)
-        if contains(item) {
-            removeItem(item)
+        if enabled {
+            var itemsToUpdate = Set(arrayLiteral: item)
+            state.write({ (inout state: SelectionState<Item>) in
+                if state.selectedItems.contains(item) {
+                    state.selectedItems.remove(item)
+                }
+                else {
+                    if !self.allowsMultipleSelection {
+                        itemsToUpdate.unionInPlace(state.selectedItems)
+                        state.selectedItems.removeAll(keepCapacity: true)
+                    }
+                    state.selectedItems.insert(item)
+                }
+            }, completion: {
+                shouldRefreshItems?(itemsToRefresh: Array(itemsToUpdate))
+            })
         }
-        else {
-            if !allowsMultipleSelection {
-                itemsToUpdate.unionInPlace(selectedItems)
-                selectedItems.removeAll(keepCapacity: false)
-            }
-            addItem(item)
-        }
-        shouldRefreshItems?(itemsToRefresh: Array(itemsToUpdate))
     }
 }
 
