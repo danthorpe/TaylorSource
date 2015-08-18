@@ -22,7 +22,6 @@ public struct YapDBDatasource<
     public var title: String? = .None
 
     public let observer: Observer<Factory.ItemType>
-    public var selectionManager = SelectionManager()
 
     var mappings: YapDatabaseViewMappings {
         return observer.mappings
@@ -34,6 +33,12 @@ public struct YapDBDatasource<
 
     var configuration: Configuration<Factory.ItemType> {
         return observer.configuration
+    }
+
+    public var selectionManager = SelectionManager()
+
+    public var selectedItems: [Factory.ItemType] {
+        return observer.itemsAtIndexPaths(selectionManager.indexPaths)
     }
 
     public init(id: String, database: YapDatabase, factory f: Factory, processChanges changes: YapDatabaseViewMappings.Changes, configuration: Configuration<Factory.ItemType>) {
