@@ -15,6 +15,10 @@ public class SelectionManager {
     public var allowsMultipleSelection: Bool = false
     public var enabled = false
 
+    public var indexPaths: [NSIndexPath] {
+        return Array(selectedIndexPaths)
+    }
+
     public init() { }
 
     public func addIndexPath(indexPath: NSIndexPath) {
@@ -45,4 +49,6 @@ public class SelectionManager {
         shouldRefreshItems?(indexPathsToRefresh: Array(itemsToUpdate))
     }
 }
+
+
 
