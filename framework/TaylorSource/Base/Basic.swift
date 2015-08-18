@@ -50,7 +50,6 @@ public final class StaticDatasource<
     typealias FactoryType = Factory
 
     public let factory: Factory
-    public let selectionManager = SelectionManager()
     public let identifier: String
     public var title: String? = .None
     private var items: [Factory.ItemType]

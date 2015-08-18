@@ -27,9 +27,6 @@ public protocol DatasourceType {
     /// Access the factory from the datasource, likely should be a stored property.
     var factory: FactoryType { get }
 
-    /// A selection manager
-    var selectionManager: SelectionManager { get }
-
     /// An identifier which is primarily to ease debugging and logging.
     var identifier: String { get }
 
@@ -138,7 +135,7 @@ public protocol DatasourceProviderType {
     /// The underlying Datasource.
     var datasource: Datasource { get }
 
-    /// An optional datasource editor
+    /// An datasource editor
     var editor: Editor { get }
 }
 

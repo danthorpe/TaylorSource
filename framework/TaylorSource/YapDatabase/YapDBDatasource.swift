@@ -35,12 +35,6 @@ public struct YapDBDatasource<
         return observer.configuration
     }
 
-    public var selectionManager = SelectionManager()
-
-    public var selectedItems: [Factory.ItemType] {
-        return observer.itemsAtIndexPaths(selectionManager.indexPaths)
-    }
-
     public init(id: String, database: YapDatabase, factory f: Factory, processChanges changes: YapDatabaseViewMappings.Changes, configuration: Configuration<Factory.ItemType>) {
         identifier = id
         factory = f
@@ -60,10 +54,9 @@ public struct YapDBDatasource<
     }
 
     public func cellForItemInView(view: Factory.ViewType, atIndexPath indexPath: NSIndexPath) -> Factory.CellType {
-        let isSelected: Bool = selectionManager.enabled && selectionManager.contains(itemAtIndexPath: indexPath)
         return readOnlyConnection.read { transaction in
             if let item = self.observer.itemAtIndexPath(indexPath, inTransaction: transaction) {
-                let index = YapDBCellIndex(indexPath: indexPath, transaction: transaction, isSelected: isSelected)
+                let index = YapDBCellIndex(indexPath: indexPath, transaction: transaction)
                 return self.factory.cellForItem(item, inView: view, atIndex: index)
             }
             fatalError("No item available at index path: \(indexPath)")
