@@ -256,25 +256,28 @@ Observer<T> implements SequenceType, and Int based CollectionType.
 */
 public struct Observer<T> {
 
+    private let queue: dispatch_queue_t
+    private var notificationHandler: NotificationCenterHandler!
+
     let database: YapDatabase
     let mapper: Mapper<T>
-    let queue: dispatch_queue_t
     let changes: YapDatabaseViewMappings.Changes
-    var notificationHandler: NotificationCenterHandler!
 
-    var configuration: Configuration<T> {
+    public var shouldProcessChanges = true
+
+    public var configuration: Configuration<T> {
         return mapper.configuration
     }
 
-    var name: String {
+    public var name: String {
         return mapper.name
     }
 
-    var mappings: YapDatabaseViewMappings {
+    public var mappings: YapDatabaseViewMappings {
         return mapper.mappings
     }
 
-    var readOnlyConnection: YapDatabaseConnection {
+    public var readOnlyConnection: YapDatabaseConnection {
         return mapper.readOnlyConnection
     }
 
@@ -310,7 +313,7 @@ public struct Observer<T> {
 
     func processChangesWithBlock(changes: YapDatabaseViewMappings.Changes) -> (NSNotification) -> Void {
         return { _ in
-            if let changeset = self.createChangeset() {
+            if self.shouldProcessChanges, let changeset = self.createChangeset() {
                 self.processChanges {
                     changes(changeset)
                 }
