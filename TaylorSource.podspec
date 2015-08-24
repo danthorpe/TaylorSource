@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.default_subspec   = 'Base'
 
   s.subspec 'Base' do |ss|
-    ss.source_files   = 'framework/TaylorSource/Base/*.{swift,m,h}'
+    ss.source_files   = 'framework/TaylorSource/Base/*.{m,h,swift}'
   end
 
   s.subspec 'YapDatabase' do |ss|

@@ -30,6 +30,10 @@
 		65F8E6F51B694AB9009C18F9 /* Basic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F8E6F41B694AB9009C18F9 /* Basic.swift */; };
 		65F8E6F71B694B07009C18F9 /* Segmented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F8E6F61B694B07009C18F9 /* Segmented.swift */; };
 		65F8E6F91B694B62009C18F9 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F8E6F81B694B62009C18F9 /* Entity.swift */; };
+		65F8EE5A1B8B6CC400B74995 /* UICollectionView+TaylorSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F8EE561B8B6CC400B74995 /* UICollectionView+TaylorSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		65F8EE5B1B8B6CC400B74995 /* UICollectionView+TaylorSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F8EE571B8B6CC400B74995 /* UICollectionView+TaylorSource.m */; };
+		65F8EE5C1B8B6CC400B74995 /* UITableView+TaylorSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F8EE581B8B6CC400B74995 /* UITableView+TaylorSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		65F8EE5D1B8B6CC400B74995 /* UITableView+TaylorSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F8EE591B8B6CC400B74995 /* UITableView+TaylorSource.m */; };
 		CEC0879ACD7D1CCCE05E6C0B /* Pods_TaylorSourceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E45CB6825BDC28691D4F0F6C /* Pods_TaylorSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2604FB2F0CB56C5B5B81DACA /* Pods_TaylorSource.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
@@ -74,6 +78,10 @@
 		65F8E6F41B694AB9009C18F9 /* Basic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Basic.swift; sourceTree = "<group>"; };
 		65F8E6F61B694B07009C18F9 /* Segmented.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Segmented.swift; sourceTree = "<group>"; };
 		65F8E6F81B694B62009C18F9 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
+		65F8EE561B8B6CC400B74995 /* UICollectionView+TaylorSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+TaylorSource.h"; sourceTree = "<group>"; };
+		65F8EE571B8B6CC400B74995 /* UICollectionView+TaylorSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+TaylorSource.m"; sourceTree = "<group>"; };
+		65F8EE581B8B6CC400B74995 /* UITableView+TaylorSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+TaylorSource.h"; sourceTree = "<group>"; };
+		65F8EE591B8B6CC400B74995 /* UITableView+TaylorSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+TaylorSource.m"; sourceTree = "<group>"; };
 		7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaylorSourceTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A578C3969F628D5199729DFF /* Pods-TaylorSource.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaylorSource.release.xcconfig"; path = "Pods/Target Support Files/Pods-TaylorSource/Pods-TaylorSource.release.xcconfig"; sourceTree = "<group>"; };
 		EFDDF0CBF3053AB8936D7DBB /* Pods-TaylorSource.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaylorSource.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaylorSource/Pods-TaylorSource.debug.xcconfig"; sourceTree = "<group>"; };
@@ -189,6 +197,7 @@
 		652DB7841B2879EE0002F65C /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				65F8EE5E1B8B6EA100B74995 /* ObjC */,
 				65F8E6F41B694AB9009C18F9 /* Basic.swift */,
 				652DB7851B2879EE0002F65C /* Datasource.swift */,
 				65F8E6F81B694B62009C18F9 /* Entity.swift */,
@@ -199,6 +208,17 @@
 				652DB78C1B2879EE0002F65C /* Views.swift */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		65F8EE5E1B8B6EA100B74995 /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				65F8EE561B8B6CC400B74995 /* UICollectionView+TaylorSource.h */,
+				65F8EE581B8B6CC400B74995 /* UITableView+TaylorSource.h */,
+				65F8EE571B8B6CC400B74995 /* UICollectionView+TaylorSource.m */,
+				65F8EE591B8B6CC400B74995 /* UITableView+TaylorSource.m */,
+			);
+			name = ObjC;
 			sourceTree = "<group>";
 		};
 		F505289CA3EA2CE0D6118D01 /* Frameworks */ = {
@@ -218,6 +238,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				652DB76A1B28786F0002F65C /* TaylorSource.h in Headers */,
+				65F8EE5C1B8B6CC400B74995 /* UITableView+TaylorSource.h in Headers */,
+				65F8EE5A1B8B6CC400B74995 /* UICollectionView+TaylorSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +434,8 @@
 				65AFECE81B6ACED100716BB5 /* YapDBEntity.swift in Sources */,
 				652DB7961B2879EE0002F65C /* Utilities.swift in Sources */,
 				652DB7971B2879EE0002F65C /* Views.swift in Sources */,
+				65F8EE5D1B8B6CC400B74995 /* UITableView+TaylorSource.m in Sources */,
+				65F8EE5B1B8B6CC400B74995 /* UICollectionView+TaylorSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
