@@ -50,15 +50,30 @@ extension UITableView: UpdatableView {
     public var processChanges: YapDatabaseViewMappings.Changes {
         return { [weak self] changeset in
             if let weakSelf = self {
-                weakSelf.beginUpdates()
-                weakSelf.processSectionChanges(changeset.sections)
-                weakSelf.processRowChanges(changeset.items)
-                weakSelf.endUpdates()
+                if weakSelf.tay_shouldProcessChangeset(changeset) {
+                    weakSelf.tay_performBatchUpdates {
+                        weakSelf.tay_processSectionChanges(changeset.sections)
+                        weakSelf.tay_processRowChanges(changeset.items)
+                    }
+                }
             }
         }
     }
 
-    func processSectionChanges(sectionChanges: [YapDatabaseViewSectionChange]) {
+
+    /**
+    Consumers can override this to intercept whether or not the default change set processing
+    should kick in. This is because in some scenarios it makes sense to prevent it. For example
+    a common scenario is that a table view controller presents a "create new item" modal. When
+    the save action occurs, the modal is dismissed, and the table view controller is reloaded, 
+    and the changeset can subsequently occur. Running the changeset in this situation will 
+    result in an exception. TaylorSource will suppress this exception, regardless, but still.. 
+    */
+    public func tay_shouldProcessChangeset(changeset: YapDatabaseViewMappings.Changeset) -> Bool {
+        return true
+    }
+
+    public func tay_processSectionChanges(sectionChanges: [YapDatabaseViewSectionChange]) {
         for change in sectionChanges {
             let indexes = NSIndexSet(index: Int(change.index))
             switch change.type {
@@ -72,7 +87,7 @@ extension UITableView: UpdatableView {
         }
     }
 
-    func processRowChanges(rowChanges: [YapDatabaseViewRowChange]) {
+    public func tay_processRowChanges(rowChanges: [YapDatabaseViewRowChange]) {
         for change in rowChanges {
             switch change.type {
             case .Delete:
