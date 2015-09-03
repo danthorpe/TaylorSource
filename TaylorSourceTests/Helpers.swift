@@ -140,7 +140,7 @@ func generateRandomPeople(count: Int) -> [Person] {
 
 func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetch {
 
-    let grouping: YapDB.View.Grouping = .ByObject({ (collection, key, object) -> String! in
+    let grouping: YapDB.View.Grouping = .ByObject({ (_, collection, key, object) -> String! in
         if collection == Person.collection {
             if let person = Person.unarchive(object) {
                 return createGroup(person)
@@ -149,7 +149,7 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
         return .None
     })
 
-    let sorting: YapDB.View.Sorting = .ByObject({ (group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
+    let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
         if  let person1 = Person.unarchive(object1),
             let person2 = Person.unarchive(object2) {
                 let comparison = person1.name.caseInsensitiveCompare(person2.name)

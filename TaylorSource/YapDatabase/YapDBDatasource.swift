@@ -13,7 +13,7 @@ public struct YapDBDatasource<
     Factory.CellIndexType == YapDBCellIndex,
     Factory.SupplementaryIndexType == YapDBSupplementaryIndex>: DatasourceType, SequenceType, CollectionType {
 
-    typealias FactoryType = Factory
+    public typealias FactoryType = Factory
 
     public let identifier: String
     public let factory: Factory

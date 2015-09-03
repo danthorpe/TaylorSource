@@ -11,7 +11,7 @@ A struct which owns a data mapper closure, used to map AnyObject? which is
 stored in YapDatabase into strongly typed T? instances.
 */
 public struct Configuration<T> {
-    typealias DataItemMapper = (AnyObject?) -> T?
+    public typealias DataItemMapper = (AnyObject?) -> T?
 
     let fetchConfiguration: YapDB.FetchConfiguration
     let itemMapper: DataItemMapper

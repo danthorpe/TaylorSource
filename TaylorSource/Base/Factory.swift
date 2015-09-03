@@ -255,13 +255,13 @@ public class Factory<
     CellIndex: IndexPathIndexType,
     SupplementaryIndex: IndexPathIndexType>: _FactoryType {
 
-    typealias TextType = String
-    typealias ItemType = Item
-    typealias CellType = Cell
-    typealias SupplementaryViewType = SupplementaryView
-    typealias ViewType = View
-    typealias CellIndexType = CellIndex
-    typealias SupplementaryIndexType = SupplementaryIndex
+    public typealias TextType = String
+    public typealias ItemType = Item
+    public typealias CellType = Cell
+    public typealias SupplementaryViewType = SupplementaryView
+    public typealias ViewType = View
+    public typealias CellIndexType = CellIndex
+    public typealias SupplementaryIndexType = SupplementaryIndex
 
     public typealias CellConfig = (cell: Cell, item: Item, index: CellIndexType) -> Void
     public typealias SupplementaryViewConfig = (supplementaryView: SupplementaryView, index: SupplementaryIndexType) -> Void
