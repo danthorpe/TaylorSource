@@ -5,12 +5,6 @@ use_frameworks!
 
 platform :ios, "8.0"
 
-target 'Datasources' do
-  pod 'DateTools', :git => 'https://github.com/yakatak/DateTools.git', :branch => 'bug/DT-56_import_bundle_from_framework'
-  pod 'TaylorSource/YapDatabase', :path => '../../'
-end
-
-target 'DatasourcesTests' do
-  pod 'DateTools', :git => 'https://github.com/yakatak/DateTools.git', :branch => 'bug/DT-56_import_bundle_from_framework'
-  pod 'TaylorSource/YapDatabase', :path => '../../'
-end
+pod 'DateTools'
+pod 'YapDatabaseExtensions', :git => 'https://github.com/danthorpe/YapDatabaseExtensions.git', :branch => 'swift_2.0'
+pod 'TaylorSource/YapDatabase', :path => '../../'
