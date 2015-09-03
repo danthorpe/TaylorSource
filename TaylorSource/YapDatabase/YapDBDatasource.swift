@@ -73,10 +73,10 @@ public struct YapDBDatasource<
     /**
     Will return an optional text for the supplementary kind
 
-    :param: view the View which should dequeue the cell.
-    :param: kind the kind of the supplementary element. See SupplementaryElementKind
-    :param: indexPath the NSIndexPath of the item.
-    :return: a TextType?
+    - parameter view: the View which should dequeue the cell.
+    - parameter kind: the kind of the supplementary element. See SupplementaryElementKind
+    - parameter indexPath: the NSIndexPath of the item.
+    - returns: a TextType?
     */
     public func textForSupplementaryElementInView(view: Factory.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> Factory.TextType? {
         let group = mappings.groupForSection(UInt(indexPath.section))

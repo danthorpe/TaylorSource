@@ -215,7 +215,7 @@ public struct Observer<T> {
     
     - parameter database: The YapDatabase instance.
     - parameter update: An update block, see extension on YapDatabaseViewMappings.
-    :configuration: A Configuration<T> instance.
+    - parameter configuration: A Configuration<T> instance.
     */
     public init(database db: YapDatabase, changes c: YapDatabaseViewMappings.Changes, configuration: Configuration<T>) {
         database = db

@@ -23,6 +23,15 @@
 		658413A81B29AB8100991C50 /* YapDBMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79C1B287BAD0002F65C /* YapDBMapperTests.swift */; };
 		658413A91B29AB8100991C50 /* YapDBObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79D1B287BAD0002F65C /* YapDBObserverTests.swift */; };
 		658413AA1B29AC1700991C50 /* YapDBDatasourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652DB79B1B287BAD0002F65C /* YapDBDatasourceTests.swift */; };
+		65F3A5061B99096E00BB6490 /* Basic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F3A4FE1B99096E00BB6490 /* Basic.swift */; settings = {ASSET_TAGS = (); }; };
+		65F3A5071B99096E00BB6490 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F3A4FF1B99096E00BB6490 /* Entity.swift */; settings = {ASSET_TAGS = (); }; };
+		65F3A5081B99096E00BB6490 /* Segmented.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F3A5001B99096E00BB6490 /* Segmented.swift */; settings = {ASSET_TAGS = (); }; };
+		65F3A5091B99096E00BB6490 /* Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F3A5011B99096E00BB6490 /* Selection.swift */; settings = {ASSET_TAGS = (); }; };
+		65F3A50A1B99096E00BB6490 /* UICollectionView+TaylorSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F3A5021B99096E00BB6490 /* UICollectionView+TaylorSource.m */; settings = {ASSET_TAGS = (); }; };
+		65F3A50B1B99096E00BB6490 /* UITableView+TaylorSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 65F3A5031B99096E00BB6490 /* UITableView+TaylorSource.m */; settings = {ASSET_TAGS = (); }; };
+		65F3A50C1B99096E00BB6490 /* UICollectionView+TaylorSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F3A5041B99096E00BB6490 /* UICollectionView+TaylorSource.h */; settings = {ASSET_TAGS = (); }; };
+		65F3A50D1B99096E00BB6490 /* UITableView+TaylorSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F3A5051B99096E00BB6490 /* UITableView+TaylorSource.h */; settings = {ASSET_TAGS = (); }; };
+		65F3A50F1B990AAB00BB6490 /* YapDBEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F3A50E1B990AAB00BB6490 /* YapDBEntity.swift */; settings = {ASSET_TAGS = (); }; };
 		CEC0879ACD7D1CCCE05E6C0B /* Pods_TaylorSourceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E45CB6825BDC28691D4F0F6C /* Pods_TaylorSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2604FB2F0CB56C5B5B81DACA /* Pods_TaylorSource.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
@@ -60,6 +69,15 @@
 		652DB79C1B287BAD0002F65C /* YapDBMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBMapperTests.swift; sourceTree = "<group>"; };
 		652DB79D1B287BAD0002F65C /* YapDBObserverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBObserverTests.swift; sourceTree = "<group>"; };
 		652DB7A41B287CFF0002F65C /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Models.swift; path = ../examples/Events/Datasources/Models.swift; sourceTree = "<group>"; };
+		65F3A4FE1B99096E00BB6490 /* Basic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Basic.swift; sourceTree = "<group>"; };
+		65F3A4FF1B99096E00BB6490 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
+		65F3A5001B99096E00BB6490 /* Segmented.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Segmented.swift; sourceTree = "<group>"; };
+		65F3A5011B99096E00BB6490 /* Selection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selection.swift; sourceTree = "<group>"; };
+		65F3A5021B99096E00BB6490 /* UICollectionView+TaylorSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+TaylorSource.m"; sourceTree = "<group>"; };
+		65F3A5031B99096E00BB6490 /* UITableView+TaylorSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+TaylorSource.m"; sourceTree = "<group>"; };
+		65F3A5041B99096E00BB6490 /* UICollectionView+TaylorSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+TaylorSource.h"; sourceTree = "<group>"; };
+		65F3A5051B99096E00BB6490 /* UITableView+TaylorSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+TaylorSource.h"; sourceTree = "<group>"; };
+		65F3A50E1B990AAB00BB6490 /* YapDBEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBEntity.swift; sourceTree = "<group>"; };
 		7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TaylorSourceTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A578C3969F628D5199729DFF /* Pods-TaylorSource.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaylorSource.release.xcconfig"; path = "Pods/Target Support Files/Pods-TaylorSource/Pods-TaylorSource.release.xcconfig"; sourceTree = "<group>"; };
 		EFDDF0CBF3053AB8936D7DBB /* Pods-TaylorSource.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaylorSource.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TaylorSource/Pods-TaylorSource.debug.xcconfig"; sourceTree = "<group>"; };
@@ -162,6 +180,7 @@
 		652DB7801B2879EE0002F65C /* YapDatabase */ = {
 			isa = PBXGroup;
 			children = (
+				65F3A50E1B990AAB00BB6490 /* YapDBEntity.swift */,
 				652DB7811B2879EE0002F65C /* YapDB.swift */,
 				652DB7821B2879EE0002F65C /* YapDBDatasource.swift */,
 				652DB7831B2879EE0002F65C /* YapDBFactory.swift */,
@@ -172,8 +191,16 @@
 		652DB7841B2879EE0002F65C /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				65F3A5041B99096E00BB6490 /* UICollectionView+TaylorSource.h */,
+				65F3A5051B99096E00BB6490 /* UITableView+TaylorSource.h */,
+				65F3A5021B99096E00BB6490 /* UICollectionView+TaylorSource.m */,
+				65F3A5031B99096E00BB6490 /* UITableView+TaylorSource.m */,
+				65F3A4FE1B99096E00BB6490 /* Basic.swift */,
 				652DB7851B2879EE0002F65C /* Datasource.swift */,
+				65F3A4FF1B99096E00BB6490 /* Entity.swift */,
 				652DB7861B2879EE0002F65C /* Factory.swift */,
+				65F3A5001B99096E00BB6490 /* Segmented.swift */,
+				65F3A5011B99096E00BB6490 /* Selection.swift */,
 				652DB78B1B2879EE0002F65C /* Utilities.swift */,
 				652DB78C1B2879EE0002F65C /* Views.swift */,
 			);
@@ -197,6 +224,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				652DB76A1B28786F0002F65C /* TaylorSource.h in Headers */,
+				65F3A50D1B99096E00BB6490 /* UITableView+TaylorSource.h in Headers */,
+				65F3A50C1B99096E00BB6490 /* UICollectionView+TaylorSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,10 +409,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65F3A5061B99096E00BB6490 /* Basic.swift in Sources */,
+				65F3A50F1B990AAB00BB6490 /* YapDBEntity.swift in Sources */,
 				652DB7901B2879EE0002F65C /* Datasource.swift in Sources */,
+				65F3A50A1B99096E00BB6490 /* UICollectionView+TaylorSource.m in Sources */,
 				658413A51B29A9D400991C50 /* YapDB.swift in Sources */,
 				652DB7911B2879EE0002F65C /* Factory.swift in Sources */,
+				65F3A50B1B99096E00BB6490 /* UITableView+TaylorSource.m in Sources */,
+				65F3A5081B99096E00BB6490 /* Segmented.swift in Sources */,
+				65F3A5091B99096E00BB6490 /* Selection.swift in Sources */,
 				652DB7961B2879EE0002F65C /* Utilities.swift in Sources */,
+				65F3A5071B99096E00BB6490 /* Entity.swift in Sources */,
 				652DB7971B2879EE0002F65C /* Views.swift in Sources */,
 				658413A61B29AB7300991C50 /* YapDBDatasource.swift in Sources */,
 				658413A71B29AB7300991C50 /* YapDBFactory.swift in Sources */,
@@ -509,6 +545,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EFDDF0CBF3053AB8936D7DBB /* Pods-TaylorSource.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -519,6 +556,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "me.danthorpe.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -526,6 +564,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A578C3969F628D5199729DFF /* Pods-TaylorSource.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
