@@ -24,13 +24,80 @@ struct City {
     let stateId: Identifier
 }
 
+extension City {
+
+    static let view: YapDB.Fetch = {
+
+        let grouping: YapDB.View.Grouping = .ByObject({ (_, collection, key, object) -> String! in
+            if collection == City.collection, let city: City = valueFromArchive(object) {
+                return collection
+            }
+            return nil
+        })
+
+        let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
+            if let city1: City = valueFromArchive(object1), city2: City = valueFromArchive(object2) {
+                return city1.compare(city2)
+            }
+            return .OrderedSame
+        })
+
+        return .View(YapDB.View(name: "Cities", grouping: grouping, sorting: sorting, collections: [collection]))
+    }()
+
+    static let viewByState: YapDB.Fetch = {
+
+        let grouping: YapDB.View.Grouping = .ByObject({ (_, collection, key, object) -> String! in
+            if collection == City.collection, let city: City = valueFromArchive(object) {
+                return city.stateId
+            }
+            return nil
+        })
+
+        let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
+            if let city1: City = valueFromArchive(object1), city2: City = valueFromArchive(object2) {
+                return city1.compare(city2)
+            }
+            return .OrderedSame
+        })
+
+        return .View(YapDB.View(name: "Cities by State ID", grouping: grouping, sorting: sorting, collections: [collection]))
+    }()
+
+    static func viewCities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0) -> YapDB.Fetch {
+        let parent = byState ? viewByState : view
+        if threshold > 0 {
+
+            let filtering = YapDB.Filter.Filtering.ByObject({ (_, group, collection, key, object) -> Bool in
+                if collection == City.collection, let city: City = valueFromArchive(object) {
+                    return city.population >= threshold
+                }
+                return false
+            })
+
+            let name = "\(parent.name), above population threshold: \(threshold)"
+            return .Filter(YapDB.Filter(name: name, parent: parent, filtering: filtering, collections: [collection]))
+        }
+        return parent
+    }
+
+    static func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> TaylorSource.Configuration<City> {
+        let config = YapDB.FetchConfiguration(fetch: viewCities(byState: byState, abovePopulationThreshold: threshold), block: mappingBlock)
+        return TaylorSource.Configuration(fetch: config, itemMapper: valueFromArchive)
+    }
+
+
+
+
+
+
+}
+
 // MARK: - Persistable
 
 extension State: Persistable {
 
-    static var collection: String {
-        return "States"
-    }
+    static let collection: String = "States"
 
     var identifier: Identifier {
         return name
@@ -40,14 +107,56 @@ extension State: Persistable {
 
 extension City: Persistable {
 
-    static var collection: String {
-        return "Cities"
-    }
+    static let collection: String = "Cities"
 
     var identifier: Identifier {
         return name
     }
 }
+
+// MARK: - Equatable 
+
+extension State: Equatable { }
+
+func ==(a: State, b: State) -> Bool {
+    return a.name == b.name
+}
+
+extension City: Equatable { }
+
+func ==(a: City, b: City) -> Bool {
+    return (a.name == b.name) && (a.population == b.population) && (a.capital == b.capital) && (a.stateId == b.stateId)
+}
+
+// MARK: - Comparable
+
+extension City: Comparable {
+
+    func compare(other: City) -> NSComparisonResult {
+        if self == other {
+            return .OrderedSame
+        }
+        else if self < other {
+            return .OrderedAscending
+        }
+        return .OrderedDescending
+    }
+}
+
+func <(a: City, b: City) -> Bool {
+    switch (a.capital, b.capital) {
+    case (true, false):
+        return true
+    case (false, true):
+        return false
+    default:
+        if a.population == b.population {
+            return a.name < b.name
+        }
+        return a.population < b.population
+    }
+}
+
 
 // MARK: - Saveable
 
@@ -111,53 +220,5 @@ class CityArchiver: NSObject, NSCoding, Archiver {
         aCoder.encodeBool(value.capital, forKey: "capital")
         aCoder.encodeObject(value.stateId, forKey: "stateId")
     }
-}
-
-// MARK: - Database Views
-
-func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0) -> YapDB.Fetch {
-
-    let grouping: YapDB.View.Grouping = .ByObject({(_, collection, key, object) -> String! in
-        if collection == City.collection {
-            if let city: City = valueFromArchive(object) {
-                if city.population > threshold {
-                    return byState ? city.stateId : collection
-                }
-            }
-        }
-        return nil
-    })
-
-    let sorting: YapDB.View.Sorting = .ByObject({(_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
-        if let city1: City = valueFromArchive(object1), city2: City = valueFromArchive(object2) {
-            switch (city1.capital, city2.capital) {
-            case (true, false):
-                return .OrderedAscending
-            case (false, true):
-                return .OrderedDescending
-            default:
-                switch NSNumber(integer: city1.population).compare(NSNumber(integer: city2.population)) {
-                case .OrderedSame:
-                    return city1.name.caseInsensitiveCompare(city2.name)
-                case let result:
-                    return result
-                }
-            }
-        }
-        return .OrderedSame
-    })
-
-    let byStateName = byState ? ", by state." : "."
-    let name = "Cities above population: \(threshold)\(byStateName))"
-
-    return .View(YapDB.View(name: name, grouping: grouping, sorting: sorting, collections: [City.collection]))
-}
-
-func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> YapDB.FetchConfiguration {
-    return YapDB.FetchConfiguration(fetch: cities(byState: byState, abovePopulationThreshold: threshold), block: mappingBlock)
-}
-
-func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> TaylorSource.Configuration<City> {
-    return TaylorSource.Configuration(fetch: cities(byState: byState, abovePopulationThreshold: threshold, mappingBlock: mappingBlock), itemMapper: valueFromArchive)
 }
 
