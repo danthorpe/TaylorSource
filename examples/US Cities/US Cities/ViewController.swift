@@ -49,7 +49,7 @@ struct CitiesDatasource: DatasourceProviderType {
 
         readWriteConnection = db.newConnection()
 
-        datasource = Datasource(id: "cities datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: cities(abovePopulationThreshold: threshold))
+        datasource = Datasource(id: "cities datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: City.cities(abovePopulationThreshold: threshold))
 
         datasource.factory.registerCell(.ClassWithIdentifier(CityCell.self, "cell"), inView: view, configuration: CityCell.configuration(formatter))
         datasource.factory.registerHeaderText { index in
@@ -67,6 +67,30 @@ struct CitiesDatasource: DatasourceProviderType {
         }
     }
 }
+
+class ViewController: UIViewController {
+
+    @IBOutlet weak var addButton: UIBarButtonItem!
+    @IBOutlet weak var tableView: UITableView!
+
+    lazy var data = USStatesAndCities()
+    var wrapper: TableViewDataSourceProvider<CitiesDatasource>!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = NSLocalizedString("US Cities", comment: "US Cities")
+        configureDatasource()
+    }
+
+    func configureDatasource() {
+
+        wrapper = TableViewDataSourceProvider(CitiesDatasource(db: database, view: tableView, threshold: 20_000))
+        tableView.dataSource = wrapper.tableViewDataSource
+        data.loadIntoDatabase(database)
+    }
+}
+
+// MARK: - Dataloader
 
 struct USStatesAndCities {
     let data: NSDictionary
@@ -104,28 +128,6 @@ struct USStatesAndCities {
                 }
             }
         }
-    }
-}
-
-class ViewController: UIViewController {
-
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    @IBOutlet weak var tableView: UITableView!
-
-    lazy var data = USStatesAndCities()
-    var wrapper: TableViewDataSourceProvider<CitiesDatasource>!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = NSLocalizedString("US Cities", comment: "US Cities")
-        configureDatasource()
-    }
-
-    func configureDatasource() {
-
-        wrapper = TableViewDataSourceProvider(CitiesDatasource(db: database, view: tableView, threshold: 0))
-        tableView.dataSource = wrapper.tableViewDataSource
-        data.loadIntoDatabase(database)
     }
 }
 
