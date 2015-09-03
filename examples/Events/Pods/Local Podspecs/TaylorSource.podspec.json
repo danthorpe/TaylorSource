@@ -22,7 +22,7 @@
   "subspecs": [
     {
       "name": "Base",
-      "source_files": "framework/TaylorSource/Base/*.{swift,m,h}"
+      "source_files": "TaylorSource/Base/*.{m,h,swift}"
     },
     {
       "name": "YapDatabase",
@@ -37,7 +37,7 @@
           "~> 1"
         ]
       },
-      "source_files": "framework/TaylorSource/YapDatabase/*.{m,h,swift}"
+      "source_files": "TaylorSource/YapDatabase/*.{m,h,swift}"
     }
   ]
 }
