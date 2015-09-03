@@ -70,7 +70,7 @@
 		652DB79B1B287BAD0002F65C /* YapDBDatasourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBDatasourceTests.swift; sourceTree = "<group>"; };
 		652DB79C1B287BAD0002F65C /* YapDBMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBMapperTests.swift; sourceTree = "<group>"; };
 		652DB79D1B287BAD0002F65C /* YapDBObserverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBObserverTests.swift; sourceTree = "<group>"; };
-		652DB7A41B287CFF0002F65C /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Models.swift; path = ../../examples/Events/Datasources/Models.swift; sourceTree = "<group>"; };
+		652DB7A41B287CFF0002F65C /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Models.swift; path = ../examples/Events/Datasources/Models.swift; sourceTree = "<group>"; };
 		6584D5671B69620F003B8666 /* EntityDatasourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityDatasourceTests.swift; sourceTree = "<group>"; };
 		65AC88491B54468300BFF702 /* DatasourceProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatasourceProviderTests.swift; sourceTree = "<group>"; };
 		65AFECE71B6ACED100716BB5 /* YapDBEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBEntity.swift; sourceTree = "<group>"; };
