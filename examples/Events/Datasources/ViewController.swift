@@ -38,34 +38,6 @@ struct EventsDatasource: DatasourceProviderType {
     let datasource: Datasource
     let editor: Editor
 
-    var canEditItemAtIndexPath: CanEditItemAtIndexPath? {
-        return { _ in true }
-    }
-
-    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? {
-        return { (action, indexPath) in
-            switch action {
-            case .Delete:
-                if let item = self.datasource.itemAtIndexPath(indexPath) {
-                    self.readWriteConnection.remove(item)
-                }
-            default: break
-            }
-        }
-    }
-
-    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? {
-        return { _ in .Delete }
-    }
-
-    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? {
-        return { _ in false }
-    }
-
-    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? {
-        return { (_, _) in }
-    }
-
     init(color: Event.Color, db: YapDatabase, view: Factory.ViewType) {
         eventColor = color
 
@@ -152,7 +124,7 @@ class ViewController: UIViewController, UITableViewDelegate {
     // UITableViewDelegate - Editing
 
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        return selectedDatasourceProvider.editActionForItemAtIndexPath?(indexPath: indexPath).editingStyle ?? .None
+        return selectedDatasourceProvider.editor.editActionForItemAtIndexPath?(indexPath: indexPath).editingStyle ?? .None
     }
 }
 
