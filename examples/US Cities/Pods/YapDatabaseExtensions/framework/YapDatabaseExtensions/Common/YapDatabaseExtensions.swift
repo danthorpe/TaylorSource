@@ -264,7 +264,7 @@ initWithCoder(_: NSCoder)
 :returns: an optional Value
 */
 public func valueFromArchive<Value where Value: Saveable, Value.ArchiverType.ValueType == Value>(archive: AnyObject?) -> Value? {
-    return archive.map { ($0 as! Value.ArchiverType).value }
+    return (archive as? Value.ArchiverType).map { $0.value }
 }
 
 /**
@@ -288,7 +288,7 @@ Again, primarily useful when implmementing encodeWithCoder(_: NSCoder)
 :returns: An optional ArchiverType instance.
 */
 public func archiveFromValue<Value where Value: Saveable, Value.ArchiverType.ValueType == Value>(value: Value?) -> Value.ArchiverType? {
-    return value.map { $0.archive }
+    return value.map { Value.ArchiverType($0) }
 }
 
 /**
