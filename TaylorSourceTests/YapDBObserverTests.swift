@@ -45,7 +45,7 @@ func validateChangesetHasRowInsert(count: Int = 1) -> YapDatabaseViewMappings.Ch
 }
 
 func createOneEvent(color: Event.Color = .Red) -> Event {
-    return Event.create(color)
+    return Event.create(color: color)
 }
 
 func createManyEvents(color: Event.Color = .Red) -> [Event] {
