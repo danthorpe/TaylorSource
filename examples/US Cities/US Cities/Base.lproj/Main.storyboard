@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="6xe-F8-M9T">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8187.4" systemVersion="15A279b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="6xe-F8-M9T">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8151.3"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -12,10 +13,11 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4uk-PN-tWw">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="eHK-Uh-dPw" kind="relationship" relationship="rootViewController" id="Gwi-kt-eyf"/>
+                        <segue destination="HNM-k3-bMY" kind="relationship" relationship="rootViewController" id="l44-Yc-5tX"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CjJ-pZ-rkR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -23,38 +25,49 @@
             <point key="canvasLocation" x="791" y="566"/>
         </scene>
         <!--View Controller-->
-        <scene sceneID="PUg-yG-xLY">
+        <scene sceneID="xIK-o5-Orr">
             <objects>
-                <viewController id="eHK-Uh-dPw" customClass="ViewController" customModule="US_Cities" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ycC-DP-LxU"/>
-                        <viewControllerLayoutGuide type="bottom" id="eZF-pI-tg7"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="3jC-O1-en6">
+                <tableViewController id="HNM-k3-bMY" customClass="ViewController" customModule="US_Cities" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="jsU-Na-Izc">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="RH5-nR-2jF">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="eZF-pI-tg7" firstAttribute="top" secondItem="RH5-nR-2jF" secondAttribute="bottom" id="EZY-KL-WaL"/>
-                            <constraint firstAttribute="trailing" secondItem="RH5-nR-2jF" secondAttribute="trailing" id="dqL-SO-gwU"/>
-                            <constraint firstItem="RH5-nR-2jF" firstAttribute="leading" secondItem="3jC-O1-en6" secondAttribute="leading" id="lIO-tJ-thW"/>
-                            <constraint firstItem="RH5-nR-2jF" firstAttribute="top" secondItem="ycC-DP-LxU" secondAttribute="bottom" constant="-64" id="qp5-rA-9Z0"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="kTr-zf-m5j"/>
+                        <animations/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <connections>
+                            <outlet property="dataSource" destination="HNM-k3-bMY" id="238-8q-adf"/>
+                            <outlet property="delegate" destination="HNM-k3-bMY" id="LNR-zA-b56"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="6P1-q7-yXh"/>
                     <connections>
-                        <outlet property="tableView" destination="RH5-nR-2jF" id="VOY-8A-vME"/>
+                        <outlet property="tableViewHeader" destination="hdJ-jf-vZn" id="T6R-fA-3gs"/>
                     </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="J53-XF-GHZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9hB-AC-5wB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" id="hdJ-jf-vZn">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="62"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is just a list of some cities and their population in the first 10 US states when listed alphabetically." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pgq-ax-nQE">
+                            <rect key="frame" x="12" y="47" width="577" height="15"/>
+                            <animations/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <animations/>
+                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="pgq-ax-nQE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hdJ-jf-vZn" secondAttribute="leading" constant="8" id="0X0-f6-5AV"/>
+                        <constraint firstAttribute="bottom" secondItem="pgq-ax-nQE" secondAttribute="bottom" id="5b8-jc-KXH"/>
+                        <constraint firstItem="pgq-ax-nQE" firstAttribute="centerX" secondItem="hdJ-jf-vZn" secondAttribute="centerX" id="Z5V-P3-jqB"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="pgq-ax-nQE" secondAttribute="trailing" constant="8" id="ij9-t4-dn4"/>
+                        <constraint firstItem="pgq-ax-nQE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="hdJ-jf-vZn" secondAttribute="top" constant="8" id="tjI-Zt-Y9i"/>
+                    </constraints>
+                </view>
             </objects>
-            <point key="canvasLocation" x="1530" y="566"/>
+            <point key="canvasLocation" x="1462" y="566"/>
         </scene>
     </scenes>
 </document>
