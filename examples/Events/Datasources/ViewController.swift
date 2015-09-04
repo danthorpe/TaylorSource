@@ -36,19 +36,37 @@ struct EventsDatasource: DatasourceProviderType {
     let readWriteConnection: YapDatabaseConnection
     let eventColor: Event.Color
     let datasource: Datasource
+    let editor: Editor
 
     init(color: Event.Color, db: YapDatabase, view: Factory.ViewType) {
+        eventColor = color
 
         var ds = YapDBDatasource(id: "\(color) events datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: eventsWithColor(color, byColor: true) { mappings in
             mappings.setIsReversed(true, forGroup: "\(color)")
         })
 
         ds.title = color.description
+        ds.factory.registerCell(.ClassWithIdentifier(EventCell.self, "cell"), inView: view, configuration: EventCell.configuration())
 
-        eventColor = color
-        readWriteConnection = db.newConnection()
+        let connection = db.newConnection()
+        editor = Editor(
+            canEdit: { _ in true },
+            commitEdit: { (action, indexPath) in
+                switch action {
+                case .Delete:
+                    if let item = ds.itemAtIndexPath(indexPath) {
+                        connection.remove(item)
+                    }
+                default: break
+                }
+            },
+            editAction: { _ in .Delete },
+            canMove: { _ in false },
+            commitMove: { (_, _) in }
+        )
+
         datasource = ds
-        datasource.factory.registerCell(.ClassWithIdentifier(EventCell.self, "cell"), inView: view, configuration: EventCell.configuration())
+        readWriteConnection = connection
     }
 
     func addEvent(event: Event) {
@@ -60,13 +78,18 @@ struct EventsDatasource: DatasourceProviderType {
     }
 }
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate {
+
+    typealias TableViewDataSource = TableViewDataSourceProvider<SegmentedDatasourceProvider<EventsDatasource>>
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
 
-    var segmentedDatasourceProvider: SegmentedDatasourceProvider<EventsDatasource>!
-    var datasource: TableViewDataSourceProvider<SegmentedDatasourceProvider<EventsDatasource>>!
+    var wrapper: TableViewDataSource!
+
+    var selectedDatasourceProvider: EventsDatasource {
+        return wrapper.provider.selectedDatasourceProvider
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,19 +100,17 @@ class ViewController: UIViewController {
         let colors: [Event.Color] = [.Red, .Blue, .Green]
         let datasources = colors.map { EventsDatasource(color: $0, db: database, view: self.tableView) }
 
-        segmentedDatasourceProvider = SegmentedDatasourceProvider(id: "events segmented datasource", datasources: datasources, selectedIndex: 0) { [weak self] in
+        wrapper = TableViewDataSource(SegmentedDatasourceProvider(id: "events segmented datasource", datasources: datasources, selectedIndex: 0) { [weak self] in
             self?.tableView.reloadData()
-        }
-
-        segmentedDatasourceProvider.configureSegmentedControl(segmentedControl)
-
-        datasource = TableViewDataSourceProvider(segmentedDatasourceProvider)
-        tableView.dataSource = datasource.tableViewDataSource
+        })
+        wrapper.provider.configureSegmentedControl(segmentedControl)
+        tableView.dataSource = wrapper.tableViewDataSource
+        tableView.setEditing(true, animated: false)
     }
 
     @IBAction func addEvent(sender: UIBarButtonItem) {
-        let color = segmentedDatasourceProvider.selectedDatasourceProvider.eventColor
-        segmentedDatasourceProvider.selectedDatasourceProvider.addEvent(Event.create(color: color))
+        let color = selectedDatasourceProvider.eventColor
+        selectedDatasourceProvider.addEvent(Event.create(color: color))
     }
 
     @IBAction func refreshEvents(sender: UIBarButtonItem) {
@@ -97,7 +118,13 @@ class ViewController: UIViewController {
     }
 
     @IBAction func removeAll(sender: UIBarButtonItem) {
-        segmentedDatasourceProvider.selectedDatasourceProvider.removeAllEvents()
+        selectedDatasourceProvider.removeAllEvents()
+    }
+
+    // UITableViewDelegate - Editing
+
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return selectedDatasourceProvider.editor.editActionForItemAtIndexPath?(indexPath: indexPath).editingStyle ?? .None
     }
 }
 

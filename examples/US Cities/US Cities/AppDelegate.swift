@@ -8,6 +8,7 @@
 
 import UIKit
 import YapDatabase
+import YapDatabaseExtensions
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,20 +16,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 }
 
-let database = databaseNamed("US_Cities")
-
-private func pathToDatabase(name: String) -> String {
-    var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-    if let documents = paths.first as? String {
-        if !documents.isEmpty {
-            let filename = "\(name).sqlite"
-            let path = documents.stringByAppendingPathComponent(filename)
-            return path
-        }
-    }
-    fatalError("Unable to find the documents directory")
-}
-
-private func databaseNamed(name: String) -> YapDatabase {
-    return YapDatabase(path: pathToDatabase(name))
-}
+let database = YapDB.databaseNamed("US_Cities")

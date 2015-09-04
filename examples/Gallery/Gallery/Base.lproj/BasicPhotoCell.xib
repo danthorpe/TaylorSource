@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BasicPhotoCell" rowHeight="320" id="b1a-zs-5f0" userLabel="BasicPhotoCell" customClass="BasicPhotoCell" customModule="Gallery">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b1a-zs-5f0" id="wsk-Rw-sHx">
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fXw-0s-y0W">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="250" id="NIE-pG-dh3"/>
+                            <constraint firstAttribute="width" secondItem="fXw-0s-y0W" secondAttribute="height" multiplier="1:1" id="qgc-cO-oWH"/>
+                        </constraints>
+                    </imageView>
+                    <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5oJ-hx-EhD">
+                        <rect key="frame" x="0.0" y="283" width="320" height="37"/>
+                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="D0H-Tt-8Zd">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="37"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vYb-aq-VQf">
+                                    <rect key="frame" x="8" y="8" width="304" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="vYb-aq-VQf" secondAttribute="trailing" constant="8" id="OcQ-Jf-Z4m"/>
+                                <constraint firstAttribute="bottom" secondItem="vYb-aq-VQf" secondAttribute="bottom" constant="8" id="Zy5-ke-g2f"/>
+                                <constraint firstItem="vYb-aq-VQf" firstAttribute="leading" secondItem="D0H-Tt-8Zd" secondAttribute="leading" constant="8" id="eee-8X-65L"/>
+                                <constraint firstItem="vYb-aq-VQf" firstAttribute="top" secondItem="D0H-Tt-8Zd" secondAttribute="top" constant="8" id="rPG-hl-bmW"/>
+                            </constraints>
+                        </view>
+                        <vibrancyEffect>
+                            <blurEffect style="light"/>
+                        </vibrancyEffect>
+                    </visualEffectView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="5oJ-hx-EhD" firstAttribute="leading" secondItem="fXw-0s-y0W" secondAttribute="leading" id="Li5-Rb-Q8S"/>
+                    <constraint firstAttribute="trailing" secondItem="fXw-0s-y0W" secondAttribute="trailing" id="OW9-j5-9jv"/>
+                    <constraint firstItem="fXw-0s-y0W" firstAttribute="leading" secondItem="wsk-Rw-sHx" secondAttribute="leading" id="X1z-W9-2oi"/>
+                    <constraint firstItem="fXw-0s-y0W" firstAttribute="top" secondItem="wsk-Rw-sHx" secondAttribute="top" id="Z9v-oS-Wsr"/>
+                    <constraint firstItem="5oJ-hx-EhD" firstAttribute="trailing" secondItem="fXw-0s-y0W" secondAttribute="trailing" id="ZGI-fB-2e8"/>
+                    <constraint firstItem="5oJ-hx-EhD" firstAttribute="bottom" secondItem="fXw-0s-y0W" secondAttribute="bottom" id="ljd-yb-k6g"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="photoImageView" destination="fXw-0s-y0W" id="vsK-L9-GFz"/>
+                <outlet property="titleLabel" destination="vYb-aq-VQf" id="IKn-kk-NZG"/>
+            </connections>
+            <point key="canvasLocation" x="164" y="438.5"/>
+        </tableViewCell>
+    </objects>
+</document>

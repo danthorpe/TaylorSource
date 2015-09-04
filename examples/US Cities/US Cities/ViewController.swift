@@ -37,6 +37,7 @@ struct CitiesDatasource: DatasourceProviderType {
 
     let readWriteConnection: YapDatabaseConnection
     let formatter: NSNumberFormatter
+    let editor = NoEditor()
     var datasource: Datasource
 
     init(db: YapDatabase, view: Factory.ViewType, threshold: Int) {
@@ -48,7 +49,7 @@ struct CitiesDatasource: DatasourceProviderType {
 
         readWriteConnection = db.newConnection()
 
-        datasource = Datasource(id: "cities datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: cities(abovePopulationThreshold: threshold))
+        datasource = Datasource(id: "cities datasource", database: db, factory: Factory(), processChanges: view.processChanges, configuration: City.cities(abovePopulationThreshold: threshold))
 
         datasource.factory.registerCell(.ClassWithIdentifier(CityCell.self, "cell"), inView: view, configuration: CityCell.configuration(formatter))
         datasource.factory.registerHeaderText { index in
@@ -67,6 +68,30 @@ struct CitiesDatasource: DatasourceProviderType {
     }
 }
 
+class ViewController: UITableViewController {
+
+    @IBOutlet weak var addButton: UIBarButtonItem!
+    @IBOutlet var tableViewHeader: UIView!
+
+    lazy var data = USStatesAndCities()
+    var wrapper: TableViewDataSourceProvider<CitiesDatasource>!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        title = NSLocalizedString("Some US Cities & States", comment: "Some US Cities & States")
+        configureDatasource()
+    }
+
+    func configureDatasource() {
+        wrapper = TableViewDataSourceProvider(CitiesDatasource(db: database, view: tableView, threshold: 20_000))
+        tableView.dataSource = wrapper.tableViewDataSource
+        tableView.tableHeaderView = tableViewHeader
+        data.loadIntoDatabase(database)
+    }
+}
+
+// MARK: - Dataloader
+
 struct USStatesAndCities {
     let data: NSDictionary
 
@@ -83,9 +108,9 @@ struct USStatesAndCities {
 
         let connection = db.newConnection()
 
-        var states: [State] = connection.readAll()
+        let states: [State] = connection.readAll()
         let stateNames = states.map { $0.name }
-        let remainingStateNames = (data.allKeys as! [String]).filter { !contains(stateNames, $0) }
+        let remainingStateNames = (data.allKeys as! [String]).filter { !stateNames.contains($0) }
 
         for stateName in remainingStateNames {
 
@@ -99,35 +124,10 @@ struct USStatesAndCities {
 
             connection.asyncWrite(state) { state in
                 connection.asyncWrite(cities) { cities in
-                    println("Wrote \(state.name) cities to database.")
+                    print("Wrote \(state.name) cities to database.")
                 }
             }
         }
-    }
-}
-
-class ViewController: UIViewController {
-
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    @IBOutlet weak var tableView: UITableView!
-
-    lazy var data = USStatesAndCities()
-    var datasource: CitiesDatasource!
-    var tableViewDatasource: TableViewDataSourceProvider<CitiesDatasource>!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = NSLocalizedString("US Cities", comment: "US Cities")
-        configureDatasource()
-    }
-
-    func configureDatasource() {
-
-        datasource = CitiesDatasource(db: database, view: tableView, threshold: 0)
-        tableViewDatasource = TableViewDataSourceProvider(datasource)
-        tableView.dataSource = tableViewDatasource.tableViewDataSource
-
-        data.loadIntoDatabase(database)
     }
 }
 
