@@ -26,7 +26,7 @@ public struct Event {
         color = c
     }
 
-    public static func create(color: Color = .Red) -> Event {
+    public static func create(color color: Color = .Red) -> Event {
         return Event(uuid: NSUUID().UUIDString, color: color, date: NSDate())
     }
 }

@@ -52,16 +52,16 @@ code_sign_if_enabled() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework 'Pods/CocoaLumberjack.framework'
-  install_framework 'Pods/DateTools.framework'
-  install_framework 'Pods/TaylorSource.framework'
-  install_framework 'Pods/YapDatabase.framework'
-  install_framework 'Pods/YapDatabaseExtensions.framework'
+  install_framework 'Pods-Datasources/CocoaLumberjack.framework'
+  install_framework 'Pods-Datasources/DateTools.framework'
+  install_framework 'Pods-Datasources/TaylorSource.framework'
+  install_framework 'Pods-Datasources/YapDatabase.framework'
+  install_framework 'Pods-Datasources/YapDatabaseExtensions.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework 'Pods/CocoaLumberjack.framework'
-  install_framework 'Pods/DateTools.framework'
-  install_framework 'Pods/TaylorSource.framework'
-  install_framework 'Pods/YapDatabase.framework'
-  install_framework 'Pods/YapDatabaseExtensions.framework'
+  install_framework 'Pods-Datasources/CocoaLumberjack.framework'
+  install_framework 'Pods-Datasources/DateTools.framework'
+  install_framework 'Pods-Datasources/TaylorSource.framework'
+  install_framework 'Pods-Datasources/YapDatabase.framework'
+  install_framework 'Pods-Datasources/YapDatabaseExtensions.framework'
 fi
