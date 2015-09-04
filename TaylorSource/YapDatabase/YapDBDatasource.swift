@@ -103,7 +103,7 @@ public struct YapDBDatasource<
     }
 
     public subscript(i: Int) -> Factory.ItemType {
-        return observer.mapper[i]
+        return observer[i]
     }
 }
 
