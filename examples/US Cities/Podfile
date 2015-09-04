@@ -5,4 +5,5 @@ use_frameworks!
 
 platform :ios, "8.0"
 
+pod 'YapDatabaseExtensions', :git => 'https://github.com/danthorpe/YapDatabaseExtensions.git', :branch => 'swift_2.0'
 pod 'TaylorSource/YapDatabase', :path => '../../'
