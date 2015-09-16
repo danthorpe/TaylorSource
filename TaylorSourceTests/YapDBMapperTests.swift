@@ -45,4 +45,13 @@ class MapperTests: XCTestCase {
         mapper = Mapper(database: db, configuration: events())
         XCTAssertEqual(mapper.indexPathForKey(keyForPersistable(event), inCollection: Event.collection)!, NSIndexPath.first)
     }
+
+    func test__when_database_has_three_events__can_slice_last_two() {
+        let someEvents = createSomeEvents()
+        db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__) { db in
+            db.write(someEvents)
+        }
+        mapper = Mapper(database: db, configuration: events())
+        XCTAssertEqual(Array(someEvents.reverse()[2..<5]), mapper[2..<5])
+    }
 }

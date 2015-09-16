@@ -20,7 +20,7 @@ public struct Event {
     let color: Color
     let date: NSDate
 
-    public init(uuid u: String, color c: Color, date d: NSDate) {
+    public init(uuid u: String = NSUUID().UUIDString, color c: Color, date d: NSDate = NSDate()) {
         uuid = u
         date = d
         color = c
@@ -145,6 +145,15 @@ public class EventArchiver: NSObject, NSCoding, Archiver {
         aCoder.encodeObject(value.color.archive, forKey: "color")
         aCoder.encodeObject(value.uuid, forKey: "uuid")
         aCoder.encodeObject(value.date, forKey: "date")
+    }
+}
+
+func createSomeEvents(numberOfDays: Int = 10) -> [Event] {
+    let today = NSDate()
+    let interval: NSTimeInterval = 86_400
+    return (0..<numberOfDays).map { index in
+        let date = today.dateByAddingTimeInterval(-1.0 * Double(index) * interval)
+        return Event(color: .Red, date: date)
     }
 }
 
