@@ -55,14 +55,14 @@ public struct Mapper<T>: SequenceType, CollectionType {
         return configuration.fetchConfiguration.name
     }
 
-    var fetch: (inTransaction: YapDatabaseReadTransaction, atIndexPath: NSIndexPath) -> T? {
-        return { (transaction, indexPath) in
+    var get: (inTransaction: YapDatabaseReadTransaction, atIndexPaths: [NSIndexPath]) -> [T] {
+        return { (transaction, indexPaths) in
             if let viewTransaction = transaction.ext(self.name) as? YapDatabaseViewTransaction {
                 return indexPaths.flatMap {
-                return self.configuration.itemMapper(viewTransaction.objectAtIndexPath(indexPath, withMappings: self.mappings))
+                    self.configuration.itemMapper(viewTransaction.objectAtIndexPath($0, withMappings: self.mappings))
                 }
             }
-            return self.configuration.itemMapper(.None)
+            return []
         }
     }
 
@@ -188,7 +188,7 @@ public struct Mapper<T>: SequenceType, CollectionType {
         return readOnlyConnection.read { transaction in
             if let viewTransaction = transaction.ext(self.name) as? YapDatabaseViewTransaction {
                 return keys.flatMap {
-                    flatMap(viewTransaction.indexPathForKey($0, inCollection: collection, withMappings: self.mappings), { [$0] }) ?? []
+                    viewTransaction.indexPathForKey($0, inCollection: collection, withMappings: self.mappings)
                 }
             }
             return []
@@ -261,10 +261,8 @@ public struct Observer<T> {
 
     let database: YapDatabase
     let mapper: Mapper<T>
-    let queue: dispatch_queue_t
     let changes: YapDatabaseViewMappings.Changes
 
-    var notificationHandler: NotificationCenterHandler!
     public var shouldProcessChanges = true
 
     public var configuration: Configuration<T> {
@@ -485,9 +483,6 @@ extension Observer: CollectionType {
     public subscript(i: Int) -> T {
         return mapper[i]
     }
-}
-
-extension Observer: Sliceable {
 
     public subscript(bounds: Range<Int>) -> [T] {
         return mapper[bounds]
@@ -569,12 +564,9 @@ extension YapDatabaseViewMappings: CollectionType {
             return NSIndexPath(forItem: item, inSection: section)
         }
     }
-}
-
-extension YapDatabaseViewMappings: Sliceable {
 
     public subscript(bounds: Range<Int>) -> [NSIndexPath] {
-        return reduce(bounds, Array<NSIndexPath>()) { (var acc, index) in
+        return bounds.reduce(Array<NSIndexPath>()) { (var acc, index) in
             acc.append(self[index])
             return acc
         }

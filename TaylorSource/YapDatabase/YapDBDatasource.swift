@@ -23,7 +23,6 @@ public struct YapDBDatasource<
 
     public let observer: Observer<Factory.ItemType>
 
-    private let observer: Observer<Factory.ItemType>
     public var selectionManager = IndexPathSelectionManager()
 
     var mappings: YapDatabaseViewMappings {

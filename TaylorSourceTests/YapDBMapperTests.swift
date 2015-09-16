@@ -52,6 +52,6 @@ class MapperTests: XCTestCase {
             db.write(someEvents)
         }
         mapper = Mapper(database: db, configuration: events())
-        XCTAssertEqual(Array(reverse(someEvents)[2..<5]), mapper[2..<5])
+        XCTAssertEqual(Array(someEvents.reverse()[2..<5]), mapper[2..<5])
     }
 }

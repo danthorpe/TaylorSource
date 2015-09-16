@@ -49,7 +49,6 @@ extension UITableView: UpdatableView {
 
     public var processChanges: YapDatabaseViewMappings.Changes {
         return { [weak self] changeset in
-            for change in sectionChanges {
             if let weakSelf = self {
                 if weakSelf.tay_shouldProcessChangeset(changeset) {
                     weakSelf.tay_performBatchUpdates {
@@ -146,11 +145,6 @@ extension UICollectionView: UpdatableView {
                 reloadItemsAtIndexPaths([change.indexPath])
             }
         }
-
-        performBatchUpdates({
-            processSectionChanges(changeset.sections)
-            processItemChanges(changeset.items)
-        }, completion: nil)
     }
 }
 
