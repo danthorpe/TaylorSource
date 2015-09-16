@@ -9,19 +9,19 @@ PODS:
     - CocoaLumberjack/Default
   - FlickrKit (1.0.5)
   - HanekeSwift (0.9.1)
-  - TaylorSource/Base (1.0.0)
-  - TaylorSource/YapDatabase (1.0.0):
+  - TaylorSource/Base (2.0.0)
+  - TaylorSource/YapDatabase (2.0.0):
     - TaylorSource/Base
     - YapDatabase (~> 2.7)
-    - YapDatabaseExtensions (~> 1)
+    - YapDatabaseExtensions (~> 2)
   - YapDatabase (2.7.2):
     - YapDatabase/standard (= 2.7.2)
   - YapDatabase/standard (2.7.2):
     - CocoaLumberjack (~> 2)
-  - YapDatabaseExtensions (1.8.0):
+  - YapDatabaseExtensions (2.0.1):
     - YapDatabase (~> 2)
-    - YapDatabaseExtensions/Common (= 1.8.0)
-  - YapDatabaseExtensions/Common (1.8.0):
+    - YapDatabaseExtensions/Common (= 2.0.1)
+  - YapDatabaseExtensions/Common (2.0.1):
     - YapDatabase (~> 2)
 
 DEPENDENCIES:
@@ -37,8 +37,8 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 019d1361244274a6138c788c6cb80baabc13fb8f
   FlickrKit: fc0ed009c5cb69db4d82e68f7acb02002ebe1a42
   HanekeSwift: 50d37bfbc4432edc649167e538c259feccb4a2bb
-  TaylorSource: 1006deb842f5fa1a3171a01008124f8ac38f6b1e
+  TaylorSource: 86484ba9cf9374d51d4c17db1ad21ee5acba1277
   YapDatabase: bcf13bd764ab4961fb48bef937becf964e50063d
-  YapDatabaseExtensions: 76dfc152e5d4b2cb04fb6baf1f0355bd145c3aed
+  YapDatabaseExtensions: 260ba5b2cb2086ca2a073ff54c503b96cdf01207
 
 COCOAPODS: 0.38.2

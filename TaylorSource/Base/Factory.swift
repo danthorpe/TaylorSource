@@ -47,7 +47,7 @@ public enum SupplementaryElementKind {
     case Custom(String)
 }
 
-struct SupplementaryElementIndex: Hashable {
+struct SupplementaryElementIndex {
     let kind: SupplementaryElementKind
     let key: String
 }
@@ -65,25 +65,25 @@ public protocol ReusableCellBasedView: class {
     /**
     Registers a nib in the view.
     
-    :param: nib A UINib to register.
-    :param: reuseIdentifier A String for the reuseIdentifier.
+    - parameter nib A UINib to register.
+    - parameter reuseIdentifier A String for the reuseIdentifier.
     */
     func registerNib(nib: UINib, withIdentifier reuseIdentifier: String)
 
     /**
     Registers a class in the view.
 
-    :param: aClass A AnyClass to register.
-    :param: reuseIdentifier A String for the reuseIdentifier.
+    - parameter aClass A AnyClass to register.
+    - parameter reuseIdentifier A String for the reuseIdentifier.
     */
     func registerClass(aClass: AnyClass, withIdentifier reuseIdentifier: String)
 
     /**
     Dequeues a cell with an identifier at an index path.
 
-    :param: id A String the reuse identifier
-    :param: indexPath the NSIndexPath which is required.
-    :returns: an instance of the CellType.
+    - parameter id A String the reuse identifier
+    - parameter indexPath the NSIndexPath which is required.
+    - returns: an instance of the CellType.
     */
     func dequeueCellWithIdentifier(id: String, atIndexPath indexPath: NSIndexPath) -> CellType
 }
@@ -96,28 +96,28 @@ public protocol ReusableSupplementaryViewBasedView: class {
     /**
     Registers a nib in the view for a supplementary element kind, with a reuse identifier.
 
-    :param: nib A UINib to register.
-    :param: kind the SupplementaryElementKind
-    :param: reuseIdentifier the String.
+    - parameter nib A UINib to register.
+    - parameter kind the SupplementaryElementKind
+    - parameter reuseIdentifier the String.
     */
     func registerNib(nib: UINib, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String)
 
     /**
     Registers a class in the view for a supplementary element kind, with a reuse identifier.
 
-    :param: aClass A AnyClass to register.
-    :param: kind the SupplementaryElementKind
-    :param: reuseIdentifier the String.
+    - parameter aClass A AnyClass to register.
+    - parameter kind the SupplementaryElementKind
+    - parameter reuseIdentifier the String.
     */
     func registerClass(aClass: AnyClass, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String)
 
     /**
     Dequeues a view for a supplementary element kind with an identifier at an index path.
 
-    :param: kind the SupplementaryElementKind
-    :param: id A String the reuse identifier
-    :param: indexPath the NSIndexPath which is required.
-    :returns: an instance of the SupplementaryViewType.
+    - parameter kind the SupplementaryElementKind
+    - parameter id A String the reuse identifier
+    - parameter indexPath the NSIndexPath which is required.
+    - returns: an instance of the SupplementaryViewType.
     */
     func dequeueSupplementaryViewWithKind(kind: SupplementaryElementKind, identifier id: String, atIndexPath indexPath: NSIndexPath) -> SupplementaryViewType?
 }
@@ -183,10 +183,10 @@ public protocol _FactoryType {
     The key parameter is used to look up the configuration, as multiple configurations
     can be stored for the same base cell.
     
-    :param: descriptor a ReusableViewDescriptor which descibes the cell with either nib or class.
-    :param: view the CellBasedView conforming view.
-    :param: key a String used for lookup
-    :param: configuration the cell configuration closure.
+    - parameter descriptor: a ReusableViewDescriptor which descibes the cell with either nib or class.
+    - parameter view: the CellBasedView conforming view.
+    - parameter key: a String used for lookup
+    - parameter configuration: the cell configuration closure.
     */
     mutating func registerCell(descriptor: ReusableViewDescriptor, inView view: ViewType, withKey key: String, configuration: CellConfiguration)
 
@@ -196,11 +196,11 @@ public protocol _FactoryType {
     The key parameter is used to look up the configuration, as multiple configurations
     can be stored for the same base cell.
 
-    :param: descriptor a ReusableViewDescriptor which descibes the cell with either nib or class.
-    :param: kind the SupplementaryElementKind kind.
-    :param: view the CellBasedView conforming view.
-    :param: key a String used for lookup
-    :param: configuration the supplementary view configuration closure.
+    - parameter descriptor: a ReusableViewDescriptor which descibes the cell with either nib or class.
+    - parameter kind: the SupplementaryElementKind kind.
+    - parameter view: the CellBasedView conforming view.
+    - parameter key: a String used for lookup
+    - parameter configuration: the supplementary view configuration closure.
     */
     mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView: ViewType, withKey key: String, configuration: SupplementaryViewConfiguration)
 
@@ -209,8 +209,8 @@ public protocol _FactoryType {
 
     The text configuration block receives the SupplementaryIndexType, e.g. an NSIndexPath.
 
-    :param: kind the SupplementaryElementKind kind.
-    :param: configuration the text configuration closure.
+    - parameter kind: the SupplementaryElementKind kind.
+    - parameter configuration: the text configuration closure.
     */
     mutating func registerTextWithKind(kind: SupplementaryElementKind, configuration: SupplementaryTextConfiguration)
 
@@ -219,26 +219,26 @@ public protocol _FactoryType {
     /**
     Returns a configured cell for the item at the index.
     
-    :param: item, the dataum ItemType.
-    :param: view, the cell based view, ViewType
-    :param: index, the index a CellIndexType.
+    - parameter item: the dataum ItemType.
+    - parameter view: the cell based view, ViewType
+    - parameter index: the index a CellIndexType.
     */
     func cellForItem(item: ItemType, inView view: ViewType, atIndex index: CellIndexType) -> CellType
 
     /**
     Returns a configured supplementary view for the item at the index.
 
-    :param: kind, the SupplementaryElementKind kind
-    :param: view, the cell based view, ViewType
-    :param: index, the index a CellIndexType.
+    - parameter kind: the SupplementaryElementKind kind
+    - parameter view: the cell based view, ViewType
+    - parameter index: the index a CellIndexType.
     */
     func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: ViewType, atIndex index: SupplementaryIndexType) -> SupplementaryViewType?
 
     /**
     Returns a configured text for the supplementary element of kind at index.
 
-    :param: view, the cell based view, ViewType
-    :param: index, the index a CellIndexType.
+    - parameter view: the cell based view, ViewType
+    - parameter index: the index a CellIndexType.
     */
     func supplementaryTextForKind(kind: SupplementaryElementKind, atIndex: SupplementaryIndexType) -> TextType?
 }
@@ -255,13 +255,13 @@ public class Factory<
     CellIndex: IndexPathIndexType,
     SupplementaryIndex: IndexPathIndexType>: _FactoryType {
 
-    typealias TextType = String
-    typealias ItemType = Item
-    typealias CellType = Cell
-    typealias SupplementaryViewType = SupplementaryView
-    typealias ViewType = View
-    typealias CellIndexType = CellIndex
-    typealias SupplementaryIndexType = SupplementaryIndex
+    public typealias TextType = String
+    public typealias ItemType = Item
+    public typealias CellType = Cell
+    public typealias SupplementaryViewType = SupplementaryView
+    public typealias ViewType = View
+    public typealias CellIndexType = CellIndex
+    public typealias SupplementaryIndexType = SupplementaryIndex
 
     public typealias CellConfig = (cell: Cell, item: Item, index: CellIndexType) -> Void
     public typealias SupplementaryViewConfig = (supplementaryView: SupplementaryView, index: SupplementaryIndexType) -> Void
@@ -283,8 +283,8 @@ public class Factory<
     let getCellKey: GetCellKey?
     let getSupplementaryKey: GetSupplementaryKey?
 
-    var cells = [String: (ReuseIdentifier, CellConfig)]()
-    var views = [SupplementaryElementIndex: (ReuseIdentifier, SupplementaryViewConfig)]()
+    var cells = [String: (reuseIdentifier: ReuseIdentifier, configure: CellConfig)]()
+    var views = [SupplementaryElementIndex: (reuseIdentifier: ReuseIdentifier, configure: SupplementaryViewConfig)]()
     var texts = [SupplementaryElementKind: SupplementaryTextConfig]()
 
     init(cell: GetCellKey? = .None, supplementary: GetSupplementaryKey? = .None) {
@@ -320,9 +320,9 @@ public class Factory<
 
     public func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) -> Cell {
         let key = getCellKey?(item, index) ?? self.dynamicType.defaultCellKey
-        if let (reuseIdentifier: String, configure: CellConfig) = cells[key] {
-            let cell = view.dequeueCellWithIdentifier(reuseIdentifier, atIndexPath: index.indexPath) as! Cell
-            configure(cell: cell, item: item, index: index)
+        if let info = cells[key] {
+            let cell = view.dequeueCellWithIdentifier(info.reuseIdentifier, atIndexPath: index.indexPath) as! Cell
+            info.configure(cell: cell, item: item, index: index)
             return cell
         }
         fatalError("No cell factory registered with key: \(key). Currently registered keys: \(([String])(cells.keys))")
@@ -330,9 +330,9 @@ public class Factory<
 
     public func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: View, atIndex index: SupplementaryIndex) -> SupplementaryView? {
         let key = getSupplementaryKey?(index) ?? self.dynamicType.defaultSuppplementaryViewKey
-        if let (reuseIdentifier: String, configure: SupplementaryViewConfig) = views[SupplementaryElementIndex(kind: kind, key: key)] {
-            if let supplementaryView = view.dequeueSupplementaryViewWithKind(kind, identifier: reuseIdentifier, atIndexPath: index.indexPath) as? SupplementaryView {
-                configure(supplementaryView: supplementaryView, index: index)
+        if let info = views[SupplementaryElementIndex(kind: kind, key: key)] {
+            if let supplementaryView = view.dequeueSupplementaryViewWithKind(kind, identifier: info.reuseIdentifier, atIndexPath: index.indexPath) as? SupplementaryView {
+                info.configure(supplementaryView: supplementaryView, index: index)
                 return supplementaryView
             }
         }
@@ -402,7 +402,7 @@ extension SupplementaryElementKind {
     }
 }
 
-extension SupplementaryElementKind: Printable {
+extension SupplementaryElementKind: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -481,7 +481,7 @@ extension UITableView: CellBasedView {
     }
 
     public func dequeueCellWithIdentifier(id: String, atIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return dequeueReusableCellWithIdentifier(id, forIndexPath: indexPath) as! UITableViewCell
+        return dequeueReusableCellWithIdentifier(id, forIndexPath: indexPath)
     }
 
     public func registerNib(nib: UINib, forSupplementaryViewKind: SupplementaryElementKind, withIdentifier id: String) {
@@ -493,7 +493,7 @@ extension UITableView: CellBasedView {
     }
 
     public func dequeueSupplementaryViewWithKind(kind: SupplementaryElementKind, identifier: String, atIndexPath: NSIndexPath) -> UITableViewHeaderFooterView? {
-        return dequeueReusableHeaderFooterViewWithIdentifier(identifier) as? UITableViewHeaderFooterView
+        return dequeueReusableHeaderFooterViewWithIdentifier(identifier)
     }
 }
 
@@ -508,7 +508,7 @@ extension UICollectionView: CellBasedView {
     }
 
     public func dequeueCellWithIdentifier(id: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        return dequeueReusableCellWithReuseIdentifier(id, forIndexPath: indexPath) as! UICollectionReusableView
+        return dequeueReusableCellWithReuseIdentifier(id, forIndexPath: indexPath)
     }
 
     public func registerNib(nib: UINib, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier id: String) {
@@ -520,6 +520,6 @@ extension UICollectionView: CellBasedView {
     }
 
     public func dequeueSupplementaryViewWithKind(kind: SupplementaryElementKind, identifier: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView? {
-        return dequeueReusableSupplementaryViewOfKind("\(kind)", withReuseIdentifier: identifier, forIndexPath: indexPath) as? UICollectionReusableView
+        return dequeueReusableSupplementaryViewOfKind("\(kind)", withReuseIdentifier: identifier, forIndexPath: indexPath)
     }
 }

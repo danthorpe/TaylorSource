@@ -6,11 +6,8 @@ use_frameworks!
 platform :ios, "8.0"
 
 target 'Datasources' do
-  pod 'DateTools'
-  pod 'TaylorSource/YapDatabase', :path => '../../'
-end
 
-target 'DatasourcesTests' do
   pod 'DateTools'
   pod 'TaylorSource/YapDatabase', :path => '../../'
+
 end

@@ -26,14 +26,14 @@ public struct Event {
         color = c
     }
 
-    public static func create(color: Color = .Red) -> Event {
+    public static func create(color color: Color = .Red) -> Event {
         return Event(uuid: NSUUID().UUIDString, color: color, date: NSDate())
     }
 }
 
 // MARK: - Model Helpers
 
-extension Event.Color: Printable {
+extension Event.Color: CustomStringConvertible {
 
     public var description: String {
         switch self {
@@ -87,7 +87,7 @@ public class EventColorArchiver: NSObject, NSCoding, Archiver {
         value = v
     }
 
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         if let kind = Event.Color.Kind(rawValue: aDecoder.decodeIntegerForKey("kind")) {
             switch kind {
             case .Red:
@@ -134,8 +134,8 @@ public class EventArchiver: NSObject, NSCoding, Archiver {
         value = v
     }
 
-    public required init(coder aDecoder: NSCoder) {
-        let color: Event.Color? = valueFromArchive(aDecoder.decodeObjectForKey("color"))
+    public required init?(coder aDecoder: NSCoder) {
+        let color = Event.Color(aDecoder.decodeObjectForKey("color"))
         let uuid = aDecoder.decodeObjectForKey("uuid") as? String
         let date = aDecoder.decodeObjectForKey("date") as? NSDate
         value = Event(uuid: uuid!, color: color!, date: date!)
@@ -167,7 +167,7 @@ public func events(byColor: Bool = false) -> YapDB.Fetch {
                 return collection
             }
 
-            if let event: Event = valueFromArchive(object) {
+            if let event = Event.unarchive(object) {
                 return event.color.description
             }
         }
@@ -175,10 +175,9 @@ public func events(byColor: Bool = false) -> YapDB.Fetch {
     })
 
     let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
-        if let event1: Event = valueFromArchive(object1) {
-            if let event2: Event = valueFromArchive(object2) {
+        if  let event1 = Event.unarchive(object1),
+            let event2 = Event.unarchive(object2) {
                 return event1.date.compare(event2.date)
-            }
         }
         return .OrderedSame
     })
@@ -189,23 +188,23 @@ public func events(byColor: Bool = false) -> YapDB.Fetch {
 }
 
 public func events(byColor: Bool = false, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> YapDB.FetchConfiguration {
-    return YapDB.FetchConfiguration(fetch: events(byColor: byColor), block: mappingBlock)
+    return YapDB.FetchConfiguration(fetch: events(byColor), block: mappingBlock)
 }
 
 public func events(byColor: Bool = false, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> Configuration<Event> {
-    return Configuration(fetch: events(byColor: byColor, mappingBlock: mappingBlock)) { valueFromArchive($0) }
+    return Configuration(fetch: events(byColor), itemMapper: Event.unarchive)
 }
 
 public func eventsWithColor(color: Event.Color, byColor: Bool = false) -> YapDB.Fetch {
 
     let filtering: YapDB.Filter.Filtering = .ByObject({ (_, group, collection, key, object) -> Bool in
-        if let event: Event = valueFromArchive(object) {
+        if let event = Event.unarchive(object) {
             return event.color == color
         }
         return false
     })
 
-    let filter = YapDB.Filter(name: "\(color) Events", parent: events(byColor: byColor), filtering: filtering, collections: [Event.collection])
+    let filter = YapDB.Filter(name: "\(color) Events", parent: events(byColor), filtering: filtering, collections: [Event.collection])
 
     return .Filter(filter)
 }
@@ -215,7 +214,7 @@ public func eventsWithColor(color: Event.Color, byColor: Bool = false, mappingBl
 }
 
 public func eventsWithColor(color: Event.Color, byColor: Bool = false, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> Configuration<Event> {
-    return Configuration(fetch: eventsWithColor(color, byColor: byColor, mappingBlock: mappingBlock)) { valueFromArchive($0) }
+    return Configuration(fetch: eventsWithColor(color, byColor: byColor), itemMapper: Event.unarchive)
 }
 
 

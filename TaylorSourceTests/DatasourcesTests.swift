@@ -14,8 +14,9 @@ class StaticDatasourceTests: XCTestCase {
 
     let view = StubbedTableView()
     let factory = Factory()
-    let data: [Event] = map(0..<5) { (index) -> Event in Event.create() }
+    let data: [Event] = (0..<5).map { (index) -> Event in Event.create() }
     var datasource: Datasource!
+    var provider: BasicDatasourceProvider<Datasource>!
 
     var lessThanStartIndexPath: NSIndexPath {
         return NSIndexPath(forRow: data.count * -1, inSection: 0)
@@ -32,6 +33,7 @@ class StaticDatasourceTests: XCTestCase {
     override func setUp() {
         factory.registerCell(.ClassWithIdentifier(UITableViewCell.self, "cell"), inView: view) { (_, _, _) in }
         datasource = Datasource(id: "test datasource", factory: factory, items: data)
+        provider = BasicDatasourceProvider(datasource)
     }
 
     func registerHeader(key: String? = .None, config: Factory.SupplementaryViewConfiguration) {
@@ -81,6 +83,29 @@ class StaticDatasourceTests: XCTestCase {
         else {
             XCTAssertNil(text)
         }
+    }
+}
+
+extension StaticDatasourceTests {
+
+    func test_BasicDatasourceProvider_VendsDatasource() {
+        XCTAssertNotNil(provider.datasource)
+    }
+
+    func test_StaticDatasource_is_a_sequence() {
+        XCTAssertEqual(datasource.generate().map { $0.color }, data.map { $0.color })
+    }
+
+    func test_StaticDatasource_startIndex_is_zero() {
+        XCTAssertEqual(datasource.startIndex, 0)
+    }
+
+    func test_StaticDatasource_endIndex_is_5() {
+        XCTAssertEqual(datasource.endIndex, 5)
+    }
+
+    func test_StaticDatasource_allows_random_access() {
+        XCTAssertEqual(datasource[0], data[0])
     }
 }
 
@@ -206,4 +231,5 @@ extension StaticDatasourceTests {
         validateSupplementaryText(.Footer, equals: "World", atIndexPath: validIndexPath)
     }
 }
+
 

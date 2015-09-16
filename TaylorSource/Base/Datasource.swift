@@ -39,45 +39,45 @@ public protocol DatasourceType {
     /**
     The number of items in the section.
 
-    :param: section The section index
-    :returns: An Int, the number of items.
+    - parameter section: The section index
+    - returns: An Int, the number of items.
     */
     func numberOfItemsInSection(sectionIndex: Int) -> Int
 
     /**
     Access the underlying data item at the indexPath.
     
-    :param: indexPath A NSIndexPath instance.
-    :returns: An optional Item
+    - parameter indexPath: A NSIndexPath instance.
+    - returns: An optional Item
     */
     func itemAtIndexPath(indexPath: NSIndexPath) -> FactoryType.ItemType?
 
     /**
     Vends a configured cell for the item.
     
-    :param: view the View which should dequeue the cell.
-    :param: indexPath the NSIndexPath of the item.
-    :return: a FactoryType.CellType instance, this should be dequeued and configured.
+    - parameter view: the View which should dequeue the cell.
+    - parameter indexPath: the NSIndexPath of the item.
+    - returns: a FactoryType.CellType instance, this should be dequeued and configured.
     */
     func cellForItemInView(view: FactoryType.ViewType, atIndexPath indexPath: NSIndexPath) -> FactoryType.CellType
 
     /**
     Vends a configured supplementary view of kind.
 
-    :param: view the View which should dequeue the cell.
-    :param: kind the kind of the supplementary element. See SupplementaryElementKind
-    :param: indexPath the NSIndexPath of the item.
-    :return: a Factory.Type.SupplementaryViewType instance, this should be dequeued and configured.
+    - parameter view: the View which should dequeue the cell.
+    - parameter kind: the kind of the supplementary element. See SupplementaryElementKind
+    - parameter indexPath: the NSIndexPath of the item.
+    - returns: a Factory.Type.SupplementaryViewType instance, this should be dequeued and configured.
     */
     func viewForSupplementaryElementInView(view: FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> FactoryType.SupplementaryViewType?
 
     /**
     Vends a optional text for the supplementary kind
     
-    :param: view the View which should dequeue the cell.
-    :param: kind the kind of the supplementary element. See SupplementaryElementKind
-    :param: indexPath the NSIndexPath of the item.
-    :return: a TextType?
+    - parameter view: the View which should dequeue the cell.
+    - parameter kind: the kind of the supplementary element. See SupplementaryElementKind
+    - parameter indexPath: the NSIndexPath of the item.
+    - returns: a TextType?
     */
     func textForSupplementaryElementInView(view: FactoryType.ViewType, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> FactoryType.TextType?
 }

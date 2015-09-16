@@ -9,37 +9,12 @@ import YapDatabase
 import YapDatabaseExtensions
 import TaylorSource
 
-typealias DatabaseOperationsBlock = (YapDatabase) -> Void
-
-func createYapDatabase(file: String, suffix: String? = .None, operations: DatabaseOperationsBlock? = .None) -> YapDatabase {
-
-    func pathToDatabase(name: String, suffix: String? = .None) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        let directory: String = (paths.first as? String) ?? NSTemporaryDirectory()
-        let filename: String = {
-            if let suffix = suffix {
-                return "\(name)-\(suffix).sqlite"
-            }
-            return "\(name).sqlite"
-        }()
-        return directory.stringByAppendingPathComponent(filename)
-    }
-
-    let path = pathToDatabase(file.lastPathComponent, suffix: suffix?.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "()")))
-    assert(!path.isEmpty, "Path should not be empty.")
-    NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
-
-    let db =  YapDatabase(path: path)
-    operations?(db)
-    return db
-}
-
 class StubbedTableView: UITableView {
     override func dequeueCellWithIdentifier(id: String, atIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         return UITableViewCell(style: .Default, reuseIdentifier: id)
     }
 
-    override func dequeueReusableHeaderFooterViewWithIdentifier(identifier: String) -> AnyObject? {
+    override func dequeueReusableHeaderFooterViewWithIdentifier(identifier: String) -> UITableViewHeaderFooterView? {
         return UITableViewHeaderFooterView(reuseIdentifier: identifier)
     }
 }
@@ -49,7 +24,7 @@ class StubbedCollectionView: UICollectionView {
         return UICollectionViewCell()
     }
 
-    override func dequeueReusableSupplementaryViewOfKind(elementKind: String, withReuseIdentifier identifier: String, forIndexPath indexPath: NSIndexPath!) -> AnyObject {
+    override func dequeueReusableSupplementaryViewOfKind(elementKind: String, withReuseIdentifier identifier: String, forIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         return UICollectionReusableView()
     }
 }
@@ -79,7 +54,7 @@ class PersonArchiver: NSObject, NSCoding, Archiver {
         value = v
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         if let gender = Person.Gender(rawValue: aDecoder.decodeIntegerForKey("gender")) {
             let age = aDecoder.decodeIntegerForKey("age")
             let name = aDecoder.decodeObjectForKey("name") as! String
@@ -103,7 +78,7 @@ extension Person: Saveable {
     }
 }
 
-extension Person.Gender: Printable {
+extension Person.Gender: CustomStringConvertible {
     var description: String {
         switch self {
         case .Unknown: return "Unknown"
@@ -127,7 +102,7 @@ extension Person: Persistable {
     }
 }
 
-extension Person: Printable {
+extension Person: CustomStringConvertible {
     var description: String {
         return "\(name), \(gender) \(age)"
     }
@@ -167,7 +142,7 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
 
     let grouping: YapDB.View.Grouping = .ByObject({ (_, collection, key, object) -> String! in
         if collection == Person.collection {
-            if let person: Person = valueFromArchive(object) {
+            if let person = Person.unarchive(object) {
                 return createGroup(person)
             }
         }
@@ -175,8 +150,8 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
     })
 
     let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
-        if let person1: Person = valueFromArchive(object1) {
-            if let person2: Person = valueFromArchive(object2) {
+        if  let person1 = Person.unarchive(object1),
+            let person2 = Person.unarchive(object2) {
                 let comparison = person1.name.caseInsensitiveCompare(person2.name)
                 switch comparison {
                 case .OrderedSame:
@@ -184,7 +159,6 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
                 default:
                     return comparison
                 }
-            }
         }
         return .OrderedSame
     })
@@ -198,7 +172,7 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
 }
 
 func people(name: String, byGroup createGroup: (Person) -> String) -> Configuration<Person> {
-    return Configuration(fetch: people(name, byGroup: createGroup)) { valueFromArchive($0) }
+    return Configuration(fetch: people(name, byGroup: createGroup), itemMapper: Person.unarchive)
 }
 
 
