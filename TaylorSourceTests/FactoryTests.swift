@@ -128,7 +128,7 @@ class UICollectionViewTests: XCTestCase {
     }
 
     override func setUp() {
-        view.registerClass(UICollectionViewCell.self, withIdentifier: "cell")
+        view.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         view.registerClass(UICollectionReusableView.self, forSupplementaryViewKind: .Header, withIdentifier: "whatever")
     }
 
@@ -143,7 +143,7 @@ class UICollectionViewTests: XCTestCase {
     func test_GivenRegisteredCell_WhenAccessingCellForItem_ThatConfigurationBlockIsRun() {
         var blockDidRun = false
         registerCell { (_, _, _) in blockDidRun = true }
-        let cell = factory.cellForItem(Event.create(), inView: view, atIndex: validIndexPath)
+        _ = factory.cellForItem(Event.create(), inView: view, atIndex: validIndexPath)
         XCTAssertTrue(blockDidRun, "Configuration block was not run.")
     }
 
@@ -156,7 +156,7 @@ class UICollectionViewTests: XCTestCase {
     func test_GivenRegisteredHeaderView_WhenAccessingHeader_ThatConfigurationBlockIsRun() {
         var blockDidRun = false
         registerHeader { (_, _) in blockDidRun = true }
-        let supplementary = factory.supplementaryViewForKind(.Header, inView: view, atIndex: validIndexPath)
+        _ = factory.supplementaryViewForKind(.Header, inView: view, atIndex: validIndexPath)
         XCTAssertTrue(blockDidRun, "Configuration block was not run.")
     }
 

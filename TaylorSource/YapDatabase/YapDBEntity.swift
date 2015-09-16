@@ -20,7 +20,7 @@ public struct YapDBEntityDatasource<
     Factory.CellIndexType == YapDBCellIndex,
     Factory.SupplementaryIndexType == YapDBSupplementaryIndex>: DatasourceType {
 
-    typealias FactoryType = Factory
+    public typealias FactoryType = Factory
 
     public let factory: Factory
     public let identifier: String

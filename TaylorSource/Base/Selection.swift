@@ -55,5 +55,5 @@ public class SelectionManager<Item: Hashable> {
     }
 }
 
-typealias IndexPathSelectionManager = SelectionManager<NSIndexPath>
+public typealias IndexPathSelectionManager = SelectionManager<NSIndexPath>
 

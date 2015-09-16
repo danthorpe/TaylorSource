@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "65FB1AA41ADFF574004FEB63"
-               BuildableName = "Datasources.app"
-               BlueprintName = "Datasources"
-               ReferencedContainer = "container:Datasources.xcodeproj">
+               BlueprintIdentifier = "6525AF131B4C471000FE923B"
+               BuildableName = "Gallery.app"
+               BlueprintName = "Gallery"
+               ReferencedContainer = "container:Gallery.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,14 +28,24 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6525AF281B4C471000FE923B"
+               BuildableName = "GalleryTests.xctest"
+               BlueprintName = "GalleryTests"
+               ReferencedContainer = "container:Gallery.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "65FB1AA41ADFF574004FEB63"
-            BuildableName = "Datasources.app"
-            BlueprintName = "Datasources"
-            ReferencedContainer = "container:Datasources.xcodeproj">
+            BlueprintIdentifier = "6525AF131B4C471000FE923B"
+            BuildableName = "Gallery.app"
+            BlueprintName = "Gallery"
+            ReferencedContainer = "container:Gallery.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +65,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "65FB1AA41ADFF574004FEB63"
-            BuildableName = "Datasources.app"
-            BlueprintName = "Datasources"
-            ReferencedContainer = "container:Datasources.xcodeproj">
+            BlueprintIdentifier = "6525AF131B4C471000FE923B"
+            BuildableName = "Gallery.app"
+            BlueprintName = "Gallery"
+            ReferencedContainer = "container:Gallery.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +84,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "65FB1AA41ADFF574004FEB63"
-            BuildableName = "Datasources.app"
-            BlueprintName = "Datasources"
-            ReferencedContainer = "container:Datasources.xcodeproj">
+            BlueprintIdentifier = "6525AF131B4C471000FE923B"
+            BuildableName = "Gallery.app"
+            BlueprintName = "Gallery"
+            ReferencedContainer = "container:Gallery.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

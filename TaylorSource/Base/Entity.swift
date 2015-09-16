@@ -27,7 +27,7 @@ public struct EntityDatasource<
     Factory.CellIndexType == NSIndexPath,
     Factory.SupplementaryIndexType == NSIndexPath>: DatasourceType {
 
-    typealias FactoryType = Factory
+    public typealias FactoryType = Factory
 
     public let factory: Factory
     public let identifier: String

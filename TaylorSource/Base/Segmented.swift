@@ -80,14 +80,13 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
     action will select the appropriate datasource and call the
     didSelectDatasourceCompletion completion block.
 
-    :param: segmentedControl the UISegmentedControl to configure.
-
+    - parameter segmentedControl: the UISegmentedControl to configure.
     */
     public func configureSegmentedControl(segmentedControl: UISegmentedControl) {
         segmentedControl.removeAllSegments()
 
-        for (index, provider) in enumerate(datasources) {
-            var title = provider.datasource.title ?? "No title"
+        for (index, provider) in datasources.enumerate() {
+            let title = provider.datasource.title ?? "No title"
             segmentedControl.insertSegmentWithTitle(title, atIndex: index, animated: false)
         }
 
@@ -101,7 +100,7 @@ public final class SegmentedDatasource<DatasourceProvider: DatasourceProviderTyp
     /**
     Programatic interface to select a datasource at a given index.
 
-    :param: index an Int index.
+    - parameter index: an Int index.
     */
     public func selectDatasourceAtIndex(index: Int) {
         precondition(0 <= index, "Index must be greater than zero.")
@@ -195,10 +194,10 @@ public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProvider
     /**
     The initializer.
 
-    :param: id, a String identifier for the datasource.
-    :param: datasources, an array of DatasourceProvider instances.
-    :param: selectedIndex, the index of the initial selection.
-    :param: didSelectDatasourceCompletion, a completion block which executes when selecting the datasource has completed. This block should reload the view.
+    - parameter id: a String identifier for the datasource.
+    - parameter datasources: an array of DatasourceProvider instances.
+    - parameter selectedIndex: the index of the initial selection.
+    - parameter didSelectDatasourceCompletion: a completion block which executes when selecting the datasource has completed. This block should reload the view.
     */
     public init(id: String, datasources: [DatasourceProvider], selectedIndex: Int = 0, didSelectDatasourceCompletion: () -> Void) {
         datasource = SegmentedDatasource(id: id, datasources: datasources, selectedIndex: selectedIndex, didSelectDatasourceCompletion: didSelectDatasourceCompletion)
@@ -207,8 +206,7 @@ public struct SegmentedDatasourceProvider<DatasourceProvider: DatasourceProvider
     /**
     Call the equivalent function on SegmentedDatasource.
 
-    :param: segmentedControl the UISegmentedControl to configure.
-    
+    - parameter segmentedControl: the UISegmentedControl to configure.
     */
     public func configureSegmentedControl(segmentedControl: UISegmentedControl) {
         datasource.configureSegmentedControl(segmentedControl)

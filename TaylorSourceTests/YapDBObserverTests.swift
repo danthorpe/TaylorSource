@@ -49,31 +49,32 @@ func createOneEvent(color: Event.Color = .Red) -> Event {
 }
 
 func createManyEvents(color: Event.Color = .Red) -> [Event] {
-    return map(0..<5) { _ in createOneEvent(color: color) }
+    return (0..<5).map { _ in createOneEvent(color) }
 }
 
 class ObserverTests: XCTestCase {
 
-    let configuration: TaylorSource.Configuration<Event> = events(byColor: true)
+    var observer: Observer<Event>!
+    let configuration: TaylorSource.Configuration<Event> = events(true)
 }
 
 extension ObserverTests {
 
     func testObserver_EmptyDatabase_EndIndexIsZero() {
-        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
+        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
         let observer = Observer(database: db, changes: { changeset in }, configuration: configuration)
         XCTAssertEqual(observer.startIndex, 0)
         XCTAssertEqual(observer.endIndex, 0)
     }
 
     func testObserver_WriteOneObject_ChangesetHasOneSectionInsert() {
-        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
+        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing one object")
 
-        let observer = Observer(
+        observer = Observer(
             database: db,
-            changes: validateChangeset(expectation, [validateChangesetHasSectionInsert()]),
+            changes: validateChangeset(expectation, validations: [validateChangesetHasSectionInsert()]),
             configuration: configuration)
 
         connection.write(createOneEvent())
@@ -81,30 +82,29 @@ extension ObserverTests {
     }
 
     func testObserver_DatabaseWithOneRow_WriteOneObject_ChangesetHasOneRowInsert() {
-        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
+        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing one object")
 
         connection.write(createOneEvent())
 
-        let observer = Observer(
+        observer = Observer(
             database: db,
-            changes: validateChangeset(expectation, [validateChangesetHasRowInsert()]),
+            changes: validateChangeset(expectation, validations: [validateChangesetHasRowInsert()]),
             configuration: configuration)
 
         connection.write(createOneEvent())
         waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
-
     func testObserver_WriteManyObjectToOneGroup_ChangesetHasOneSectionInsert() {
-        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
+        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing many object")
 
-        let observer = Observer(
+        observer = Observer(
             database: db,
-            changes: validateChangeset(expectation, [validateChangesetHasSectionInsert()]),
+            changes: validateChangeset(expectation, validations: [validateChangesetHasSectionInsert()]),
             configuration: configuration)
 
         connection.write(createManyEvents())
@@ -112,17 +112,17 @@ extension ObserverTests {
     }
 
     func testObserver_WriteManyObjectToTwoGroups_ChangesetHasTwoSectionInsert() {
-        let db = createYapDatabase(__FILE__, suffix: __FUNCTION__)
+        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing many object to groups")
 
-        let observer = Observer(
+        observer = Observer(
             database: db,
-            changes: validateChangeset(expectation, [validateChangesetHasSectionInsert(count: 2)]),
+            changes: validateChangeset(expectation, validations: [validateChangesetHasSectionInsert(2)]),
             configuration: configuration)
 
-        var events = createManyEvents(color: .Red)
-        events += createManyEvents(color: .Blue)
+        var events = createManyEvents(.Red)
+        events += createManyEvents(.Blue)
 
         connection.write(events)
         waitForExpectationsWithTimeout(5.0, handler: nil)

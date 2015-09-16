@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "643B7DCA5DB341490584C8CE"
+               BlueprintIdentifier = "18CC052A9627852CAA1B8966"
                BuildableName = "TaylorSource.framework"
                BlueprintName = "TaylorSource"
                ReferencedContainer = "container:Pods.xcodeproj">
