@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name              = "TaylorSource"
-  s.version           = "0.15.2"
+  s.version           = "1.0.0"
   s.summary           = "Generic table view & collection view datasources in Swift, for use with YapDatabase."
   s.description       = <<-DESC
   
@@ -22,14 +22,14 @@ Pod::Spec.new do |s|
   s.default_subspec   = 'Base'
 
   s.subspec 'Base' do |ss|
-    ss.source_files   = 'framework/TaylorSource/Base/*.{swift,m,h}'
+    ss.source_files   = 'TaylorSource/Base/*.{m,h,swift}'
   end
 
   s.subspec 'YapDatabase' do |ss|
     ss.dependency 'TaylorSource/Base'
-    ss.dependency 'YapDatabase', '~> 2.6.5'
+    ss.dependency 'YapDatabase', '~> 2.7'
     ss.dependency 'YapDatabaseExtensions', '~> 1'
-    ss.source_files   = 'framework/TaylorSource/YapDatabase/*.{m,h,swift}'    
+    ss.source_files   = 'TaylorSource/YapDatabase/*.{m,h,swift}'    
   end
 end
 
