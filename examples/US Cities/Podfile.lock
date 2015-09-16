@@ -7,42 +7,32 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (2.0.1):
     - CocoaLumberjack/Default
-  - TaylorSource/Base (0.15.2)
-  - TaylorSource/YapDatabase (0.15.2):
+  - TaylorSource/Base (2.0.0)
+  - TaylorSource/YapDatabase (2.0.0):
     - TaylorSource/Base
     - YapDatabase (~> 2.7)
-    - YapDatabaseExtensions (~> 1)
+    - YapDatabaseExtensions (~> 2)
   - YapDatabase (2.7.2):
     - YapDatabase/standard (= 2.7.2)
   - YapDatabase/standard (2.7.2):
     - CocoaLumberjack (~> 2)
-  - YapDatabaseExtensions (1.7.0):
-    - YapDatabase (~> 2.6)
-    - YapDatabaseExtensions/Common (= 1.7.0)
-  - YapDatabaseExtensions/Common (1.7.0):
-    - YapDatabase (~> 2.6)
+  - YapDatabaseExtensions (2.0.1):
+    - YapDatabase (~> 2)
+    - YapDatabaseExtensions/Common (= 2.0.1)
+  - YapDatabaseExtensions/Common (2.0.1):
+    - YapDatabase (~> 2)
 
 DEPENDENCIES:
   - TaylorSource/YapDatabase (from `../../`)
-  - YapDatabaseExtensions (from `https://github.com/danthorpe/YapDatabaseExtensions.git`,
-    branch `swift_2.0`)
 
 EXTERNAL SOURCES:
   TaylorSource:
     :path: "../../"
-  YapDatabaseExtensions:
-    :branch: swift_2.0
-    :git: https://github.com/danthorpe/YapDatabaseExtensions.git
-
-CHECKOUT OPTIONS:
-  YapDatabaseExtensions:
-    :commit: bd6b059eedcb5e0b2f1cfb08ef8e2fd211edce66
-    :git: https://github.com/danthorpe/YapDatabaseExtensions.git
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 019d1361244274a6138c788c6cb80baabc13fb8f
-  TaylorSource: 4b2c0c2397faa77240d3d582dff88b45ed33d7e7
+  TaylorSource: 86484ba9cf9374d51d4c17db1ad21ee5acba1277
   YapDatabase: bcf13bd764ab4961fb48bef937becf964e50063d
-  YapDatabaseExtensions: ae72d4b5b384d592dba71ab540096327505d9313
+  YapDatabaseExtensions: 260ba5b2cb2086ca2a073ff54c503b96cdf01207
 
 COCOAPODS: 0.38.2
