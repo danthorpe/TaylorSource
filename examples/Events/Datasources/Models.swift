@@ -5,6 +5,7 @@
 
 import Foundation
 import YapDatabase
+import ValueCoding
 import YapDatabaseExtensions
 import TaylorSource
 
@@ -59,15 +60,11 @@ public func == (a: Event, b: Event) -> Bool {
     return (a.color == b.color) && (a.uuid == b.uuid) && (a.date == b.date)
 }
 
-extension Event.Color: Saveable {
-    public typealias Archive = EventColorArchiver
+extension Event.Color: ValueCoding {
+    public typealias Coder = EventColorCoder
 
     enum Kind: Int {
         case Red = 1, Blue, Green
-    }
-
-    public var archive: Archive {
-        return Archive(self)
     }
 
     var kind: Kind {
@@ -79,7 +76,7 @@ extension Event.Color: Saveable {
     }
 }
 
-public class EventColorArchiver: NSObject, NSCoding, Archiver {
+public class EventColorCoder: NSObject, NSCoding, CodingType {
 
     public let value: Event.Color
 
@@ -118,15 +115,11 @@ extension Event: Persistable {
     }
 }
 
-extension Event: Saveable {
-    public typealias Archive = EventArchiver
-
-    public var archive: Archive {
-        return Archive(self)
-    }
+extension Event: ValueCoding {
+    public typealias Coder = EventCoder
 }
 
-public class EventArchiver: NSObject, NSCoding, Archiver {
+public class EventCoder: NSObject, NSCoding, CodingType {
 
     public let value: Event
 
@@ -135,14 +128,14 @@ public class EventArchiver: NSObject, NSCoding, Archiver {
     }
 
     public required init?(coder aDecoder: NSCoder) {
-        let color = Event.Color(aDecoder.decodeObjectForKey("color"))
+        let color = Event.Color.decode(aDecoder.decodeObjectForKey("color"))
         let uuid = aDecoder.decodeObjectForKey("uuid") as? String
         let date = aDecoder.decodeObjectForKey("date") as? NSDate
         value = Event(uuid: uuid!, color: color!, date: date!)
     }
 
     public func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(value.color.archive, forKey: "color")
+        aCoder.encodeObject(value.color.encoded, forKey: "color")
         aCoder.encodeObject(value.uuid, forKey: "uuid")
         aCoder.encodeObject(value.date, forKey: "date")
     }
@@ -167,7 +160,7 @@ public func events(byColor: Bool = false) -> YapDB.Fetch {
                 return collection
             }
 
-            if let event = Event.unarchive(object) {
+            if let event = Event.decode(object) {
                 return event.color.description
             }
         }
@@ -175,8 +168,8 @@ public func events(byColor: Bool = false) -> YapDB.Fetch {
     })
 
     let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
-        if  let event1 = Event.unarchive(object1),
-            let event2 = Event.unarchive(object2) {
+        if  let event1 = Event.decode(object1),
+            let event2 = Event.decode(object2) {
                 return event1.date.compare(event2.date)
         }
         return .OrderedSame
@@ -192,13 +185,13 @@ public func events(byColor: Bool = false, mappingBlock: YapDB.FetchConfiguration
 }
 
 public func events(byColor: Bool = false, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> Configuration<Event> {
-    return Configuration(fetch: events(byColor), itemMapper: Event.unarchive)
+    return Configuration(fetch: events(byColor), itemMapper: Event.decode)
 }
 
 public func eventsWithColor(color: Event.Color, byColor: Bool = false) -> YapDB.Fetch {
 
     let filtering: YapDB.Filter.Filtering = .ByObject({ (_, group, collection, key, object) -> Bool in
-        if let event = Event.unarchive(object) {
+        if let event = Event.decode(object) {
             return event.color == color
         }
         return false
@@ -214,7 +207,7 @@ public func eventsWithColor(color: Event.Color, byColor: Bool = false, mappingBl
 }
 
 public func eventsWithColor(color: Event.Color, byColor: Bool = false, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> Configuration<Event> {
-    return Configuration(fetch: eventsWithColor(color, byColor: byColor), itemMapper: Event.unarchive)
+    return Configuration(fetch: eventsWithColor(color, byColor: byColor), itemMapper: Event.decode)
 }
 
 

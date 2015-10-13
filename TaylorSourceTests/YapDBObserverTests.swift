@@ -61,14 +61,14 @@ class ObserverTests: XCTestCase {
 extension ObserverTests {
 
     func testObserver_EmptyDatabase_EndIndexIsZero() {
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
+        let db = YapDB.testDatabase()
         let observer = Observer(database: db, changes: { changeset in }, configuration: configuration)
         XCTAssertEqual(observer.startIndex, 0)
         XCTAssertEqual(observer.endIndex, 0)
     }
 
     func testObserver_WriteOneObject_ChangesetHasOneSectionInsert() {
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
+        let db = YapDB.testDatabase()
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing one object")
 
@@ -82,7 +82,7 @@ extension ObserverTests {
     }
 
     func testObserver_DatabaseWithOneRow_WriteOneObject_ChangesetHasOneRowInsert() {
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
+        let db = YapDB.testDatabase()
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing one object")
 
@@ -98,7 +98,7 @@ extension ObserverTests {
     }
 
     func testObserver_WriteManyObjectToOneGroup_ChangesetHasOneSectionInsert() {
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
+        let db = YapDB.testDatabase()
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing many object")
 
@@ -112,7 +112,7 @@ extension ObserverTests {
     }
 
     func testObserver_WriteManyObjectToTwoGroups_ChangesetHasTwoSectionInsert() {
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
+        let db = YapDB.testDatabase()
         let connection = db.newConnection()
         let expectation = expectationWithDescription("Writing many object to groups")
 
