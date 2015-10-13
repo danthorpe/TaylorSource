@@ -70,11 +70,11 @@ struct EventsDatasource: DatasourceProviderType {
     }
 
     func addEvent(event: Event) {
-        readWriteConnection.write(event)
+        event.write.async(readWriteConnection) {}
     }
 
     func removeAllEvents() {
-        readWriteConnection.remove(datasource)
+        datasource.remove.sync(readWriteConnection)
     }
 }
 
