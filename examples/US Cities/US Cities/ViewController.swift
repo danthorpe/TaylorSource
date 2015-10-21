@@ -53,7 +53,7 @@ struct CitiesDatasource: DatasourceProviderType {
 
         datasource.factory.registerCell(.ClassWithIdentifier(CityCell.self, "cell"), inView: view, configuration: CityCell.configuration(formatter))
         datasource.factory.registerHeaderText { index in
-            if let state: State = index.transaction.read(index.group) {
+            if let state: State = index.transaction.readByKey(index.group) {
                 return state.name
             }
             return .None
@@ -122,8 +122,8 @@ struct USStatesAndCities {
                 return City(name: cityName, population: population, capital: isCapital, stateId: state.identifier)
             }
 
-            connection.asyncWrite(state) { state in
-                connection.asyncWrite(cities) { cities in
+            connection.asyncWrite(state) { _ in
+                connection.asyncWrite(cities) { _ in
                     print("Wrote \(state.name) cities to database.")
                 }
             }
