@@ -8,6 +8,7 @@
 
 import Foundation
 import YapDatabase
+import ValueCoding
 import YapDatabaseExtensions
 import TaylorSource
 
@@ -29,14 +30,14 @@ extension City {
     static let view: YapDB.Fetch = {
 
         let grouping: YapDB.View.Grouping = .ByObject({ (_, collection, key, object) -> String! in
-            if collection == City.collection, let city = City.unarchive(object) {
+            if collection == City.collection, let city = City.decode(object) {
                 return collection
             }
             return nil
         })
 
         let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
-            if let city1 = City.unarchive(object1), city2 = City.unarchive(object2) {
+            if let city1 = City.decode(object1), city2 = City.decode(object2) {
                 return city1.compare(city2)
             }
             return .OrderedSame
@@ -48,14 +49,14 @@ extension City {
     static let viewByState: YapDB.Fetch = {
 
         let grouping: YapDB.View.Grouping = .ByObject({ (_, collection, key, object) -> String! in
-            if collection == City.collection, let city = City.unarchive(object) {
+            if collection == City.collection, let city = City.decode(object) {
                 return city.stateId
             }
             return nil
         })
 
         let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
-            if let city1 = City.unarchive(object1), city2 = City.unarchive(object2) {
+            if let city1 = City.decode(object1), city2 = City.decode(object2) {
                 return city1.compare(city2)
             }
             return .OrderedSame
@@ -69,7 +70,7 @@ extension City {
         if threshold > 0 {
 
             let filtering = YapDB.Filter.Filtering.ByObject({ (_, group, collection, key, object) -> Bool in
-                if collection == City.collection, let city = City.unarchive(object) {
+                if collection == City.collection, let city = City.decode(object) {
                     return city.population >= threshold
                 }
                 return false
@@ -83,7 +84,7 @@ extension City {
 
     static func cities(byState: Bool = true, abovePopulationThreshold threshold: Int = 0, mappingBlock: YapDB.FetchConfiguration.MappingsConfigurationBlock? = .None) -> TaylorSource.Configuration<City> {
         let config = YapDB.FetchConfiguration(fetch: viewCities(byState, abovePopulationThreshold: threshold), block: mappingBlock)
-        return TaylorSource.Configuration(fetch: config, itemMapper: City.unarchive)
+        return TaylorSource.Configuration(fetch: config, itemMapper: City.decode)
     }
 
 
@@ -158,29 +159,19 @@ func <(a: City, b: City) -> Bool {
 }
 
 
-// MARK: - Saveable
+// MARK: - ValueCoding
 
-extension State: Saveable {
-
-    typealias Archiver = StateArchiver
-
-    var archive: Archiver {
-        return Archiver(self)
-    }
+extension State: ValueCoding {
+    typealias Coder = StateCoder
 }
 
-extension City: Saveable {
-
-    typealias Archiver = CityArchiver
-
-    var archive: Archiver {
-        return Archiver(self)
-    }
+extension City: ValueCoding {
+    typealias Coder = CityCoder
 }
 
-// MARK: - Archivers
+// MARK: - Coders
 
-class StateArchiver: NSObject, NSCoding, Archiver {
+class StateCoder: NSObject, NSCoding, CodingType {
 
     let value: State
 
@@ -198,7 +189,7 @@ class StateArchiver: NSObject, NSCoding, Archiver {
     }
 }
 
-class CityArchiver: NSObject, NSCoding, Archiver {
+class CityCoder: NSObject, NSCoding, CodingType {
 
     let value: City
 

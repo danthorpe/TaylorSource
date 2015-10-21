@@ -16,40 +16,40 @@ class MapperTests: XCTestCase {
     var mapper: Mapper<Event>!
 
     func test__initially__the_endIndex__is__zero() {
-        db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
+        db = YapDB.testDatabase()
         mapper = Mapper(database: db, configuration: events())
         XCTAssertEqual(mapper.startIndex, 0)
         XCTAssertEqual(mapper.endIndex, 0)
     }
 
     func test__when_database_has_one_item__initially__the_endIndex_is_1() {
-        db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
-        db.write(Event.create(.Red))
+        db = YapDB.testDatabase()
+        db.newConnection().write(Event.create(.Red))
         mapper = Mapper(database: db, configuration: events())
         XCTAssertEqual(mapper.startIndex, 0)
         XCTAssertEqual(mapper.endIndex, 1)
     }
 
     func test__when_database_has_one_item__lookup_items_by_indexPath__the_first_indexPath__is_the_item() {
-        db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
+        db = YapDB.testDatabase()
         let event = Event.create(.Red)
-        db.write(event)
+        db.newConnection().write(event)
         mapper = Mapper(database: db, configuration: events())
         XCTAssertEqual(mapper.itemAtIndexPath(NSIndexPath.first)!, event)
     }
 
     func test__when_database_has_one_item__reverse_loop_items__the_first_item__is_the_first_indexPath() {
-        db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
+        db = YapDB.testDatabase()
         let event = Event.create(.Red)
-        db.write(event)
+        db.newConnection().write(event)
         mapper = Mapper(database: db, configuration: events())
         XCTAssertEqual(mapper.indexPathForKey(keyForPersistable(event), inCollection: Event.collection)!, NSIndexPath.first)
     }
 
     func test__when_database_has_three_events__can_slice_last_two() {
         let someEvents = createSomeEvents()
-        db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__) { db in
-            db.write(someEvents)
+        db = YapDB.testDatabase() { db in
+            db.newConnection().write(someEvents)
         }
         mapper = Mapper(database: db, configuration: events())
         XCTAssertEqual(Array(someEvents.reverse()[2..<5]), mapper[2..<5])

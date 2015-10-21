@@ -32,8 +32,8 @@
 		65F3A50C1B99096E00BB6490 /* UICollectionView+TaylorSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F3A5041B99096E00BB6490 /* UICollectionView+TaylorSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65F3A50D1B99096E00BB6490 /* UITableView+TaylorSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F3A5051B99096E00BB6490 /* UITableView+TaylorSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65F3A50F1B990AAB00BB6490 /* YapDBEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F3A50E1B990AAB00BB6490 /* YapDBEntity.swift */; settings = {ASSET_TAGS = (); }; };
-		CEC0879ACD7D1CCCE05E6C0B /* Pods_TaylorSourceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		E45CB6825BDC28691D4F0F6C /* Pods_TaylorSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2604FB2F0CB56C5B5B81DACA /* Pods_TaylorSource.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		CEC0879ACD7D1CCCE05E6C0B /* Pods_TaylorSourceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7022F6ECC49316DD2F6B37A0 /* Pods_TaylorSourceTests.framework */; };
+		E45CB6825BDC28691D4F0F6C /* Pods_TaylorSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2604FB2F0CB56C5B5B81DACA /* Pods_TaylorSource.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -582,10 +582,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 55A85AC6F8D061F34E441A6A /* Pods-TaylorSourceTests.debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -601,10 +597,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 18E4AFD691C632BD8AED7FA1 /* Pods-TaylorSourceTests.release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
 				INFOPLIST_FILE = TaylorSourceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "me.danthorpe.$(PRODUCT_NAME:rfc1034identifier)";

@@ -1,28 +1,39 @@
 PODS:
-  - CocoaLumberjack (2.0.1):
-    - CocoaLumberjack/Default (= 2.0.1)
-    - CocoaLumberjack/Extensions (= 2.0.1)
-  - CocoaLumberjack/Core (2.0.1)
-  - CocoaLumberjack/Default (2.0.1):
+  - CocoaLumberjack (2.0.3):
+    - CocoaLumberjack/Default (= 2.0.3)
+    - CocoaLumberjack/Extensions (= 2.0.3)
+  - CocoaLumberjack/Core (2.0.3)
+  - CocoaLumberjack/Default (2.0.3):
     - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (2.0.1):
+  - CocoaLumberjack/Extensions (2.0.3):
     - CocoaLumberjack/Default
   - FlickrKit (1.0.5)
-  - HanekeSwift (0.9.1)
+  - HanekeSwift (0.10.0)
   - TaylorSource/Base (2.0.0)
   - TaylorSource/YapDatabase (2.0.0):
     - TaylorSource/Base
     - YapDatabase (~> 2.7)
     - YapDatabaseExtensions (~> 2)
-  - YapDatabase (2.7.2):
-    - YapDatabase/standard (= 2.7.2)
-  - YapDatabase/standard (2.7.2):
+  - ValueCoding (1.0.1)
+  - YapDatabase (2.7.3):
+    - YapDatabase/standard (= 2.7.3)
+  - YapDatabase/standard (2.7.3):
     - CocoaLumberjack (~> 2)
-  - YapDatabaseExtensions (2.0.1):
+  - YapDatabaseExtensions (2.2.1):
+    - ValueCoding (~> 1)
     - YapDatabase (~> 2)
-    - YapDatabaseExtensions/Common (= 2.0.1)
-  - YapDatabaseExtensions/Common (2.0.1):
+    - YapDatabaseExtensions/Persitable (= 2.2.1)
+  - YapDatabaseExtensions/Core (2.2.1):
+    - ValueCoding (~> 1)
     - YapDatabase (~> 2)
+  - YapDatabaseExtensions/Functional (2.2.1):
+    - ValueCoding (~> 1)
+    - YapDatabase (~> 2)
+    - YapDatabaseExtensions/Core
+  - YapDatabaseExtensions/Persitable (2.2.1):
+    - ValueCoding (~> 1)
+    - YapDatabase (~> 2)
+    - YapDatabaseExtensions/Functional
 
 DEPENDENCIES:
   - FlickrKit (~> 1.0.5)
@@ -34,11 +45,12 @@ EXTERNAL SOURCES:
     :path: "../../"
 
 SPEC CHECKSUMS:
-  CocoaLumberjack: 019d1361244274a6138c788c6cb80baabc13fb8f
+  CocoaLumberjack: f58d8a19629f4d8379ae14bb3534def24161430e
   FlickrKit: fc0ed009c5cb69db4d82e68f7acb02002ebe1a42
-  HanekeSwift: 50d37bfbc4432edc649167e538c259feccb4a2bb
+  HanekeSwift: d6f5bdf9dbdbbc09d59623b2c1d533e46463dd4d
   TaylorSource: 86484ba9cf9374d51d4c17db1ad21ee5acba1277
-  YapDatabase: bcf13bd764ab4961fb48bef937becf964e50063d
-  YapDatabaseExtensions: 260ba5b2cb2086ca2a073ff54c503b96cdf01207
+  ValueCoding: fc021813824387d66e3ac7ea0dff7cc5910dc0a4
+  YapDatabase: 6d6a30e97face6c3158830823c27614afe83e1e0
+  YapDatabaseExtensions: f600b83154d976c86ef2c23e366005dd3a61a652
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0

@@ -15,7 +15,7 @@
 		65E52D3E1AFFB531007E5946 /* US_CitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E52D3D1AFFB531007E5946 /* US_CitiesTests.swift */; };
 		65E52D481AFFB67F007E5946 /* Domain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E52D471AFFB67F007E5946 /* Domain.swift */; };
 		65E52D4A1AFFC6BE007E5946 /* USStatesAndCities.plist in Resources */ = {isa = PBXBuildFile; fileRef = 65E52D491AFFC6BE007E5946 /* USStatesAndCities.plist */; };
-		805808D5EC9DAAC48619D70E /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDFA9748121D0EE2BC9E39D1 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		805808D5EC9DAAC48619D70E /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDFA9748121D0EE2BC9E39D1 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

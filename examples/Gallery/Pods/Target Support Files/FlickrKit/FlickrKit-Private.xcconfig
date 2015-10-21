@@ -1,6 +1,0 @@
-#include "FlickrKit.xcconfig"
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Private" "${PODS_ROOT}/Headers/Private/FlickrKit" "${PODS_ROOT}/Headers/Public"
-OTHER_LDFLAGS = ${FLICKRKIT_OTHER_LDFLAGS}
-PODS_ROOT = ${SRCROOT}
-SKIP_INSTALL = YES
