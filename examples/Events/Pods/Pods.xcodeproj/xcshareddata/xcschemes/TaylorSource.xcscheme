@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '83616A73885E8938CFE7B729'
+               BlueprintIdentifier = '0BAFC2E6C3C4E8CCB07D4A5D'
                BlueprintName = 'TaylorSource'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'TaylorSource.framework'>

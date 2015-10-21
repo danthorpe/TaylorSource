@@ -52,12 +52,8 @@ struct EventsDatasource: DatasourceProviderType {
         editor = Editor(
             canEdit: { _ in true },
             commitEdit: { (action, indexPath) in
-                switch action {
-                case .Delete:
-                    if let item = ds.itemAtIndexPath(indexPath) {
-                        connection.remove(item)
-                    }
-                default: break
+                if case .Delete = action {
+                    ds.itemAtIndexPath(indexPath)?.remove(connection)
                 }
             },
             editAction: { _ in .Delete },
@@ -70,11 +66,11 @@ struct EventsDatasource: DatasourceProviderType {
     }
 
     func addEvent(event: Event) {
-        event.write.async(readWriteConnection) {}
+        event.asyncWrite(readWriteConnection)
     }
 
     func removeAllEvents() {
-        datasource.remove.sync(readWriteConnection)
+        datasource.remove(readWriteConnection)
     }
 }
 

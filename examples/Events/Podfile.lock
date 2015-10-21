@@ -18,18 +18,18 @@ PODS:
     - YapDatabase/standard (= 2.7.3)
   - YapDatabase/standard (2.7.3):
     - CocoaLumberjack (~> 2)
-  - YapDatabaseExtensions (2.1.3):
+  - YapDatabaseExtensions (2.2.1):
     - ValueCoding (~> 1)
     - YapDatabase (~> 2)
-    - YapDatabaseExtensions/Persitable (= 2.1.3)
-  - YapDatabaseExtensions/Core (2.1.3):
+    - YapDatabaseExtensions/Persitable (= 2.2.1)
+  - YapDatabaseExtensions/Core (2.2.1):
     - ValueCoding (~> 1)
     - YapDatabase (~> 2)
-  - YapDatabaseExtensions/Functional (2.1.3):
+  - YapDatabaseExtensions/Functional (2.2.1):
     - ValueCoding (~> 1)
     - YapDatabase (~> 2)
     - YapDatabaseExtensions/Core
-  - YapDatabaseExtensions/Persitable (2.1.3):
+  - YapDatabaseExtensions/Persitable (2.2.1):
     - ValueCoding (~> 1)
     - YapDatabase (~> 2)
     - YapDatabaseExtensions/Functional
@@ -48,6 +48,6 @@ SPEC CHECKSUMS:
   TaylorSource: 86484ba9cf9374d51d4c17db1ad21ee5acba1277
   ValueCoding: fc021813824387d66e3ac7ea0dff7cc5910dc0a4
   YapDatabase: 6d6a30e97face6c3158830823c27614afe83e1e0
-  YapDatabaseExtensions: 96bebce39c8defbba90c907318cffcd5551a8c59
+  YapDatabaseExtensions: f600b83154d976c86ef2c23e366005dd3a61a652
 
 COCOAPODS: 0.39.0
