@@ -1,6 +1,12 @@
-# Taylor Source
+![](header.png)
 
-[![Join the chat at https://gitter.im/danthorpe/TaylorSource](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/danthorpe/TaylorSource?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build status](https://badge.buildkite.com/2110c7f551cf50f252b3c1e998a163d21008d0deb1011ccd53.svg)](https://buildkite.com/blindingskies/taylorsource?branch=development)
+[![codecov.io](https://codecov.io/github/danthorpe/TaylorSource/coverage.svg?branch=development)](https://codecov.io/github/danthorpe/TaylorSource?branch=development)
+[![Cocoapods Compatible](https://img.shields.io/cocoapods/v/TaylorSource.svg)](https://img.shields.io/cocoapods/v/TaylorSource.svg)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Platform](https://img.shields.io/cocoapods/p/TaylorSource.svg?style=flat)](http://cocoadocs.org/docsets/TaylorSource)
+
+# Taylor Source
 
 Taylor Source is a Swift framework for creating highly configurable and reusable data sources.
 
