@@ -18,7 +18,7 @@
 		6531E2F91B4D6D2E003AEEFA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6531E2F81B4D6D2E003AEEFA /* MapKit.framework */; };
 		6539DD471B4C951700F5FB1F /* PhotoCellWithLabel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6539DD461B4C951700F5FB1F /* PhotoCellWithLabel.xib */; };
 		659D28FE1B4D63AC00ABB546 /* PhotoCellWithMap.xib in Resources */ = {isa = PBXBuildFile; fileRef = 659D28FC1B4D63AC00ABB546 /* PhotoCellWithMap.xib */; };
-		67DA0302B320104C429D7526 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95CE29DA6B731D9C3D22018A /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		67DA0302B320104C429D7526 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95CE29DA6B731D9C3D22018A /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

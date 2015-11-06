@@ -22,6 +22,15 @@ class YapDBDatasourceTests: XCTestCase {
     let view = StubbedTableView()
     let factory = Factory()
 
+    var someEvents: [Event]!
+    var numberOfEvents: Int!
+
+    override func setUp() {
+        super.setUp()
+        someEvents = createManyEvents()
+        numberOfEvents = someEvents.count
+    }
+
     func datasourceWithDatabase(db: YapDatabase, changesValidator: YapDatabaseViewMappings.Changes? = .None) -> Datasource {
         if let changes = changesValidator {
             return Datasource(id: "test datasource", database: db, factory: factory, processChanges: changes, configuration: configuration)
@@ -33,14 +42,14 @@ class YapDBDatasourceTests: XCTestCase {
 extension YapDBDatasourceTests {
 
     func test_GivenEmptyDatabase_ThatHasCorrectSections() {
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__)
+        let db = YapDB.testDatabase()
         let datasource = datasourceWithDatabase(db)
         XCTAssertEqual(datasource.numberOfSections, 0)
     }
 
     func test_GivenDatabaseWithOneRedEvent_ThatHasCorrectSections() {
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__) { database in
-            database.write(createOneEvent())
+        let db = YapDB.testDatabase() { database in
+            database.newConnection().write(createOneEvent())
         }
         let datasource = datasourceWithDatabase(db)
         XCTAssertEqual(datasource.numberOfSections, 1)
@@ -48,9 +57,8 @@ extension YapDBDatasourceTests {
     }
 
     func test_GivenDatabaseWithManyRedEvents_ThatHasCorrectSections() {
-        var numberOfEvents: Int!
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__) { database in
-            numberOfEvents = database.write(createManyEvents()).count
+        let db = YapDB.testDatabase() { database in
+            database.newConnection().write(self.someEvents)
         }
         let datasource = datasourceWithDatabase(db)
         XCTAssertEqual(datasource.numberOfSections, 1)
@@ -58,11 +66,15 @@ extension YapDBDatasourceTests {
     }
 
     func test_GivenDatabaseWithManyRedAndManyBlueEvents_ThatHasCorrectSections() {
-        var numberOfRedEvents: Int!
-        var numberOfBlueEvents: Int!
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__) { database in
-            numberOfRedEvents = database.write(createManyEvents()).count
-            numberOfBlueEvents = database.write(createManyEvents(.Blue)).count
+        let redEvents = createManyEvents()
+        let numberOfRedEvents = redEvents.count
+        let blueEvents = createManyEvents(.Blue)
+        let numberOfBlueEvents = blueEvents.count
+        let db = YapDB.testDatabase() { database in
+            database.newConnection().write { transaction in
+                transaction.write(redEvents)
+                transaction.write(blueEvents)
+            }
         }
         let datasource = datasourceWithDatabase(db)
         XCTAssertEqual(datasource.numberOfSections, 2)
@@ -71,30 +83,27 @@ extension YapDBDatasourceTests {
     }
 
     func test_GivenStaticDatasource_WhenAccessingItemsAtANegativeIndex_ThatResultIsNone() {
-        var numberOfEvents: Int!
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__) { database in
-            numberOfEvents = database.write(createManyEvents()).count
+        let db = YapDB.testDatabase() { database in
+            database.newConnection().write(self.someEvents)
         }
         let datasource = datasourceWithDatabase(db)
         XCTAssertTrue(datasource.itemAtIndexPath(NSIndexPath(forRow: numberOfEvents * -1, inSection: 0)) == nil)
     }
 
     func test_GivenStaticDatasource_WhenAccessingItemsGreaterThanMaxIndex_ThatResultIsNone() {
-        var numberOfEvents: Int!
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__) { database in
-            numberOfEvents = database.write(createManyEvents()).count
+        let db = YapDB.testDatabase() { database in
+            database.newConnection().write(self.someEvents)
         }
         let datasource = datasourceWithDatabase(db)
         XCTAssertTrue(datasource.itemAtIndexPath(NSIndexPath(forRow: numberOfEvents * -1, inSection: 0)) == nil)
     }
 
     func test_GivenStaticDatasource_WhenAccessingItems_ThatCorrectItemIsReturned() {
-        var events: [Event]!
-        let db = YapDB.testDatabaseForFile(__FILE__, test: __FUNCTION__) { database in
-            events = database.write(createManyEvents())
+        let db = YapDB.testDatabase() { database in
+            database.newConnection().write(self.someEvents)
         }
         let datasource = datasourceWithDatabase(db)
-        XCTAssertEqual(datasource.itemAtIndexPath(NSIndexPath.first)!, events[0])
+        XCTAssertEqual(datasource.itemAtIndexPath(NSIndexPath.first)!, someEvents[0])
     }
 }
 

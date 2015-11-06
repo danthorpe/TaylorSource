@@ -6,6 +6,7 @@
 import UIKit
 
 import YapDatabase
+import ValueCoding
 import YapDatabaseExtensions
 import TaylorSource
 
@@ -47,7 +48,7 @@ struct Person {
     let name: String
 }
 
-class PersonArchiver: NSObject, NSCoding, Archiver {
+class PersonCoder: NSObject, NSCoding, CodingType {
     let value: Person
 
     required init(_ v: Person) {
@@ -70,12 +71,8 @@ class PersonArchiver: NSObject, NSCoding, Archiver {
     }
 }
 
-extension Person: Saveable {
-    typealias Archive = PersonArchiver
-
-    var archive: Archive {
-        return Archive(self)
-    }
+extension Person: ValueCoding {
+    typealias Coder = PersonCoder
 }
 
 extension Person.Gender: CustomStringConvertible {
@@ -142,7 +139,7 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
 
     let grouping: YapDB.View.Grouping = .ByObject({ (_, collection, key, object) -> String! in
         if collection == Person.collection {
-            if let person = Person.unarchive(object) {
+            if let person = Person.decode(object) {
                 return createGroup(person)
             }
         }
@@ -150,8 +147,8 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
     })
 
     let sorting: YapDB.View.Sorting = .ByObject({ (_, group, collection1, key1, object1, collection2, key2, object2) -> NSComparisonResult in
-        if  let person1 = Person.unarchive(object1),
-            let person2 = Person.unarchive(object2) {
+        if  let person1 = Person.decode(object1),
+            let person2 = Person.decode(object2) {
                 let comparison = person1.name.caseInsensitiveCompare(person2.name)
                 switch comparison {
                 case .OrderedSame:
@@ -172,7 +169,7 @@ func people(name: String, byGroup createGroup: (Person) -> String) -> YapDB.Fetc
 }
 
 func people(name: String, byGroup createGroup: (Person) -> String) -> Configuration<Person> {
-    return Configuration(fetch: people(name, byGroup: createGroup), itemMapper: Person.unarchive)
+    return Configuration(fetch: people(name, byGroup: createGroup), itemMapper: Person.decode)
 }
 
 

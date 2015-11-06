@@ -8,6 +8,10 @@
 
 # Taylor Source
 
+[![Build status](https://badge.buildkite.com/2110c7f551cf50f252b3c1e998a163d21008d0deb1011ccd53.svg)](https://buildkite.com/blindingskies/taylorsource)
+[![codecov.io](http://codecov.io/github/danthorpe/TaylorSource/coverage.svg?branch=development)](http://codecov.io/github/danthorpe/TaylorSource?branch=development)
+[![CocoaPods version](https://img.shields.io/cocoapods/v/TaylorSource.svg)](https://cocoapods.org/pods/TaylorSource) 
+
 Taylor Source is a Swift framework for creating highly configurable and reusable data sources.
 
 ## Installation

@@ -31,7 +31,7 @@ class BasicPhotoCell: UITableViewCell, ReusableView {
     class func configuration() -> GalleryDatasource.Datasource.FactoryType.CellConfiguration {
         return { (cell, photo, index) in
             cell.titleLabel.text = photo.title
-            println("fetching image: \(photo.url)")
+            print("fetching image: \(photo.url)")
             cell.photoImageView.hnk_setImageFromURL(photo.url)
         }
     }
@@ -46,7 +46,7 @@ class BasicPhotoCell: UITableViewCell, ReusableView {
     }
 }
 
-class PhotoCellWithLabel: BasicPhotoCell, ReusableView {
+class PhotoCellWithLabel: BasicPhotoCell {
 
     override class var reuseIdentifier: String {
         return "PhotoCellWithLabel"
@@ -66,7 +66,7 @@ class PhotoCellWithLabel: BasicPhotoCell, ReusableView {
     @IBOutlet var infoLabel: UILabel!
 }
 
-class PhotoCellWithMap: BasicPhotoCell, ReusableView {
+class PhotoCellWithMap: BasicPhotoCell {
 
     override class var reuseIdentifier: String {
         return "PhotoCellWithMap"
@@ -88,7 +88,7 @@ class PhotoCellWithMap: BasicPhotoCell, ReusableView {
                         }
                     }
                     else if let error = error {
-                        println("error: \(error)")
+                        print("error: \(error)")
                     }
                 }
             }
@@ -232,10 +232,10 @@ class ViewController: UIViewController {
         configureDatasource()
         loadPhotos(forDate: wrapper.provider.date) { (photos, error) in
             if let photos = photos {
-                database.write(photos)
+                database.newConnection().write(photos)
             }
             else if let error = error {
-                println("Error: \(error)")
+                print("Error: \(error)")
             }
         }
     }
