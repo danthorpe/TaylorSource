@@ -25,13 +25,18 @@ public func loadReusableViewFromNib<T: UIView where T: ReusableView>(owner: AnyO
 }
 
 /**
-An enum type for describing cells or views as either classes or nibs. It
-helps if ReusableView is implemented on custom cells. E.g.
+An enum type for describing cells or views as either classes, nibs or dynamic.
+A dynamic view is anything the cell based host view already knows how to create.
+This includes storyboard prototype cells and manually registered classes or nibs.
+ 
+It helps if ReusableView is implemented on custom cells. E.g.
 
-   .ClassWithIdentifier(MyCell.self, MyCell.reuseIdentifier)
-   .NibWithIdentifier(MyCell.nib, MyCell.reuseIdentifier)
+    .DynamicWithIdentifier(MyCell.reuseIdentifier)
+    .ClassWithIdentifier(MyCell.self, MyCell.reuseIdentifier)
+    .NibWithIdentifier(MyCell.nib, MyCell.reuseIdentifier)
 */
 public enum ReusableViewDescriptor {
+    case DynamicWithIdentifier(String)
     case ClassWithIdentifier(AnyClass, String)
     case NibWithIdentifier(UINib, String)
 }
@@ -439,6 +444,7 @@ extension ReusableViewDescriptor {
 
     var identifier: String {
         switch self {
+        case let .DynamicWithIdentifier(identifier): return identifier
         case let .ClassWithIdentifier(_, identifier): return identifier
         case let .NibWithIdentifier(_, identifier): return identifier
         }
@@ -446,6 +452,8 @@ extension ReusableViewDescriptor {
 
     func registerInView<View: ReusableCellBasedView>(view: View) {
         switch self {
+        case .DynamicWithIdentifier(_):
+            break
         case let .ClassWithIdentifier(aClass, identifier):
             view.registerClass(aClass, withIdentifier: identifier)
         case let .NibWithIdentifier(nib, identifier):
@@ -455,6 +463,8 @@ extension ReusableViewDescriptor {
 
     func registerInView<View: ReusableSupplementaryViewBasedView>(view: View, kind: SupplementaryElementKind) {
         switch self {
+        case .DynamicWithIdentifier(_):
+            break
         case let .ClassWithIdentifier(aClass, identifier):
             view.registerClass(aClass, forSupplementaryViewKind: kind, withIdentifier: identifier)
         case let .NibWithIdentifier(nib, identifier):
