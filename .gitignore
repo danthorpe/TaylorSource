@@ -28,9 +28,10 @@ DerivedData
 #
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
 # Carthage/Checkouts
-
-Carthage/Build
+Carthage
 .fastlane/report.xml
 .fastlane/xcodebuild-data
+
+.ci/xcodebuild-data
 
 *.coverage.txt
