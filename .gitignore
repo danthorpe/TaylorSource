@@ -61,3 +61,4 @@ Carthage/Build
 .fastlane/screenshots
 
 *.coverage.txt
+test_output
