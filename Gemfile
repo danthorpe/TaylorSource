@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'cocoapods'
-gem 'fastlane', '>= 1.16'
+gem 'slather'
+gem 'fastlane'
+gem 'scan'
 gem 'xcpretty'
