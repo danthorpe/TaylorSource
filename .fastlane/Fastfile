@@ -1,3 +1,7 @@
+before_all {
+    carthage(platform: "iOS")
+}
+
 lane :lint do
 
     swiftLint(

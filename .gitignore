@@ -59,6 +59,7 @@ Carthage/Build
 
 .fastlane/report.xml
 .fastlane/screenshots
+.fastlane/xcodebuild-data
 
 *.coverage.txt
 test_output
