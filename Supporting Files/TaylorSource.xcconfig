@@ -1,0 +1,15 @@
+//
+//  TaylorSource.xcconfig
+//  TaylorSource
+//
+//  Created by Daniel Thorpe on 07/03/2016.
+//
+//
+
+
+TAYLOR_SOURCE_VERSION = 2.1.0
+
+DEFINES_MODULE = YES
+INFOPLIST_FILE = $(SRCROOT)/Supporting Files/Info.plist
+PRODUCT_BUNDLE_IDENTIFIER = me.danthorpe.TaylorSource
+PRODUCT_NAME = TaylorSource
