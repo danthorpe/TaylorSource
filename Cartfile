@@ -1,2 +1,1 @@
-github "yapstudios/YapDatabase" "2.8.2"
-github "danthorpe/YapDatabaseExtensions"
+github "danthorpe/YapDatabaseExtensions" "development"

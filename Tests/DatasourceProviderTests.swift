@@ -32,7 +32,7 @@ class DatasourceProviderTests: XCTestCase {
         }
     }
 
-    let data: [Event] = map(0..<5) { (index) -> Event in Event.create() }
+    let data: [Event] = (0..<5).map { (index) -> Event in Event.create() }
     var wrapper: TableViewDataSourceProvider<EditableEventDatasourceProvider>!
 
 
