@@ -38,5 +38,12 @@ class FactorySupplementaryViewRegistrarTypeTests: FactoryTests {
     func test_defaultSupplementaryKey() {
         XCTAssertEqual(factory.defaultSupplementaryKey, "Default Suppplementary View Key")
     }
+    
+    func test_defaultSupplementaryIndexForKind() {
+        let kind: SupplementaryElementKind = .Header
+        let index = factory.defaultSupplementaryIndexForKind(kind)
+        XCTAssertEqual(index.key, factory.defaultSupplementaryKey)
+        XCTAssertEqual(index.kind, kind)
+    }
 }
 
