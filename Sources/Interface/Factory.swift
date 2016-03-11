@@ -23,11 +23,11 @@ public protocol AbstractFactoryType {
     /// i.e. UITableView, UICollectionView or subclass
     typealias ViewType: CellBasedViewType
 
-    /// The type of the cell index, used to associate additional metadata 
+    /// The type of the cell index, used to associate additional metadata
     /// with the index
     typealias CellIndexType: IndexPathIndexType
 
-    /// The type of the supplementary (i.e. header) index, used to 
+    /// The type of the supplementary (i.e. header) index, used to
     /// associate additional metadata with the index
     typealias SupplementaryIndexType: IndexPathIndexType
 
@@ -52,7 +52,7 @@ public protocol FactoryCellRegistrarType: AbstractFactoryType {
 
     /**
      Register a cell with the factory.
-     
+
      - parameter descriptor: a value which describes the cell
      - parameter view: the view in which to register.
      - parameter key: a String used to look up the registration
@@ -69,7 +69,7 @@ public protocol FactorySupplementaryViewRegistrarType: AbstractFactoryType {
 
     /**
      Register a supplementary view with the factory.
-     
+
      - parameter descriptor: a value which describes the view
      - parameter kind: the kind of the supplementary element
      - parameter view: the view in which to register.
@@ -84,7 +84,7 @@ public protocol FactorySupplementaryTextRegistrarType: AbstractFactoryType {
 
     /**
      Register a supplementary text.
-     
+
      - parameter kind: the kind of the supplementary element
      - parameter configuration: a block which is used to configure the view.
     */
@@ -149,7 +149,7 @@ public protocol ReusableCellBasedViewType: class {
 
     func registerClass(aClass: AnyClass, withIdentifier reuseIdentifier: String)
 
-    func dequeueCellWithIdentifier(id: String, atIndexPath indexPath: NSIndexPath) -> CellType
+    func dequeueCellWithIdentifier(identifier: String, atIndexPath indexPath: NSIndexPath) -> CellType
 }
 
 public protocol ReusableSupplementaryViewBasedViewType: class {
@@ -160,7 +160,7 @@ public protocol ReusableSupplementaryViewBasedViewType: class {
 
     func registerClass(aClass: AnyClass, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String)
 
-    func dequeueSupplementaryViewWithIdentifier(id: String, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> SupplementaryViewType?
+    func dequeueSupplementaryViewWithIdentifier(identifier: String, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> SupplementaryViewType?
 }
 
 public protocol CellBasedViewType: ReusableCellBasedViewType, ReusableSupplementaryViewBasedViewType {
@@ -171,16 +171,16 @@ public protocol CellBasedViewType: ReusableCellBasedViewType, ReusableSupplement
 // MARK: - Protocol Extensions
 
 public extension FactoryCellRegistrarType {
-    
+
     /// - returns: a default implementation, which returns "Default Cell Key"
     var defaultCellKey: String {
         return "Default Cell Key"
     }
-    
+
     /**
      A convencience function to register a cell when there is only one cell type needed.
      This is the a very common scenario, where all cells are the same.
-     
+
      - parameter descriptor: a value which describes the cell
      - parameter view: the view in which to register.
      - parameter configuration: a block which is used to configure the cell.
@@ -191,22 +191,22 @@ public extension FactoryCellRegistrarType {
 }
 
 public extension FactorySupplementaryViewRegistrarType {
-    
+
     /// - returns: a default implementation, which returns "Default Suppplementary View Key"
     var defaultSupplementaryKey: String {
         return "Default Suppplementary View Key"
     }
-    
+
     internal func defaultSupplementaryIndexForKind(kind: SupplementaryElementKind) -> SupplementaryElementIndex {
         return SupplementaryElementIndex(kind: kind, key: defaultSupplementaryKey)
     }
-    
+
     /**
      A convencience function to register a supplementary view when there is
      only one type needed. This is the a very common scenario, where all
      headers and all the footers are the same. Note that this can be used
      only once for each element kind.
-     
+
      - parameter descriptor: a value which describes the view
      - parameter kind: the kind of the supplementary element
      - parameter view: the view in which to register.
@@ -239,8 +239,8 @@ internal struct SupplementaryElementIndex {
 
 /**
  An enum type which encapsulates how views (or cells) should be created.
- 
- The value is based on how the view is stored, either programmatically 
+
+ The value is based on how the view is stored, either programmatically
  as a class, but with a reuse identifier, or inside a nib. Use dynamic
  if the view is already able to dequeue the view, such as if using
  Storyboards with prototype cells.
@@ -380,7 +380,7 @@ extension Factory: FactoryCellVendorType {
 
 extension SupplementaryElementKind {
 
-    internal init(_ kind:  String) {
+    internal init(_ kind: String) {
         switch kind {
         case UICollectionElementKindSectionHeader:
             self = .Header
@@ -413,7 +413,7 @@ extension SupplementaryElementKind: Hashable {
     }
 }
 
-public func ==(lhs: SupplementaryElementKind, rhs: SupplementaryElementKind) -> Bool {
+public func == (lhs: SupplementaryElementKind, rhs: SupplementaryElementKind) -> Bool {
     return lhs.description == rhs.description
 }
 
@@ -424,10 +424,6 @@ extension SupplementaryElementIndex: Hashable {
     }
 }
 
-internal func ==(lhs: SupplementaryElementIndex, rhs: SupplementaryElementIndex) -> Bool {
+internal func == (lhs: SupplementaryElementIndex, rhs: SupplementaryElementIndex) -> Bool {
     return (lhs.kind == rhs.kind) && (lhs.key == rhs.key)
 }
-
-
-
-

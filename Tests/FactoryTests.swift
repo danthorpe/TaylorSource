@@ -14,12 +14,12 @@ typealias TestableFactory = Factory<String, UITableViewCell, UITableViewHeaderFo
 class FactoryTests: XCTestCase {
 
     var factory: TestableFactory!
-    
+
     override func setUp() {
         super.setUp()
         factory = TestableFactory()
     }
-    
+
     override func tearDown() {
         factory = nil
         super.tearDown()
@@ -27,18 +27,18 @@ class FactoryTests: XCTestCase {
 }
 
 class FactoryCellRegistrarTypeTests: FactoryTests {
-    
+
     func test__defaultCellKey() {
         XCTAssertEqual(factory.defaultCellKey, "Default Cell Key")
     }
 }
 
 class FactorySupplementaryViewRegistrarTypeTests: FactoryTests {
-    
+
     func test_defaultSupplementaryKey() {
         XCTAssertEqual(factory.defaultSupplementaryKey, "Default Suppplementary View Key")
     }
-    
+
     func test_defaultSupplementaryIndexForKind() {
         let kind: SupplementaryElementKind = .Header
         let index = factory.defaultSupplementaryIndexForKind(kind)
@@ -46,4 +46,3 @@ class FactorySupplementaryViewRegistrarTypeTests: FactoryTests {
         XCTAssertEqual(index.kind, kind)
     }
 }
-

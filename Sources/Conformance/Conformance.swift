@@ -27,8 +27,8 @@ extension UITableView: ReusableCellBasedViewType {
         registerClass(aClass, forCellReuseIdentifier: reuseIdentifier)
     }
 
-    public func dequeueCellWithIdentifier(id: String, atIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return dequeueReusableCellWithIdentifier(id, forIndexPath: indexPath)
+    public func dequeueCellWithIdentifier(identifier: String, atIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        return dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath)
     }
 }
 
@@ -42,8 +42,8 @@ extension UITableView: ReusableSupplementaryViewBasedViewType {
         registerClass(aClass, forHeaderFooterViewReuseIdentifier: reuseIdentifier)
     }
 
-    public func dequeueSupplementaryViewWithIdentifier(id: String, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> UITableViewHeaderFooterView? {
-        return dequeueReusableHeaderFooterViewWithIdentifier(id)
+    public func dequeueSupplementaryViewWithIdentifier(identifier: String, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> UITableViewHeaderFooterView? {
+        return dequeueReusableHeaderFooterViewWithIdentifier(identifier)
     }
 }
 
