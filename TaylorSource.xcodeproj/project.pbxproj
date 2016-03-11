@@ -19,6 +19,7 @@
 		650266321C8F81360003ECB9 /* ValueCoding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 650266231C8E389E0003ECB9 /* ValueCoding.framework */; };
 		656E4F421C92AD3B009B4908 /* Conformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656E4F3A1C92AD3B009B4908 /* Conformance.swift */; };
 		656E4F431C92AD3B009B4908 /* Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656E4F3C1C92AD3B009B4908 /* Factory.swift */; };
+		656E4F4C1C92AF2C009B4908 /* FactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656E4F4B1C92AF2C009B4908 /* FactoryTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		656E4F3A1C92AD3B009B4908 /* Conformance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Conformance.swift; sourceTree = "<group>"; };
 		656E4F3C1C92AD3B009B4908 /* Factory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Factory.swift; sourceTree = "<group>"; };
 		656E4F491C92AD46009B4908 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		656E4F4B1C92AF2C009B4908 /* FactoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FactoryTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				656E4F491C92AD46009B4908 /* Info.plist */,
+				656E4F4B1C92AF2C009B4908 /* FactoryTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				656E4F4C1C92AF2C009B4908 /* FactoryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

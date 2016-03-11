@@ -417,8 +417,6 @@ public func ==(lhs: SupplementaryElementKind, rhs: SupplementaryElementKind) -> 
     return lhs.description == rhs.description
 }
 
-
-
 extension SupplementaryElementIndex: Hashable {
 
     internal var hashValue: Int {
