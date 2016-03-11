@@ -312,13 +312,13 @@ public class Factory<Item, Cell, SupplementaryView, View, CellIndex, Supplementa
 
     internal typealias ReuseIdentifierType = String
 
-    let getCellKey: GetCellKey?
+    internal let getCellKey: GetCellKey?
 
-    var cells = [String: (reuseIdentifier: ReuseIdentifierType, configure: CellConfig)]()
-    var views = [SupplementaryElementIndex: (reuseIdentifier: ReuseIdentifierType, configure: SupplementaryViewConfig)]()
-    var texts = [SupplementaryElementKind: SupplementaryTextConfig]()
+    internal var cells = [String: (reuseIdentifier: ReuseIdentifierType, configure: CellConfig)]()
+    internal var views = [SupplementaryElementIndex: (reuseIdentifier: ReuseIdentifierType, configure: SupplementaryViewConfig)]()
+    internal var texts = [SupplementaryElementKind: SupplementaryTextConfig]()
 
-    init(cell: GetCellKey? = .None) {
+    public init(cell: GetCellKey? = .None) {
         getCellKey = cell
     }
 }
