@@ -1,12 +1,13 @@
-excluded:
-  - Tests
-use_nested_configs: true
-disabled_rules:
+--- 
+disabled_rules: 
   - valid_docs
   - statement_position
   - line_length
   - type_name
-file_length:
-  warning: 500
+excluded: 
+  - Carthage
+  - Examples
+  - Rewritten
+file_length: 
   error: 1200
-  
+  warning: 500
