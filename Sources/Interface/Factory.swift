@@ -61,26 +61,6 @@ public protocol FactoryCellRegistrarType: AbstractFactoryType {
     mutating func registerCell(descriptor: ReusableViewDescriptor, inView view: ViewType, withKey key: String, configuration: CellConfigurationBlock)
 }
 
-public extension FactoryCellRegistrarType {
-
-    /// - returns: a default implementation, which returns "Default Cell Key"
-    var defaultCellKey: String {
-        return "Default Cell Key"
-    }
-
-    /**
-     A convencience function to register a cell when there is only one cell type needed.
-     This is the a very common scenario, where all cells are the same.
-
-     - parameter descriptor: a value which describes the cell
-     - parameter view: the view in which to register.
-     - parameter configuration: a block which is used to configure the cell.
-    */
-    mutating func registerCell(descriptor: ReusableViewDescriptor, inView view: ViewType, configuration: CellConfigurationBlock) {
-        registerCell(descriptor, inView: view, withKey: defaultCellKey, configuration: configuration)
-    }
-}
-
 /// A protocol which defines the interface used by a factory to register a supplementary view.
 public protocol FactorySupplementaryViewRegistrarType: AbstractFactoryType {
 
@@ -97,33 +77,6 @@ public protocol FactorySupplementaryViewRegistrarType: AbstractFactoryType {
      - parameter configuration: a block which is used to configure the view.
     */
     mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: ViewType, withKey key: String, configuration: SupplementaryViewConfigurationBlock)
-}
-
-public extension FactorySupplementaryViewRegistrarType {
-
-    /// - returns: a default implementation, which returns "Default Suppplementary View Key"
-    var defaultSupplementaryKey: String {
-        return "Default Suppplementary View Key"
-    }
-
-    internal func defaultSupplementaryIndexForKind(kind: SupplementaryElementKind) -> SupplementaryElementIndex {
-        return SupplementaryElementIndex(kind: kind, key: defaultSupplementaryKey)
-    }
-
-    /**
-     A convencience function to register a supplementary view when there is 
-     only one type needed. This is the a very common scenario, where all 
-     headers and all the footers are the same. Note that this can be used
-     only once for each element kind.
-
-     - parameter descriptor: a value which describes the view
-     - parameter kind: the kind of the supplementary element
-     - parameter view: the view in which to register.
-     - parameter configuration: a block which is used to configure the view.
-     */
-    mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: ViewType, configuration: SupplementaryViewConfigurationBlock) {
-        registerSupplementaryView(descriptor, kind: kind, inView: view, withKey: defaultSupplementaryKey, configuration: configuration)
-    }
 }
 
 /// A protocol which defines the interface used by a factory to register a supplementary text.
@@ -215,6 +168,57 @@ public protocol CellBasedViewType: ReusableCellBasedViewType, ReusableSupplement
     func reloadData()
 }
 
+// MARK: - Protocol Extensions
+
+public extension FactoryCellRegistrarType {
+    
+    /// - returns: a default implementation, which returns "Default Cell Key"
+    var defaultCellKey: String {
+        return "Default Cell Key"
+    }
+    
+    /**
+     A convencience function to register a cell when there is only one cell type needed.
+     This is the a very common scenario, where all cells are the same.
+     
+     - parameter descriptor: a value which describes the cell
+     - parameter view: the view in which to register.
+     - parameter configuration: a block which is used to configure the cell.
+     */
+    mutating func registerCell(descriptor: ReusableViewDescriptor, inView view: ViewType, configuration: CellConfigurationBlock) {
+        registerCell(descriptor, inView: view, withKey: defaultCellKey, configuration: configuration)
+    }
+}
+
+public extension FactorySupplementaryViewRegistrarType {
+    
+    /// - returns: a default implementation, which returns "Default Suppplementary View Key"
+    var defaultSupplementaryKey: String {
+        return "Default Suppplementary View Key"
+    }
+    
+    internal func defaultSupplementaryIndexForKind(kind: SupplementaryElementKind) -> SupplementaryElementIndex {
+        return SupplementaryElementIndex(kind: kind, key: defaultSupplementaryKey)
+    }
+    
+    /**
+     A convencience function to register a supplementary view when there is
+     only one type needed. This is the a very common scenario, where all
+     headers and all the footers are the same. Note that this can be used
+     only once for each element kind.
+     
+     - parameter descriptor: a value which describes the view
+     - parameter kind: the kind of the supplementary element
+     - parameter view: the view in which to register.
+     - parameter configuration: a block which is used to configure the view.
+     */
+    mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: ViewType, configuration: SupplementaryViewConfigurationBlock) {
+        registerSupplementaryView(descriptor, kind: kind, inView: view, withKey: defaultSupplementaryKey, configuration: configuration)
+    }
+}
+
+// MARK: - Concrete Types
+
 /**
  An enum type which describes the kind of supplmentary element. For
  standard headers in UITableView and UICollectionView its simplist
@@ -283,11 +287,7 @@ internal extension ReusableViewDescriptor {
     }
 }
 
-
-
-
-
-
+// MARK: - Factory
 
 public enum FactoryError: ErrorType {
     case NoCellRegisteredForKey(String)
