@@ -6,7 +6,8 @@ steps:
     name: ":fastlane: Test iOS"
     command: .ci/scripts/test
     agents:
-      name: "$BUILDKITE_AGENT_META_DATA_NAME"	
+      swift: "$BUILDKITE_AGENT_META_DATA_SWIFT"
+      name: "$BUILDKITE_AGENT_META_DATA_NAME"
 #  -
 #    type: "waiter"      
 #  -
