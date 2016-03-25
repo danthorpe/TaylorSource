@@ -31,5 +31,10 @@ Pod::Spec.new do |s|
     ss.dependency 'YapDatabaseExtensions', '~> 2'
     ss.source_files   = 'TaylorSource/YapDatabase/*.{m,h,swift}'    
   end
+  
+    s.subspec 'CoreData' do |ss|
+    ss.dependency 'TaylorSource/Base'
+    ss.source_files   = 'TaylorSource/CoreData/*.{m,h,swift}'    
+  end
 end
 
