@@ -1,6 +1,14 @@
 import UIKit
 import CoreData
 
+public protocol FetchedResultsControllerType {
+    var delegate: NSFetchedResultsControllerDelegate? { get set }
+    var sections: [NSFetchedResultsSectionInfo]? { get }
+    func objectAtIndexPath(_ indexPath: NSIndexPath) -> AnyObject
+}
+
+extension NSFetchedResultsController: FetchedResultsControllerType {}
+
 public struct NSFRCDatasource<
     Factory
     where
@@ -17,11 +25,11 @@ Factory.SupplementaryIndexType == NSFRCSupplementaryIndex>: DatasourceType {
     public let updateHandler = NSFRCUpdateHandler()
     public var selectionManager = IndexPathSelectionManager()
     
-    private let fetchedResultsController: NSFetchedResultsController
+    private let fetchedResultsController: FetchedResultsControllerType
     
-    public init(id: String, fetchedResultsController: NSFetchedResultsController, factory f: Factory) {
-        fetchedResultsController.delegate = updateHandler
+    public init(id: String, fetchedResultsController: FetchedResultsControllerType, factory f: Factory) {
         self.fetchedResultsController = fetchedResultsController
+        self.fetchedResultsController.delegate = updateHandler
         identifier = id
         factory = f
     }
