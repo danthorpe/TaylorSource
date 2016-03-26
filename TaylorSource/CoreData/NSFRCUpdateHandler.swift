@@ -19,16 +19,16 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
     private var deletedRows: [NSIndexPath]!
     
     deinit {
-        self.observers.removeAll()
+        observers.removeAll()
     }
     
     public func addUpdateObserver(observer: NSFRCIndexedUpdateConsumer) {
-        self.observers.append(WeakObserver(observer))
+        observers.append(WeakObserver(observer))
     }
     
     private func sendUpdate(update: NSFRCIndexedUpdate) {
-        self.observers = self.observers.filter { $0.value != nil } // Remove orphaned observers
-        self.observers.forEach { $0.value?.handleIndexedUpdate(update) }
+        observers = observers.filter { $0.value != nil } // Remove orphaned observers
+        observers.forEach { $0.value?.handleIndexedUpdate(update) }
     }
     
     private func createUpdateFromCollectedValues() -> NSFRCIndexedUpdate {
@@ -37,19 +37,19 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
         let update: NSFRCIndexedUpdate = .DeltaUpdate(
             insertedSections: insertedSections,
             deletedSections: deletedSections,
-            insertedRows: self.insertedRows,
-            updatedRows: self.updatedRows,
-            deletedRows: self.deletedRows
+            insertedRows: insertedRows,
+            updatedRows: updatedRows,
+            deletedRows: deletedRows
         )
         return update
     }
     
     private func clearCollectedValues() {
-        self.insertedSections = nil
-        self.deletedSections = nil
-        self.insertedRows = nil
-        self.updatedRows = nil
-        self.deletedRows = nil
+        insertedSections = nil
+        deletedSections = nil
+        insertedRows = nil
+        updatedRows = nil
+        deletedRows = nil
     }
     
     // MARK: NSFetchedResultsControllerDelegate
@@ -57,19 +57,19 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
 
     
     public func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        self.insertedSections = NSMutableIndexSet()
-        self.deletedSections = NSMutableIndexSet()
-        self.insertedRows = []
-        self.updatedRows = []
-        self.deletedRows = []
+        insertedSections = NSMutableIndexSet()
+        deletedSections = NSMutableIndexSet()
+        insertedRows = []
+        updatedRows = []
+        deletedRows = []
     }
     
     public func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
         switch (type) {
         case NSFetchedResultsChangeType.Delete:
-            self.deletedSections.addIndex(Int(sectionIndex))
+            deletedSections.addIndex(Int(sectionIndex))
         case NSFetchedResultsChangeType.Insert:
-            self.insertedSections.addIndex(Int(sectionIndex))
+            insertedSections.addIndex(Int(sectionIndex))
         default:
             break
         }
@@ -80,31 +80,31 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
         case NSFetchedResultsChangeType.Insert:
             if indexPath == nil { // iOS 9 / Swift 2.0 BUG with running 8.4 (https://forums.developer.apple.com/thread/12184)
                 if let newIndexPath = newIndexPath {
-                    self.insertedRows.append(newIndexPath)
+                    insertedRows.append(newIndexPath)
                 }
             }
         case NSFetchedResultsChangeType.Delete:
             if let indexPath = indexPath {
-                self.deletedRows.append(indexPath)
+                deletedRows.append(indexPath)
             }
         case NSFetchedResultsChangeType.Update:
             if let indexPath = indexPath {
-                self.updatedRows.append(indexPath)
+                updatedRows.append(indexPath)
             }
         case NSFetchedResultsChangeType.Move:
             if
                 let newIndexPath = newIndexPath,
                 let indexPath = indexPath
             {
-                    self.insertedRows.append(newIndexPath)
-                    self.deletedRows.append(indexPath)
+                insertedRows.append(newIndexPath)
+                deletedRows.append(indexPath)
             }
         }
     }
     
     public func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        let update = self.createUpdateFromCollectedValues()
-        self.sendUpdate(update)
-        self.clearCollectedValues()
+        let update = createUpdateFromCollectedValues()
+        sendUpdate(update)
+        clearCollectedValues()
     }
 }

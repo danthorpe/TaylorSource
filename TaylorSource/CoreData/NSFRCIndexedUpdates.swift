@@ -19,15 +19,15 @@ extension UITableView: NSFRCIndexedUpdateConsumer {
     public func handleIndexedUpdate(update: NSFRCIndexedUpdate) {
         switch update {
         case .DeltaUpdate(let insertedSections, let deletedSections, let insertedRows, let updatedRows, let deletedRows):
-            self.beginUpdates()
-            self.insertSections(insertedSections, withRowAnimation: .Automatic)
-            self.deleteSections(deletedSections, withRowAnimation: .Automatic)
-            self.insertRowsAtIndexPaths(insertedRows, withRowAnimation: .Automatic)
-            self.deleteRowsAtIndexPaths(deletedRows, withRowAnimation: .Automatic)
-            self.reloadRowsAtIndexPaths(updatedRows, withRowAnimation: .Automatic)
-            self.endUpdates()
+            beginUpdates()
+            insertSections(insertedSections, withRowAnimation: .Automatic)
+            deleteSections(deletedSections, withRowAnimation: .Automatic)
+            insertRowsAtIndexPaths(insertedRows, withRowAnimation: .Automatic)
+            deleteRowsAtIndexPaths(deletedRows, withRowAnimation: .Automatic)
+            reloadRowsAtIndexPaths(updatedRows, withRowAnimation: .Automatic)
+            endUpdates()
         case .FullUpdate:
-            self.reloadData()
+            reloadData()
         }
     }
 }
@@ -36,7 +36,7 @@ extension UICollectionView: NSFRCIndexedUpdateConsumer {
     public func handleIndexedUpdate(update: NSFRCIndexedUpdate) {
         switch update {
         case .DeltaUpdate(let insertedSections, let deletedSections, let insertedRows, let updatedRows, let deletedRows):
-            self.performBatchUpdates({
+            performBatchUpdates({
                 self.insertSections(insertedSections)
                 self.deleteSections(deletedSections)
                 self.insertItemsAtIndexPaths(insertedRows)
@@ -44,7 +44,7 @@ extension UICollectionView: NSFRCIndexedUpdateConsumer {
                 self.reloadItemsAtIndexPaths(updatedRows)
                 }, completion: { _ in })
         case .FullUpdate:
-            self.reloadData()
+            reloadData()
         }
     }
 }
