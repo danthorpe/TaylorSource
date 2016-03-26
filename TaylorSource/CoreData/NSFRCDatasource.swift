@@ -14,9 +14,10 @@ Factory.SupplementaryIndexType == NSFRCSupplementaryIndex>: DatasourceType {
     public let identifier: String
     public let factory: Factory
     public var title: String? = .None
-    
     public let updateHandler = NSFRCUpdateHandler()
     public var selectionManager = IndexPathSelectionManager()
+    
+    private let fetchedResultsController: NSFetchedResultsController
     
     public init(id: String, fetchedResultsController: NSFetchedResultsController, factory f: Factory) {
         fetchedResultsController.delegate = self.updateHandler
@@ -73,8 +74,4 @@ Factory.SupplementaryIndexType == NSFRCSupplementaryIndex>: DatasourceType {
         }
         return nil
     }
-    
-    // MARK: Private
-    
-    private let fetchedResultsController: NSFetchedResultsController
 }

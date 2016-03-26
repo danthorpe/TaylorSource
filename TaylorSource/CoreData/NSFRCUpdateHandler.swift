@@ -11,6 +11,13 @@ private class WeakObserver {
 
 public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
     
+    private var observers = [WeakObserver]()
+    private var insertedSections: NSMutableIndexSet!
+    private var deletedSections: NSMutableIndexSet!
+    private var insertedRows: [NSIndexPath]!
+    private var updatedRows: [NSIndexPath]!
+    private var deletedRows: [NSIndexPath]!
+    
     deinit {
         self.observers.removeAll()
     }
@@ -18,14 +25,6 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
     public func addUpdateObserver(observer: NSFRCIndexedUpdateConsumer) {
         self.observers.append(WeakObserver(observer))
     }
-    
-    func fullUpdate() {
-        self.sendUpdate(.FullUpdate)
-    }
-    
-    // MARK: Private
-    
-    private var observers = [WeakObserver]()
     
     private func sendUpdate(update: NSFRCIndexedUpdate) {
         self.observers = self.observers.filter { $0.value != nil } // Remove orphaned observers
@@ -55,11 +54,7 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
     
     // MARK: NSFetchedResultsControllerDelegate
     
-    private var insertedSections: NSMutableIndexSet!
-    private var deletedSections: NSMutableIndexSet!
-    private var insertedRows: [NSIndexPath]!
-    private var updatedRows: [NSIndexPath]!
-    private var deletedRows: [NSIndexPath]!
+
     
     public func controllerWillChangeContent(controller: NSFetchedResultsController) {
         self.insertedSections = NSMutableIndexSet()
