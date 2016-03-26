@@ -1,15 +1,15 @@
 import UIKit
 import CoreData
 
-private class WeakObserver {
-    private(set) weak var value: NSFRCIndexedUpdateConsumer?
-
-    init(_ observer: NSFRCIndexedUpdateConsumer) {
-        value = observer
-    }
-}
-
 public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
+    
+    private class WeakObserver {
+        private(set) weak var value: NSFRCIndexedUpdateConsumer?
+        
+        init(_ observer: NSFRCIndexedUpdateConsumer) {
+            value = observer
+        }
+    }
     
     private var observers = [WeakObserver]()
     private var insertedSections: NSMutableIndexSet!
