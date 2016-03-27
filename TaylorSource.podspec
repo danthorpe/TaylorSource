@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
   
     s.subspec 'CoreData' do |ss|
     ss.dependency 'TaylorSource/Base'
-    ss.source_files   = 'TaylorSource/CoreData/*.{m,h,swift}'    
+    ss.source_files   = 'Sources/CoreData/*.{m,h,swift}'
   end
 end
 
