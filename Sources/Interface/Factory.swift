@@ -11,37 +11,37 @@ import Foundation
 public protocol AbstractFactoryType {
 
     /// The type of the model item behind each cell
-    typealias ItemType
+    associatedtype ItemType
 
     /// The type of the cell - i.e. custom cell class
-    typealias CellType
+    associatedtype CellType
 
     /// The type of the supplementary view
-    typealias SupplementaryViewType
+    associatedtype SupplementaryViewType
 
     /// The type of the containing view, which must be based around cells,
     /// i.e. UITableView, UICollectionView or subclass
-    typealias ViewType: CellBasedViewType
+    associatedtype ViewType: CellBasedViewType
 
     /// The type of the cell index, used to associate additional metadata
     /// with the index
-    typealias CellIndexType: IndexPathIndexType
+    associatedtype CellIndexType: IndexPathIndexType
 
     /// The type of the supplementary (i.e. header) index, used to
     /// associate additional metadata with the index
-    typealias SupplementaryIndexType: IndexPathIndexType
+    associatedtype SupplementaryIndexType: IndexPathIndexType
 
     /// The type of any associated text, e.g. String, or NSAttributedString
-    typealias TextType
+    associatedtype TextType
 
     /// The type of the block used to configure cells
-    typealias CellConfigurationBlock = (cell: CellType, item: ItemType, index: CellIndexType) -> Void
+    associatedtype CellConfigurationBlock = (cell: CellType, item: ItemType, index: CellIndexType) -> Void
 
     /// The type of the block used to configure supplementary views
-    typealias SupplementaryViewConfigurationBlock = (supplementaryView: SupplementaryViewType, index: SupplementaryIndexType) -> Void
+    associatedtype SupplementaryViewConfigurationBlock = (supplementaryView: SupplementaryViewType, index: SupplementaryIndexType) -> Void
 
     /// The type of the block used to configure/get supplementary text
-    typealias SupplementaryTextConfigurationBlock = (index: SupplementaryIndexType) -> TextType?
+    associatedtype SupplementaryTextConfigurationBlock = (index: SupplementaryIndexType) -> TextType?
 }
 
 /// A protocol which defines the interface used by a factory to register a cell.
@@ -143,7 +143,7 @@ public protocol IndexPathIndexType {
 
 public protocol ReusableCellBasedViewType: class {
 
-    typealias CellType
+    associatedtype CellType
 
     func registerNib(nib: UINib, withIdentifier reuseIdentifier: String)
 
@@ -153,8 +153,8 @@ public protocol ReusableCellBasedViewType: class {
 }
 
 public protocol ReusableSupplementaryViewBasedViewType: class {
-
-    typealias SupplementaryViewType
+    
+    associatedtype SupplementaryViewType
 
     func registerNib(nib: UINib, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String)
 
