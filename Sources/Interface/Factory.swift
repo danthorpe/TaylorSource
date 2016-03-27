@@ -8,7 +8,7 @@ import Foundation
  An abstract protocol which defines the associated
  types in use by Factories in TaylorSource.
 */
-public protocol AbstractFactoryType {
+public protocol FactoryType {
 
     /// The type of the model item behind each cell
     associatedtype ItemType
@@ -45,7 +45,7 @@ public protocol AbstractFactoryType {
 }
 
 /// A protocol which defines the interface used by a factory to register a cell.
-public protocol FactoryCellRegistrarType: AbstractFactoryType {
+public protocol FactoryCellRegistrarType: FactoryType {
 
     /// - returns: a key used by default when there is only one cell to register
     var defaultCellKey: String { get }
@@ -62,7 +62,7 @@ public protocol FactoryCellRegistrarType: AbstractFactoryType {
 }
 
 /// A protocol which defines the interface used by a factory to register a supplementary view.
-public protocol FactorySupplementaryViewRegistrarType: AbstractFactoryType {
+public protocol FactorySupplementaryViewRegistrarType: FactoryType {
 
     /// - returns: a key used by default when there is only one supplementary view to register
     var defaultSupplementaryKey: String { get }
@@ -80,7 +80,7 @@ public protocol FactorySupplementaryViewRegistrarType: AbstractFactoryType {
 }
 
 /// A protocol which defines the interface used by a factory to register a supplementary text.
-public protocol FactorySupplementaryTextRegistrarType: AbstractFactoryType {
+public protocol FactorySupplementaryTextRegistrarType: FactoryType {
 
     /**
      Register a supplementary text.
@@ -92,7 +92,7 @@ public protocol FactorySupplementaryTextRegistrarType: AbstractFactoryType {
 }
 
 /// A protocol which defines how the factory vends cells.
-public protocol FactoryCellVendorType: AbstractFactoryType {
+public protocol FactoryCellVendorType: FactoryType {
 
     /**
      Vends a configured cell for the item at the index.
@@ -106,7 +106,7 @@ public protocol FactoryCellVendorType: AbstractFactoryType {
 }
 
 /// A protocol which defines how the factory vends supplementary view.
-public protocol FactorySupplementaryViewVendorType: AbstractFactoryType {
+public protocol FactorySupplementaryViewVendorType: FactoryType {
 
     /**
      Vends a configured view for the supplementary kind.
@@ -120,7 +120,7 @@ public protocol FactorySupplementaryViewVendorType: AbstractFactoryType {
 }
 
 /// A protocol which defines how the factory supplementary text
-public protocol FactorySupplementaryTextVendorType: AbstractFactoryType {
+public protocol FactorySupplementaryTextVendorType: FactoryType {
 
     /**
      Vends the configured text for the supplementary kind.
@@ -294,7 +294,7 @@ public enum FactoryError: ErrorType {
     case InvalidCellRegisteredAtIndexPathWithIdentifier(NSIndexPath, String)
 }
 
-public class Factory<Item, Cell, SupplementaryView, View, CellIndex, SupplementaryIndex where View: CellBasedViewType, CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathIndexType>: AbstractFactoryType {
+public class Factory<Item, Cell, SupplementaryView, View, CellIndex, SupplementaryIndex where View: CellBasedViewType, CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathIndexType>: FactoryType {
 
     public typealias ItemType = Item
     public typealias CellType = Cell
