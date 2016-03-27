@@ -1,1 +1,1 @@
-github "danthorpe/YapDatabaseExtensions" "development"
+github "danthorpe/YapDatabaseExtensions" ~> 2.5
