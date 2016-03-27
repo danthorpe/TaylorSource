@@ -11,10 +11,11 @@ import MapKit
 
 import FlickrKit
 import YapDatabase
+import ValueCoding
 import YapDatabaseExtensions
 import TaylorSource
 
-class Photo: NSObject, NSCoding, Identifiable {
+class Photo: NSObject, NSCoding, Identifiable, Persistable {
 
     struct Location {
         let latitude: Double
@@ -28,6 +29,8 @@ class Photo: NSObject, NSCoding, Identifiable {
             return MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1))
         }
     }
+
+    static let collection = "Photos"
 
     static var photoSize: FKPhotoSize = {
         switch UIScreen.mainScreen().scale {
@@ -75,7 +78,7 @@ class Photo: NSObject, NSCoding, Identifiable {
         date = aDecoder.decodeObjectForKey("date") as! NSDate
         url = aDecoder.decodeObjectForKey("url") as! NSURL
         title = aDecoder.decodeObjectForKey("title") as! String
-        location = valueFromArchive(aDecoder.decodeObjectForKey("location"))
+        location = Photo.Location.decode(aDecoder.decodeObjectForKey("location"))
         info = aDecoder.decodeObjectForKey("info") as? String
         tags = aDecoder.decodeObjectForKey("tags") as? String
     }
@@ -85,21 +88,17 @@ class Photo: NSObject, NSCoding, Identifiable {
         aCoder.encodeObject(date, forKey: "date")
         aCoder.encodeObject(url, forKey: "url")
         aCoder.encodeObject(title, forKey: "title")
-        aCoder.encodeObject(archiveFromValue(location), forKey: "location")
+        aCoder.encodeObject(location?.encoded, forKey: "location")
         aCoder.encodeObject(info, forKey: "info")
         aCoder.encodeObject(tags, forKey: "tags")
     }
 }
 
-extension Photo.Location: Saveable {
-    typealias Archiver = PhotoLocationArchiver
-
-    var archive: Archiver {
-        return Archiver(self)
-    }
+extension Photo.Location: ValueCoding {
+    typealias Coder = PhotoLocationCoder
 }
 
-class PhotoLocationArchiver: NSObject, NSCoding, Archiver {
+class PhotoLocationCoder: NSObject, NSCoding, CodingType {
 
     let value: Photo.Location
 
@@ -116,12 +115,6 @@ class PhotoLocationArchiver: NSObject, NSCoding, Archiver {
     func encodeWithCoder(aCoder: NSCoder) {
         aCoder.encodeDouble(value.latitude, forKey: "latitude")
         aCoder.encodeDouble(value.longitude, forKey: "longitude")
-    }
-}
-
-extension Photo: Persistable {
-    static var collection: String {
-        return "Photos"
     }
 }
 
@@ -170,7 +163,7 @@ func loadPhotos(forDate date: NSDate = NSDate(), completion: (photos: [Photo]?, 
             completion(photos: .None, error: error)
         }
         else if let data = (response as NSDictionary).valueForKeyPath("photos.photo") as? [[NSObject : AnyObject]] {
-            let photos = reduce(data, [Photo]()) { (var acc, data) -> [Photo] in
+            let photos = data.reduce([Photo]()) { (var acc, data) -> [Photo] in
                 if let photo = Photo.createFromDictionary(data, withDate: date, usingFlickr: flickr) {
                     acc.append(photo)
                 }

@@ -1,12 +1,22 @@
-default_platform :ios
+before_all {
+    carthage(platform: "iOS")
+}
 
-platform :ios do
+lane :lint do
 
-  desc "Runs all the tests"
-  lane :test do
-	xctest 	scheme: 'TaylorSource', 
-			sdk: 'iphonesimulator', 
-			destination: 'platform=iOS Simulator,name=iPhone 6,OS=8.4',
-			derivedDataPath: '.fastlane/xcodebuild-data'
-  end
+    swiftLint(
+        mode: :lint, 
+        config_file: '.swiftlint.yml'
+    )
+end
+
+desc "Runs all the tests"
+lane :test do
+
+	scan(
+	  scheme: "TaylorSource",
+	  output_directory: ".ci/xcodebuild-data",
+	  xcargs: "-derivedDataPath .ci/xcodebuild-data"
+	)
+
 end
