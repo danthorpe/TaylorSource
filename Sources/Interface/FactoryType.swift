@@ -132,10 +132,6 @@ public protocol FactorySupplementaryTextVendorType: FactoryType {
     func supplementaryTextForKind(kind: SupplementaryElementKind, atIndex index: SupplementaryIndexType) -> TextType?
 }
 
-
-
-
-
 public protocol IndexPathIndexType {
 
     var indexPath: NSIndexPath { get }
@@ -231,156 +227,9 @@ public enum SupplementaryElementKind: Equatable {
     case Custom(String)
 }
 
-internal struct SupplementaryElementIndex {
-    let kind: SupplementaryElementKind
-    let key: String
-}
+internal extension SupplementaryElementKind {
 
-
-/**
- An enum type which encapsulates how views (or cells) should be created.
-
- The value is based on how the view is stored, either programmatically
- as a class, but with a reuse identifier, or inside a nib. Use dynamic
- if the view is already able to dequeue the view, such as if using
- Storyboards with prototype cells.
-*/
-public enum ReusableViewDescriptor {
-    case DynamicWithIdentifier(String)
-    case ClassWithIdentifier(AnyClass, String)
-    case NibWithIdentifier(UINib, String)
-}
-
-internal extension ReusableViewDescriptor {
-
-    var identifier: String {
-        switch self {
-        case let .DynamicWithIdentifier(identifier):
-            return identifier
-        case let .ClassWithIdentifier(_, identifier):
-            return identifier
-        case let .NibWithIdentifier(_, identifier):
-            return identifier
-        }
-    }
-
-    func registerInView<View: ReusableCellBasedViewType>(view: View) {
-        switch self {
-        case .DynamicWithIdentifier(_):
-            break // Assumed that it's already registered
-        case let .ClassWithIdentifier(aClass, identifier):
-            view.registerClass(aClass, withIdentifier: identifier)
-        case let .NibWithIdentifier(aNib, identifier):
-            view.registerNib(aNib, withIdentifier: identifier)
-        }
-    }
-
-    func registerInView<View: ReusableSupplementaryViewBasedViewType>(view: View, kind: SupplementaryElementKind) {
-        switch self {
-        case .DynamicWithIdentifier(_):
-            break // Assumed that it's already registered
-        case let .ClassWithIdentifier(aClass, identifier):
-            view.registerClass(aClass, forSupplementaryViewKind: kind, withIdentifier: identifier)
-        case let .NibWithIdentifier(aNib, identifier):
-            view.registerNib(aNib, forSupplementaryViewKind: kind, withIdentifier: identifier)
-        }
-    }
-}
-
-// MARK: - Factory
-
-public enum FactoryError: ErrorType {
-    case NoCellRegisteredForKey(String)
-    case InvalidCellRegisteredAtIndexPathWithIdentifier(NSIndexPath, String)
-}
-
-public class Factory<Item, Cell, SupplementaryView, View, CellIndex, SupplementaryIndex where View: CellBasedViewType, CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathIndexType>: FactoryType {
-
-    public typealias ItemType = Item
-    public typealias CellType = Cell
-    public typealias SupplementaryViewType = SupplementaryView
-    public typealias ViewType = View
-    public typealias CellIndexType = CellIndex
-    public typealias SupplementaryIndexType = SupplementaryIndex
-    public typealias TextType = String
-
-    public typealias CellConfig = (cell: Cell, item: Item, index: CellIndex) -> Void
-    public typealias SupplementaryViewConfig = (supplementaryView: SupplementaryView, index: SupplementaryIndex) -> Void
-    public typealias SupplementaryTextConfig = (index: SupplementaryIndex) -> String?
-
-    public typealias GetCellKey = (item: Item, index: CellIndex) -> String
-
-    internal typealias ReuseIdentifierType = String
-
-    internal let getCellKey: GetCellKey?
-
-    internal var cells = [String: (reuseIdentifier: ReuseIdentifierType, configure: CellConfig)]()
-    internal var views = [SupplementaryElementIndex: (reuseIdentifier: ReuseIdentifierType, configure: SupplementaryViewConfig)]()
-    internal var texts = [SupplementaryElementKind: SupplementaryTextConfig]()
-
-    public init(cell: GetCellKey? = .None) {
-        getCellKey = cell
-    }
-}
-
-extension Factory: FactoryCellRegistrarType {
-
-    public func registerCell(descriptor: ReusableViewDescriptor, inView view: View, withKey key: String, configuration: CellConfig) {
-        descriptor.registerInView(view)
-        cells[key] = (descriptor.identifier, configuration)
-    }
-}
-
-extension Factory: FactorySupplementaryViewRegistrarType {
-
-    public func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: View, withKey key: String, configuration: SupplementaryViewConfig) {
-        descriptor.registerInView(view, kind: kind)
-        let index = SupplementaryElementIndex(kind: kind, key: key)
-        views[index] = (descriptor.identifier, configuration)
-    }
-}
-
-extension Factory: FactorySupplementaryTextRegistrarType {
-
-    public func registerSupplementaryTextWithKind(kind: SupplementaryElementKind, configuration: SupplementaryTextConfig) {
-        texts[kind] = configuration
-    }
-}
-
-extension Factory: FactoryCellVendorType {
-
-    public func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) throws -> Cell {
-
-        let key = getCellKey?(item: item, index: index) ?? defaultCellKey
-        let indexPath = index.indexPath
-
-        guard let (identifier, configure) = cells[key] else {
-            throw FactoryError.NoCellRegisteredForKey(key)
-        }
-
-        guard let cell = view.dequeueCellWithIdentifier(identifier, atIndexPath: indexPath) as? Cell else {
-            throw FactoryError.InvalidCellRegisteredAtIndexPathWithIdentifier(indexPath, identifier)
-        }
-
-        configure(cell: cell, item: item, index: index)
-
-        return cell
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-extension SupplementaryElementKind {
-
-    internal init(_ kind: String) {
+    init(_ kind: String) {
         switch kind {
         case UICollectionElementKindSectionHeader:
             self = .Header
@@ -415,6 +264,61 @@ extension SupplementaryElementKind: Hashable {
 
 public func == (lhs: SupplementaryElementKind, rhs: SupplementaryElementKind) -> Bool {
     return lhs.description == rhs.description
+}
+
+/**
+ An enum type which encapsulates how views (or cells) should be created.
+
+ The value is based on how the view is stored, either programmatically
+ as a class, but with a reuse identifier, or inside a nib. Use dynamic
+ if the view is already able to dequeue the view, such as if using
+ Storyboards with prototype cells.
+ */
+public enum ReusableViewDescriptor {
+    case DynamicWithIdentifier(String)
+    case ClassWithIdentifier(AnyClass, String)
+    case NibWithIdentifier(UINib, String)
+}
+
+internal extension ReusableViewDescriptor {
+
+    var identifier: String {
+        switch self {
+        case let .DynamicWithIdentifier(identifier):
+            return identifier
+        case let .ClassWithIdentifier(_, identifier):
+            return identifier
+        case let .NibWithIdentifier(_, identifier):
+            return identifier
+        }
+    }
+
+    func registerInView<View: ReusableCellBasedViewType>(view: View) {
+        switch self {
+        case .DynamicWithIdentifier(_):
+        break // Assumed that it's already registered
+        case let .ClassWithIdentifier(aClass, identifier):
+            view.registerClass(aClass, withIdentifier: identifier)
+        case let .NibWithIdentifier(aNib, identifier):
+            view.registerNib(aNib, withIdentifier: identifier)
+        }
+    }
+
+    func registerInView<View: ReusableSupplementaryViewBasedViewType>(view: View, kind: SupplementaryElementKind) {
+        switch self {
+        case .DynamicWithIdentifier(_):
+        break // Assumed that it's already registered
+        case let .ClassWithIdentifier(aClass, identifier):
+            view.registerClass(aClass, forSupplementaryViewKind: kind, withIdentifier: identifier)
+        case let .NibWithIdentifier(aNib, identifier):
+            view.registerNib(aNib, forSupplementaryViewKind: kind, withIdentifier: identifier)
+        }
+    }
+}
+
+internal struct SupplementaryElementIndex {
+    let kind: SupplementaryElementKind
+    let key: String
 }
 
 extension SupplementaryElementIndex: Hashable {
