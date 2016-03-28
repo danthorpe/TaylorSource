@@ -153,7 +153,7 @@ public protocol ReusableCellBasedViewType: class {
 }
 
 public protocol ReusableSupplementaryViewBasedViewType: class {
-    
+
     associatedtype SupplementaryViewType
 
     func registerNib(nib: UINib, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String)
