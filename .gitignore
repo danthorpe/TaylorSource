@@ -61,6 +61,7 @@ Carthage/Build
 .fastlane/screenshots
 .fastlane/xcodebuild-data
 
+.fastlane/README.md
 .ci/xcodebuild-data
 
 *.coverage.txt
