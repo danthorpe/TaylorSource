@@ -16,8 +16,8 @@ lane :test do
 	scan(
 	  scheme: "TaylorSource",
 	  code_coverage: true,
-	  output_directory: ".ci/xcodebuild-data",
-	  xcargs: "-derivedDataPath .ci/xcodebuild-data"
+	  output_types: "",
+	  derived_data_path: ".ci/xcodebuild-data"
 	)
 
 end
