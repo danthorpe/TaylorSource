@@ -9,25 +9,27 @@
 import XCTest
 @testable import TaylorSource
 
-typealias TestableFactory = Factory<String, UITableViewCell, UITableViewHeaderFooterView, UITableView, NSIndexPath, NSIndexPath>
+typealias TestableFactory = Factory<String, TestCell, UITableViewHeaderFooterView, TestableTable, NSIndexPath, NSIndexPath>
 
 class FactoryTests: XCTestCase {
 
     var factory: TestableFactory!
-    var tableView: UITableView!
+    var tableView: TestableFactory.ViewType!
     var identifier: String!
-    var indexPath: NSIndexPath!
-    var cell: UITableViewCell!
-    var supplementaryView: UITableViewHeaderFooterView!
+    var indexPath: TestableFactory.CellIndexType!
+    var cell: TestableFactory.CellType!
+    var supplementaryView: TestableFactory.SupplementaryViewType!
+    var item: TestableFactory.ItemType!
 
     override func setUp() {
         super.setUp()
         factory = TestableFactory()
-        tableView = UITableView()
-        identifier = "An Identifier"
+        tableView = TestableFactory.ViewType()
+        identifier = "Test Cell Identifier"
         indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        cell = UITableViewCell(style: .Default, reuseIdentifier: identifier)
-        supplementaryView = UITableViewHeaderFooterView(reuseIdentifier: identifier)
+        cell = TestableFactory.CellType(style: .Default, reuseIdentifier: identifier)
+        supplementaryView = TestableFactory.SupplementaryViewType(reuseIdentifier: identifier)
+        item = "Hello World"
     }
 
     override func tearDown() {
@@ -47,10 +49,28 @@ class FactoryCellRegistrarTypeTests: FactoryTests {
         XCTAssertEqual(factory.defaultCellKey, "Default Cell Key")
     }
 
+    func test__registerCell__classWithIdentifier__viewRegistersCellWithIdentifier() {
+        factory.registerCell(.ClassWithIdentifier(TestableFactory.CellType.self, identifier), inView: tableView) { _, _, _ in }
+        guard let (registeredClass, withIdentifier) = tableView.didRegisterClassWithIdentifier else {
+            XCTFail("Table View did not register class with identifier"); return
+        }
+        XCTAssertNotNil(registeredClass)
+        XCTAssertEqual(withIdentifier, identifier)
+    }
+
+    func test__registerCell__nibWithIdentifier__viewRegistersNibWithIdentifier() {
+        factory.registerCell(.NibWithIdentifier(TestCell.nib, identifier), inView: tableView) { _, _, _ in }
+        guard let (registeredNib, withIdentifier) = tableView.didRegisterNibWithIdentifier else {
+            XCTFail("Table View did not register class with identifier"); return
+        }
+        XCTAssertNotNil(registeredNib)
+        XCTAssertEqual(withIdentifier, identifier)
+    }
+
     func test__registerCell() {
         var didExecuteConfiguration = false
 
-        factory.registerCell(.ClassWithIdentifier(UITableViewCell.self, identifier), inView: tableView) { cell, item, index in
+        factory.registerCell(.ClassWithIdentifier(TestableFactory.CellType.self, identifier), inView: tableView) { cell, item, index in
             didExecuteConfiguration = true
         }
 
@@ -61,6 +81,18 @@ class FactoryCellRegistrarTypeTests: FactoryTests {
         XCTAssertEqual(identifier, self.identifier)
         configuration(cell: cell, item: "The Item", index: indexPath)
         XCTAssertTrue(didExecuteConfiguration)
+    }
+}
+
+class FactoryCellVendorTypeTests: FactoryTests {
+
+    func test__cellForItem__no_cell_registered__throws_error() {
+        XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.NoCellRegisteredAtIndex(indexPath))
+    }
+
+    func test__cellForItem__incorrect_cell_type_registered__throws_error() {
+        factory.registerCell(.ClassWithIdentifier(UITableViewCell.self, identifier), inView: tableView) { _, _, _ in }
+        XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath, identifier))
     }
 }
 

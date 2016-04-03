@@ -132,7 +132,7 @@ public protocol FactorySupplementaryTextVendorType: FactoryType {
     func supplementaryTextForKind(kind: SupplementaryElementKind, atIndex index: SupplementaryIndexType) -> TextType?
 }
 
-public protocol IndexPathIndexType {
+public protocol IndexPathIndexType: Equatable {
 
     var indexPath: NSIndexPath { get }
 }
@@ -162,6 +162,20 @@ public protocol ReusableSupplementaryViewBasedViewType: class {
 public protocol CellBasedViewType: ReusableCellBasedViewType, ReusableSupplementaryViewBasedViewType {
 
     func reloadData()
+}
+
+/// A protocol to expose a reuse identifier for cells and views.
+public protocol ReusableElementType {
+
+    /// - returns: a String property
+    static var reuseIdentifier: String { get }
+}
+
+/// A protocol to expose a nib for a view.
+public protocol ReusableViewType: class, ReusableElementType {
+
+    /// - returns: a UINib property
+    static var nibName: String { get }
 }
 
 // MARK: - Protocol Extensions
@@ -210,6 +224,17 @@ public extension FactorySupplementaryViewRegistrarType {
      */
     mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: ViewType, configuration: SupplementaryViewConfigurationBlock) {
         registerSupplementaryView(descriptor, kind: kind, inView: view, withKey: defaultSupplementaryKey, configuration: configuration)
+    }
+}
+
+public extension ReusableViewType {
+
+    static var nibName: String {
+        return "\(self)"
+    }
+
+    static var nib: UINib {
+        return UINib(nibName: nibName, bundle: NSBundle(forClass: self))
     }
 }
 

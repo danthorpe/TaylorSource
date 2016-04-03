@@ -9,9 +9,20 @@
 import Foundation
 
 /// Errors used by Factory classes
-public enum FactoryError: ErrorType {
-    case NoCellRegisteredForKey(String)
-    case InvalidCellRegisteredAtIndexPathWithIdentifier(NSIndexPath, String)
+public enum FactoryError<CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathIndexType>: ErrorType, Equatable {
+    case NoCellRegisteredAtIndex(CellIndex)
+    case InvalidCellRegisteredAtIndexWithIdentifier(CellIndex, String)
+}
+
+public func == <CellIndex, SupplementaryIndex where CellIndex: IndexPathIndexType, CellIndex: Equatable, SupplementaryIndex: IndexPathIndexType, SupplementaryIndex: Equatable>(lhs: FactoryError<CellIndex, SupplementaryIndex>, rhs: FactoryError<CellIndex, SupplementaryIndex>) -> Bool {
+    switch (lhs, rhs) {
+    case let (.NoCellRegisteredAtIndex(lhsIndex), .NoCellRegisteredAtIndex(rhsIndex)):
+        return lhsIndex == rhsIndex
+    case let (.InvalidCellRegisteredAtIndexWithIdentifier(lhsIndex), .InvalidCellRegisteredAtIndexWithIdentifier(rhsIndex)):
+        return lhsIndex == rhsIndex
+    default:
+        return false
+    }
 }
 
 /**
@@ -28,6 +39,8 @@ public class Factory<Item, Cell, SupplementaryView, View, CellIndex, Supplementa
     public typealias CellIndexType = CellIndex
     public typealias SupplementaryIndexType = SupplementaryIndex
     public typealias TextType = String
+
+    public typealias Error = FactoryError<CellIndex, SupplementaryIndex>
 
     public typealias CellConfig = (cell: Cell, item: Item, index: CellIndex) -> Void
     public typealias SupplementaryViewConfig = (supplementaryView: SupplementaryView, index: SupplementaryIndex) -> Void
@@ -83,11 +96,11 @@ extension Factory: FactoryCellVendorType {
         let indexPath = index.indexPath
 
         guard let (identifier, configure) = cells[key] else {
-            throw FactoryError.NoCellRegisteredForKey(key)
+            throw Error.NoCellRegisteredAtIndex(index)
         }
 
         guard let cell = view.dequeueCellWithIdentifier(identifier, atIndexPath: indexPath) as? Cell else {
-            throw FactoryError.InvalidCellRegisteredAtIndexPathWithIdentifier(indexPath, identifier)
+            throw Error.InvalidCellRegisteredAtIndexWithIdentifier(index, identifier)
         }
 
         configure(cell: cell, item: item, index: index)

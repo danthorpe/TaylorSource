@@ -8,6 +8,18 @@
 
 import UIKit
 
+/**
+ Utility function to load a Nib
+ 
+ - parameter owner: a AnyObject? to act as the file owner
+ - parameter options: a [NSObject: AnyObject]? options dictionary
+ - returns: a
+ */
+public func loadReusableViewFromNib<T: UIView where T: ReusableViewType>(owner: AnyObject? = .None, options: [NSObject: AnyObject]? = .None) -> T? {
+    return NSBundle(forClass: T.self).loadNibNamed(T.reuseIdentifier, owner: owner, options: options).last as? T
+}
+
+
 extension NSIndexPath: IndexPathIndexType {
 
     public var indexPath: NSIndexPath {
