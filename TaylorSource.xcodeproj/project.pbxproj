@@ -21,6 +21,7 @@
 		6590FABC1CB1743400694DAF /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6590FABB1CB1743400694DAF /* Helpers.swift */; };
 		6590FABE1CB17CAA00694DAF /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6590FABD1CB17CAA00694DAF /* Testable.swift */; };
 		6590FAC01CB1819A00694DAF /* TestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6590FABF1CB1819A00694DAF /* TestCell.xib */; };
+		6590FAC21CB1A2C900694DAF /* ArrayDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6590FAC11CB1A2C900694DAF /* ArrayDataSourceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		6590FABB1CB1743400694DAF /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		6590FABD1CB17CAA00694DAF /* Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Testable.swift; sourceTree = "<group>"; };
 		6590FABF1CB1819A00694DAF /* TestCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestCell.xib; sourceTree = "<group>"; };
+		6590FAC11CB1A2C900694DAF /* ArrayDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayDataSourceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				6508498E1CB15C94005C7E6F /* Info.plist */,
+				6590FAC11CB1A2C900694DAF /* ArrayDataSourceTests.swift */,
 				6508498C1CB15C94005C7E6F /* DataSourceTests.swift */,
 				6508498D1CB15C94005C7E6F /* FactoryTests.swift */,
 				6590FABB1CB1743400694DAF /* Helpers.swift */,
@@ -280,6 +283,7 @@
 				6590FABE1CB17CAA00694DAF /* Testable.swift in Sources */,
 				6590FABC1CB1743400694DAF /* Helpers.swift in Sources */,
 				6508498F1CB15C94005C7E6F /* DataSourceTests.swift in Sources */,
+				6590FAC21CB1A2C900694DAF /* ArrayDataSourceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

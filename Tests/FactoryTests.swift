@@ -9,7 +9,7 @@
 import XCTest
 @testable import TaylorSource
 
-typealias TestableFactory = Factory<String, UITableViewCell, UITableViewHeaderFooterView, TestableTable, NSIndexPath, NSIndexPath>
+typealias TestableFactory = BasicFactory<String, UITableViewCell, UITableViewHeaderFooterView, TestableTable>
 
 class FactoryTests: XCTestCase {
 

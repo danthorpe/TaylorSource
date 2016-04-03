@@ -41,11 +41,9 @@ public class Factory<Item, Cell, SupplementaryView, View, CellIndex, Supplementa
     public typealias TextType = String
 
     public typealias Error = FactoryError<CellIndex, SupplementaryIndex>
-
     public typealias CellConfig = (cell: Cell, item: Item, index: CellIndex) -> Void
     public typealias SupplementaryViewConfig = (supplementaryView: SupplementaryView, index: SupplementaryIndex) -> Void
     public typealias SupplementaryTextConfig = (index: SupplementaryIndex) -> String?
-
     public typealias GetCellKey = (item: Item, index: CellIndex) -> String
     public typealias GetSupplementaryKey = (index: SupplementaryIndex) -> String
 
@@ -90,7 +88,7 @@ extension Factory: FactorySupplementaryTextRegistrarType {
 
 extension Factory: FactoryCellVendorType {
 
-    public func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) throws -> Cell {
+    public func cellForItem(item: Item, inView view: View, atIndex index: CellIndexType) throws -> Cell {
 
         let key = getCellKey?(item: item, index: index) ?? defaultCellKey
         let indexPath = index.indexPath
@@ -108,6 +106,35 @@ extension Factory: FactoryCellVendorType {
         return cell
     }
 }
+
+extension Factory: FactorySupplementaryViewVendorType {
+
+    public func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: ViewType, atIndex index: SupplementaryIndexType) -> SupplementaryView? {
+
+        let key = getSupplementaryKey?(index: index) ?? defaultSupplementaryKey
+        let indexPath = index.indexPath
+
+        guard let
+            (identifier, configure) = views[SupplementaryElementIndex(kind: kind, key: key)],
+            supplementaryView = view.dequeueSupplementaryViewWithIdentifier(identifier, kind: kind, atIndexPath: indexPath) as? SupplementaryView
+        else { return .None }
+
+        configure(supplementaryView: supplementaryView, index: index)
+
+        return supplementaryView
+    }
+}
+
+extension Factory: FactorySupplementaryTextVendorType {
+
+    public func supplementaryTextForKind(kind: SupplementaryElementKind, atIndex index: SupplementaryIndexType) -> TextType? {
+        guard let configure = texts[kind] else { return .None }
+        return configure(index: index)
+    }
+}
+
+
+
 
 /**
  A Basic factory which uses NSIndexPath for its cell and supplementary view indexes. But

@@ -77,7 +77,7 @@ public extension DataSourceType {
     }
 
     var endIndex: Int {
-        return (0..<numberOfSections).reduce(0) { $0 + numberOfItemsInSection($1) }
+        return (0..<numberOfSections).reduce(0) { $0 + numberOfItemsInSection($1) } - 1
     }
 }
 
