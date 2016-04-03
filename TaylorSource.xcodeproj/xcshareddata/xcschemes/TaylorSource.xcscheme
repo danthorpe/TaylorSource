@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "650265BF1C8E36F10003ECB9"
+               BlueprintIdentifier = "6569B6841CB15B0000BAA449"
                BuildableName = "TaylorSource.framework"
                BlueprintName = "TaylorSource"
                ReferencedContainer = "container:TaylorSource.xcodeproj">
@@ -33,7 +33,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "650265C91C8E36F10003ECB9"
+               BlueprintIdentifier = "6569B68E1CB15B0000BAA449"
                BuildableName = "TaylorSourceTests.xctest"
                BlueprintName = "TaylorSourceTests"
                ReferencedContainer = "container:TaylorSource.xcodeproj">
@@ -43,7 +43,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "650265BF1C8E36F10003ECB9"
+            BlueprintIdentifier = "6569B6841CB15B0000BAA449"
             BuildableName = "TaylorSource.framework"
             BlueprintName = "TaylorSource"
             ReferencedContainer = "container:TaylorSource.xcodeproj">
@@ -65,7 +65,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "650265BF1C8E36F10003ECB9"
+            BlueprintIdentifier = "6569B6841CB15B0000BAA449"
             BuildableName = "TaylorSource.framework"
             BlueprintName = "TaylorSource"
             ReferencedContainer = "container:TaylorSource.xcodeproj">
@@ -83,7 +83,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "650265BF1C8E36F10003ECB9"
+            BlueprintIdentifier = "6569B6841CB15B0000BAA449"
             BuildableName = "TaylorSource.framework"
             BlueprintName = "TaylorSource"
             ReferencedContainer = "container:TaylorSource.xcodeproj">
