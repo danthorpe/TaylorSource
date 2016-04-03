@@ -9,7 +9,7 @@
 import XCTest
 @testable import TaylorSource
 
-typealias TestableFactory = Factory<String, TestCell, UITableViewHeaderFooterView, TestableTable, NSIndexPath, NSIndexPath>
+typealias TestableFactory = Factory<String, UITableViewCell, UITableViewHeaderFooterView, TestableTable, NSIndexPath, NSIndexPath>
 
 class FactoryTests: XCTestCase {
 
@@ -90,9 +90,17 @@ class FactoryCellVendorTypeTests: FactoryTests {
         XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.NoCellRegisteredAtIndex(indexPath))
     }
 
-    func test__cellForItem__incorrect_cell_type_registered__throws_error() {
-        factory.registerCell(.ClassWithIdentifier(UITableViewCell.self, identifier), inView: tableView) { _, _, _ in }
-        XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath, identifier))
+//    func test__cellForItem__incorrect_cell_type_registered__throws_error() {
+//        factory.registerCell(.ClassWithIdentifier(UITableViewCell.self, "Another Identifier"), inView: tableView) { _, _, _ in }
+//        XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath, identifier))
+//    }
+
+    func test__cellForItem__configureBlockReceivesCell() {
+        factory.registerCell(.ClassWithIdentifier(TestableFactory.CellType.self, identifier), inView: tableView) { cell, item, index in
+            cell.textLabel!.text = item
+        }
+        let cell = XCTAssertNoThrows(try factory.cellForItem(item, inView: tableView, atIndex: indexPath))
+        XCTAssertEqual(cell.textLabel?.text ?? "Not Correct", item)
     }
 }
 
@@ -109,6 +117,12 @@ class FactorySupplementaryViewRegistrarTypeTests: FactoryTests {
         XCTAssertEqual(index.kind, kind)
     }
 
+    func test__registerSupplementaryView_multipleTimes() {
+        factory.registerSupplementaryView(.ClassWithIdentifier(UITableViewHeaderFooterView.self, identifier), kind: .Header, inView: tableView) { _, _ in }
+        factory.registerSupplementaryView(.ClassWithIdentifier(UITableViewHeaderFooterView.self, identifier), kind: .Footer, inView: tableView) { _, _ in }
+        XCTAssertEqual(factory.views.count, 2)
+    }
+
     func test__registerSupplementaryView() {
         var didExecuteConfiguration = false
 
@@ -123,6 +137,15 @@ class FactorySupplementaryViewRegistrarTypeTests: FactoryTests {
         XCTAssertEqual(identifier, self.identifier)
         configuration(supplementaryView: supplementaryView, index: indexPath)
         XCTAssertTrue(didExecuteConfiguration)
+    }
+}
+
+class FactorySupplementaryTextRegistrarTypeTests: FactoryTests {
+
+    func test__registerSupplementaryTextWithKind_multipleTimes() {
+        factory.registerSupplementaryTextWithKind(.Header) { "Header text with index: \($0)" }
+        factory.registerSupplementaryTextWithKind(.Footer) { "Footer text with index: \($0)" }
+        XCTAssertEqual(factory.texts.count, 2)
     }
 }
 

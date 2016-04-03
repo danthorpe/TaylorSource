@@ -23,3 +23,19 @@ func XCTAssertThrowsError<E, T where E: ErrorType, E: Equatable>(@autoclosure ex
     }
     XCTAssertTrue(didCatchCorrectError, message, file: file, line: line)
 }
+
+func XCTAssertNoThrows<T>(@autoclosure expression: () throws -> T, @autoclosure _ message: () -> String = "", file: StaticString = #file, line: UInt = #line) -> T! {
+
+    do {
+        return try expression()
+    }
+    catch {
+        XCTFail(message(), file: file, line: line)
+    }
+    return nil
+}
+
+
+
+
+
