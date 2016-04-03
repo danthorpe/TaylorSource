@@ -14,12 +14,12 @@ public enum FactoryError<CellIndex: IndexPathIndexType, SupplementaryIndex: Inde
     case InvalidCellRegisteredAtIndexWithIdentifier(CellIndex, String)
 }
 
-public func == <CellIndex, SupplementaryIndex where CellIndex: IndexPathIndexType, CellIndex: Equatable, SupplementaryIndex: IndexPathIndexType, SupplementaryIndex: Equatable>(lhs: FactoryError<CellIndex, SupplementaryIndex>, rhs: FactoryError<CellIndex, SupplementaryIndex>) -> Bool {
+public func == <CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathIndexType>(lhs: FactoryError<CellIndex, SupplementaryIndex>, rhs: FactoryError<CellIndex, SupplementaryIndex>) -> Bool {
     switch (lhs, rhs) {
     case let (.NoCellRegisteredAtIndex(lhsIndex), .NoCellRegisteredAtIndex(rhsIndex)):
         return lhsIndex == rhsIndex
-    case let (.InvalidCellRegisteredAtIndexWithIdentifier(lhsIndex), .InvalidCellRegisteredAtIndexWithIdentifier(rhsIndex)):
-        return lhsIndex == rhsIndex
+    case let (.InvalidCellRegisteredAtIndexWithIdentifier(lhsIndex, lhsString), .InvalidCellRegisteredAtIndexWithIdentifier(rhsIndex, rhsString)):
+        return lhsIndex == rhsIndex && lhsString == rhsString
     default:
         return false
     }

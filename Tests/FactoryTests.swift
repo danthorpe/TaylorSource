@@ -90,10 +90,10 @@ class FactoryCellVendorTypeTests: FactoryTests {
         XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.NoCellRegisteredAtIndex(indexPath))
     }
 
-//    func test__cellForItem__incorrect_cell_type_registered__throws_error() {
+    func test__cellForItem__incorrect_cell_type_registered__throws_error() {
 //        factory.registerCell(.ClassWithIdentifier(UITableViewCell.self, "Another Identifier"), inView: tableView) { _, _, _ in }
 //        XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath, identifier))
-//    }
+    }
 
     func test__cellForItem__configureBlockReceivesCell() {
         factory.registerCell(.ClassWithIdentifier(TestableFactory.CellType.self, identifier), inView: tableView) { cell, item, index in
@@ -147,6 +147,42 @@ class FactorySupplementaryTextRegistrarTypeTests: FactoryTests {
         factory.registerSupplementaryTextWithKind(.Footer) { "Footer text with index: \($0)" }
         XCTAssertEqual(factory.texts.count, 2)
     }
+}
+
+class FactoryErrorTests: XCTestCase {
+
+    typealias Error = TestableFactory.Error
+
+    var indexPath1: NSIndexPath!
+    var indexPath2: NSIndexPath!
+
+    override func setUp() {
+        super.setUp()
+        indexPath1 = NSIndexPath(forItem: 0, inSection: 0)
+        indexPath2 = NSIndexPath(forItem: 1, inSection: 0)
+    }
+
+    func test__equality__equal_values_1() {
+        XCTAssertEqual(Error.NoCellRegisteredAtIndex(indexPath1), Error.NoCellRegisteredAtIndex(indexPath1))
+    }
+
+    func test__equality__different_values_1() {
+        XCTAssertNotEqual(Error.NoCellRegisteredAtIndex(indexPath1), Error.NoCellRegisteredAtIndex(indexPath2))
+    }
+
+    func test__equality__equal_values_2() {
+        XCTAssertEqual(Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath1, "Hello World"), Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath1, "Hello World"))
+    }
+
+    func test__equality__different_values_2() {
+        XCTAssertNotEqual(Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath1, "Hello"), Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath2, "Hello"))
+        XCTAssertNotEqual(Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath1, "Hello"), Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath1, "World"))
+    }
+
+    func test__equality__different_case() {
+        XCTAssertNotEqual(Error.NoCellRegisteredAtIndex(indexPath1), Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath2, "Hello"))
+    }
+
 }
 
 class SupplementaryElementKindTests: XCTestCase {
