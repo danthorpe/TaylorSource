@@ -11,15 +11,22 @@ import Foundation
 public final class ArrayDataSource<
     Factory
     where
-    Factory: FactoryCellVendorType, Factory.CellIndexType == NSIndexPath,
-    Factory: FactorySupplementaryViewVendorType, Factory.SupplementaryIndexType == NSIndexPath,
-    Factory: FactorySupplementaryTextVendorType, Factory.TextType == String>: DataSourceType {
+    Factory: FactoryCellVendorType,
+    Factory.CellIndexType == NSIndexPath,
+    Factory: FactorySupplementaryViewVendorType,
+    Factory.SupplementaryIndexType == NSIndexPath,
+    Factory: FactorySupplementaryTextVendorType,
+    Factory.TextType == String>: DataSourceType {
 
     public let identifier: String?
 
     public let factory: Factory
 
     public var title: String?
+
+    public var cellIndexMapper: Int -> NSIndexPath {
+        return { NSIndexPath(forItem: $0, inSection: 0) }
+    }
 
     private var items: [Factory.ItemType]
 
@@ -33,14 +40,14 @@ public final class ArrayDataSource<
         return items.count
     }
 
-    public func itemAtIndex(index: Factory.CellIndexType) throws -> Factory.ItemType {
-        guard startIndex <= index.item && index.item < endIndex else { throw DataSourceError<Factory>.NoItemAtIndex(index) }
-        return items[index.item]
+    public func itemAtIndex(index: Int) throws -> Factory.ItemType {
+        guard startIndex <= index && index < endIndex else { throw DataSourceError.NoItemAtIndex(index) }
+        return items[index]
     }
 
-    public func cellForItemInView(view: Factory.ViewType, atIndex index: Factory.CellIndexType) throws -> Factory.CellType {
+    public func cellForItemInView(view: Factory.ViewType, atIndex index: Int) throws -> Factory.CellType {
         let item = try itemAtIndex(index)
-        return try factory.cellForItem(item, inView: view, atIndex: index)
+        return try factory.cellForItem(item, inView: view, atIndex: cellIndexMapper(index))
     }
 
     public func supplementaryViewForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.SupplementaryViewType? {

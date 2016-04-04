@@ -87,7 +87,7 @@ class FactoryCellRegistrarTypeTests: FactoryTests {
 class FactoryCellVendorTypeTests: FactoryTests {
 
     func test__cellForItem__no_cell_registered__throws_error() {
-        XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.NoCellRegisteredAtIndex(indexPath))
+        XCTAssertThrowsErrorEqual(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.NoCellRegisteredAtIndex(indexPath))
     }
 
     func test__cellForItem__incorrect_cell_type_registered__throws_error() {

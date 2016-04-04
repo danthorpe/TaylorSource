@@ -14,6 +14,13 @@ public protocol DataSourceType {
     /// The associated factory type
     associatedtype Factory: FactoryType
 
+    /// The associated index type
+    associatedtype Index
+
+    associatedtype CellIndexMap = Index -> Factory.CellIndexType
+
+    associatedtype SupplementaryViewIndexMap = Index -> Factory.CellIndexType
+
     /// - returns: an optional identifier
     var identifier: String? { get }
 
@@ -22,6 +29,9 @@ public protocol DataSourceType {
 
     /// - returns: an optional title
     var title: String? { get }
+
+    /// - returns: mapper  which maps the item index to a cell index
+    var cellIndexMapper: CellIndexMap { get }
 
     /// - returns: the number of sections in the datasource
     var numberOfSections: Int { get }
@@ -38,14 +48,14 @@ public protocol DataSourceType {
      - parameter indexPath: An index path.
      - returns: An optional item at this index path
     */
-    func itemAtIndex(indexPath: Factory.CellIndexType) throws -> Factory.ItemType
+    func itemAtIndex(indexPath: Index) throws -> Factory.ItemType
 
     /**
      Vends a configured cell for the item at this index.
      - parameter view: the cell based view (i.e. table view, or collection view)
      - parameter index: the index for the cell.
     */
-    func cellForItemInView(view: Factory.ViewType, atIndex index: Factory.CellIndexType) throws -> Factory.CellType
+    func cellForItemInView(view: Factory.ViewType, atIndex index: Index) throws -> Factory.CellType
 
     /**
      Vends an optional configured supplementary view for the correct element at index.
@@ -81,6 +91,21 @@ public extension DataSourceType {
     }
 }
 
-public enum DataSourceError<F: FactoryType>: ErrorType {
-    case NoItemAtIndex(F.CellIndexType)
+public extension DataSourceType where Factory.CellIndexType == Index {
+
+    var cellIndexMapper: Index -> Factory.CellIndexType {
+        return { $0 }
+    }
 }
+
+public enum DataSourceError<Index: Equatable>: ErrorType, Equatable {
+    case NoItemAtIndex(Index)
+}
+
+public func == <Index: Equatable> (lhs: DataSourceError<Index>, rhs: DataSourceError<Index>) -> Bool {
+    switch (lhs, rhs) {
+    case let (.NoItemAtIndex(lhsIndex), .NoItemAtIndex(rhsIndex)):
+        return lhsIndex == rhsIndex
+    }
+}
+

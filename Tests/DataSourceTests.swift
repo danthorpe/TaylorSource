@@ -9,15 +9,15 @@
 import XCTest
 @testable import TaylorSource
 
-typealias TestableDataSource = ArrayDataSource<TestableFactory>
-
 class DataSourceTests: XCTestCase {
-
-    var dataSource: TestableDataSource!
+    
+    typealias TypeUnderTest = ArrayDataSource<TestableFactory>
+    
+    var dataSource: TypeUnderTest!
 
     override func setUp() {
         super.setUp()
-        dataSource = TestableDataSource(factory: TestableDataSource.Factory(), items: [ "Hello", "World" ])
+        dataSource = TypeUnderTest(factory: TypeUnderTest.Factory(), items: [ "Hello", "World" ])
     }
 
     override func tearDown() {
