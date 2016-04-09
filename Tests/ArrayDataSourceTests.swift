@@ -11,7 +11,7 @@ import XCTest
 
 class ArrayDataSourceTests: XCTestCase {
 
-    typealias TypeUnderTest = ArrayDataSource<TestableFactory>
+    typealias TypeUnderTest = ArrayDataSource<TestableFactory, String>
     typealias Cell = TypeUnderTest.Factory.CellType
     typealias Item = TypeUnderTest.Factory.ItemType
     typealias Index = TypeUnderTest.Factory.CellIndexType
@@ -24,7 +24,7 @@ class ArrayDataSourceTests: XCTestCase {
         super.setUp()
         tableView = TestableTable()
         factory = TypeUnderTest.Factory()
-        dataSource = TypeUnderTest(factory: factory, items: [ "Hello", "World" ])
+        dataSource = TypeUnderTest(factory: factory, items: [ "Hello", "World" ]) { $0 }
     }
 
     override func tearDown() {

@@ -11,13 +11,13 @@ import XCTest
 
 class DataSourceTests: XCTestCase {
     
-    typealias TypeUnderTest = ArrayDataSource<TestableFactory>
+    typealias TypeUnderTest = ArrayDataSource<TestableFactory, String>
     
     var dataSource: TypeUnderTest!
 
     override func setUp() {
         super.setUp()
-        dataSource = TypeUnderTest(factory: TypeUnderTest.Factory(), items: [ "Hello", "World" ])
+        dataSource = TypeUnderTest(factory: TypeUnderTest.Factory(), items: [ "Hello", "World" ]) { $0 }
     }
 
     override func tearDown() {
@@ -32,12 +32,16 @@ class DataSourceTypeDefaultImplementation: DataSourceTests {
         XCTAssertEqual(dataSource.numberOfSections, 1)
     }
 
+    func test__totalNumberOfItems() {
+        XCTAssertEqual(dataSource.totalNumberOfItems, 2)
+    }
+
     func test__startIndex() {
         XCTAssertEqual(dataSource.startIndex, 0)
     }
 
     func test__endIndex() {
-        XCTAssertEqual(dataSource.endIndex, 1)
+        XCTAssertEqual(dataSource.endIndex, 2)
     }
 }
 
