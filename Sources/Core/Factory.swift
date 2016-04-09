@@ -30,20 +30,23 @@ public func == <CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathInde
  
  - see: FactoryType
 */
-public class Factory<Item, Cell, SupplementaryView, View, CellIndex, SupplementaryIndex where View: CellBasedViewType, CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathIndexType>: FactoryType {
+public class Factory<V, C, CI, SV, SI, I, T where V: CellBasedViewType, CI: IndexPathIndexType, SI: IndexPathIndexType>: FactoryType {
 
-    public typealias ItemType = Item
-    public typealias CellType = Cell
-    public typealias SupplementaryViewType = SupplementaryView
-    public typealias ViewType = View
-    public typealias CellIndexType = CellIndex
-    public typealias SupplementaryIndexType = SupplementaryIndex
-    public typealias TextType = String
+    public typealias View = V
+
+    public typealias CellIndex = CI
+    public typealias Cell = C
+    public typealias Item = I
+
+    public typealias SupplementaryView = SV
+    public typealias SupplementaryIndex = SI
+
+    public typealias Text = T
 
     public typealias Error = FactoryError<CellIndex, SupplementaryIndex>
     public typealias CellConfig = (cell: Cell, item: Item, index: CellIndex) -> Void
     public typealias SupplementaryViewConfig = (supplementaryView: SupplementaryView, index: SupplementaryIndex) -> Void
-    public typealias SupplementaryTextConfig = (index: SupplementaryIndex) -> String?
+    public typealias SupplementaryTextConfig = (index: SupplementaryIndex) -> Text?
     public typealias GetCellKey = (item: Item, index: CellIndex) -> String
     public typealias GetSupplementaryKey = (index: SupplementaryIndex) -> String
 
@@ -86,9 +89,9 @@ extension Factory: FactorySupplementaryTextRegistrarType {
     }
 }
 
-extension Factory: FactoryCellVendorType {
+extension Factory {
 
-    public func cellForItem(item: Item, inView view: View, atIndex index: CellIndexType) throws -> Cell {
+    public func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) throws -> Cell {
 
         let key = getCellKey?(item: item, index: index) ?? defaultCellKey
         let indexPath = index.indexPath
@@ -107,9 +110,9 @@ extension Factory: FactoryCellVendorType {
     }
 }
 
-extension Factory: FactorySupplementaryViewVendorType {
+extension Factory {
 
-    public func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: ViewType, atIndex index: SupplementaryIndexType) -> SupplementaryView? {
+    public func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: View, atIndex index: SupplementaryIndex) -> SupplementaryView? {
 
         let key = getSupplementaryKey?(index: index) ?? defaultSupplementaryKey
         let indexPath = index.indexPath
@@ -125,9 +128,9 @@ extension Factory: FactorySupplementaryViewVendorType {
     }
 }
 
-extension Factory: FactorySupplementaryTextVendorType {
+extension Factory {
 
-    public func supplementaryTextForKind(kind: SupplementaryElementKind, atIndex index: SupplementaryIndexType) -> TextType? {
+    public func supplementaryTextForKind(kind: SupplementaryElementKind, atIndex index: SupplementaryIndex) -> Text? {
         guard let configure = texts[kind] else { return .None }
         return configure(index: index)
     }
@@ -142,7 +145,7 @@ extension Factory: FactorySupplementaryTextVendorType {
  - see: Factory
  - see: FactoryType
 */
-public class BasicFactory<Item, Cell, SupplementaryView, View where View: CellBasedViewType>: Factory<Item, Cell, SupplementaryView, View, NSIndexPath, NSIndexPath> {
+public class BasicFactory<V, C, SV, I where V: CellBasedViewType>: Factory<V, C, NSIndexPath, SV, NSIndexPath, I, String> {
 
     public override init(cell: GetCellKey? = .None, supplementary: GetSupplementaryKey? = .None) {
         super.init(cell: cell, supplementary: supplementary)

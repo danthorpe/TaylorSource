@@ -20,10 +20,10 @@ import Foundation
 public protocol DataSourceType {
 
     /// The associated index type
-    associatedtype ItemIndexType
+    associatedtype ItemIndex
 
     /// The associated item type
-    associatedtype ItemType
+    associatedtype Item
 
     /// - returns: an optional String, can be used for debug identification
     var identifier: String? { get }
@@ -46,7 +46,7 @@ public protocol DataSourceType {
      - parameter index: An index.
      - returns: An optional item at this index path
      */
-    func itemAtIndex(index: ItemIndexType) throws -> ItemType
+    func itemAtIndex(index: ItemIndex) throws -> Item
 }
 
 /// Default implementations

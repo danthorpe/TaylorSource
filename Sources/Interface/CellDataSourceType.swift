@@ -27,24 +27,24 @@ public protocol CellDataSourceType: DataSourceType {
     var factory: Factory { get }
 
     /// - returns: transform which maps the cell index to the data source index
-    var transformCellIndexToItemIndex: Factory.CellIndexType -> ItemIndexType { get }
+    var transformCellIndexToItemIndex: Factory.CellIndex -> ItemIndex { get }
 
     /// - returns: transform which maps the item to the cell item
-    var transformItemToCellItem: ItemType throws -> Factory.ItemType { get }
+    var transformItemToCellItem: Item throws -> Factory.Item { get }
 
     /**
      The item at index path
      - parameter indexPath: An index path.
      - returns: An optional item at this index path
      */
-    func itemAtIndex(index: Factory.CellIndexType) throws -> Factory.ItemType
+    func itemAtIndex(index: Factory.CellIndex) throws -> Factory.Item
 
     /**
      Vends a configured cell for the item at this index.
      - parameter view: the cell based view (i.e. table view, or collection view)
      - parameter index: the index for the cell.
      */
-    func cellForItemInView(view: Factory.ViewType, atIndex index: Factory.CellIndexType) throws -> Factory.CellType
+    func cellForItemInView(view: Factory.View, atIndex index: Factory.CellIndex) throws -> Factory.Cell
 
     /**
      Vends an optional configured supplementary view for the correct element at index.
@@ -53,7 +53,7 @@ public protocol CellDataSourceType: DataSourceType {
      - parameter index: the index for the supplementary view
      - returns: an optional instance of SupplementaryViewType
      */
-    func supplementaryViewForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.SupplementaryViewType?
+    func supplementaryViewForElementKind(kind: SupplementaryElementKind, inView view: Factory.View, atIndex index: Factory.SupplementaryIndex) -> Factory.SupplementaryView?
 
     /**
      Vends optional text for the supplementary element at index.
@@ -62,7 +62,7 @@ public protocol CellDataSourceType: DataSourceType {
      - parameter index: the index for the supplementary view
      - returns: an optional instance of TextType
      */
-    func supplementaryTextForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.TextType?
+    func supplementaryTextForElementKind(kind: SupplementaryElementKind, inView view: Factory.View, atIndex index: Factory.SupplementaryIndex) -> Factory.Text?
 }
 
 public extension CellDataSourceType {
@@ -74,7 +74,7 @@ public extension CellDataSourceType {
      - parameter index: A cell index.
      - returns: an item for the cell.
      */
-    public func itemAtIndex(index: Factory.CellIndexType) throws -> Factory.ItemType {
+    public func itemAtIndex(index: Factory.CellIndex) throws -> Factory.Item {
         let item = try itemAtIndex(transformCellIndexToItemIndex(index))
         return try transformItemToCellItem(item)
     }
@@ -87,7 +87,7 @@ public extension CellDataSourceType where Factory: FactoryCellVendorType {
      - parameter view: the cell based view (i.e. table view, or collection view)
      - parameter index: the index for the cell.
      */
-    public func cellForItemInView(view: Factory.ViewType, atIndex index: Factory.CellIndexType) throws -> Factory.CellType {
+    public func cellForItemInView(view: Factory.View, atIndex index: Factory.CellIndex) throws -> Factory.Cell {
         let item = try itemAtIndex(index)
         return try factory.cellForItem(item, inView: view, atIndex: index)
     }
@@ -95,28 +95,28 @@ public extension CellDataSourceType where Factory: FactoryCellVendorType {
 
 public extension CellDataSourceType where Factory: FactorySupplementaryViewVendorType {
 
-    public func supplementaryViewForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.SupplementaryViewType? {
+    public func supplementaryViewForElementKind(kind: SupplementaryElementKind, inView view: Factory.View, atIndex index: Factory.SupplementaryIndex) -> Factory.SupplementaryView? {
         return factory.supplementaryViewForKind(kind, inView: view, atIndex: index)
     }
 }
 
 public extension CellDataSourceType where Factory: FactorySupplementaryTextVendorType {
 
-    public func supplementaryTextForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.TextType? {
+    public func supplementaryTextForElementKind(kind: SupplementaryElementKind, inView view: Factory.View, atIndex index: Factory.SupplementaryIndex) -> Factory.Text? {
         return factory.supplementaryTextForKind(kind, atIndex: index)
     }
 }
 
-public extension CellDataSourceType where Factory.CellIndexType == ItemIndexType {
+public extension CellDataSourceType where Factory.CellIndex == ItemIndex {
 
-    var transformCellIndexToItemIndex: Factory.CellIndexType -> ItemIndexType {
+    var transformCellIndexToItemIndex: Factory.CellIndex -> ItemIndex {
         return { $0 }
     }
 }
 
-public extension CellDataSourceType where Factory.ItemType == ItemType {
+public extension CellDataSourceType where Factory.Item == Item {
 
-    var transformItemToCellItem: Factory.ItemType -> ItemType {
+    var transformItemToCellItem: Item -> Factory.Item {
         return { $0 }
     }
 }

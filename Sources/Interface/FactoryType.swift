@@ -6,46 +6,30 @@ import Foundation
 
 /**
  An abstract protocol which defines the associated
- types in use by Factories in TaylorSource.
+ view type in use by FactoryType in TaylorSource.
 */
-public protocol FactoryType {
-
-    /// The type of the model item behind each cell
-    associatedtype ItemType
-
-    /// The type of the cell - i.e. custom cell class
-    associatedtype CellType
-
-    /// The type of the supplementary view
-    associatedtype SupplementaryViewType
+public protocol ViewFactoryType {
 
     /// The type of the containing view, which must be based around cells,
     /// i.e. UITableView, UICollectionView or subclass
-    associatedtype ViewType: CellBasedViewType
-
-    /// The type of the cell index, used to associate additional metadata
-    /// with the index
-    associatedtype CellIndexType: IndexPathIndexType
-
-    /// The type of the supplementary (i.e. header) index, used to
-    /// associate additional metadata with the index
-    associatedtype SupplementaryIndexType: IndexPathIndexType
-
-    /// The type of any associated text, e.g. String, or NSAttributedString
-    associatedtype TextType
-
-    /// The type of the block used to configure cells
-    associatedtype CellConfigurationBlock = (cell: CellType, item: ItemType, index: CellIndexType) -> Void
-
-    /// The type of the block used to configure supplementary views
-    associatedtype SupplementaryViewConfigurationBlock = (supplementaryView: SupplementaryViewType, index: SupplementaryIndexType) -> Void
-
-    /// The type of the block used to configure/get supplementary text
-    associatedtype SupplementaryTextConfigurationBlock = (index: SupplementaryIndexType) -> TextType?
+    associatedtype View: CellBasedViewType
 }
 
 /// A protocol which defines the interface used by a factory to register a cell.
-public protocol FactoryCellRegistrarType: FactoryType {
+public protocol FactoryCellRegistrarType: ViewFactoryType {
+
+    /// The type of the cell - i.e. custom cell class
+    associatedtype Cell
+
+    /// The type of the cell index, used to associate additional metadata
+    /// with the index
+    associatedtype CellIndex: IndexPathIndexType
+
+    /// The type of the model item behind each cell
+    associatedtype Item
+
+    /// The type of the block used to configure cells
+    associatedtype CellConfigurationBlock = (cell: Cell, item: Item, index: CellIndex) -> Void
 
     /// - returns: a key used by default when there is only one cell to register
     var defaultCellKey: String { get }
@@ -58,11 +42,21 @@ public protocol FactoryCellRegistrarType: FactoryType {
      - parameter key: a String used to look up the registration
      - parameter configuration: a block which is used to configure the cell.
     */
-    mutating func registerCell(descriptor: ReusableViewDescriptor, inView view: ViewType, withKey key: String, configuration: CellConfigurationBlock)
+    mutating func registerCell(descriptor: ReusableViewDescriptor, inView view: View, withKey key: String, configuration: CellConfigurationBlock)
 }
 
 /// A protocol which defines the interface used by a factory to register a supplementary view.
-public protocol FactorySupplementaryViewRegistrarType: FactoryType {
+public protocol FactorySupplementaryViewRegistrarType: ViewFactoryType {
+
+    /// The type of the supplementary view
+    associatedtype SupplementaryView
+
+    /// The type of the supplementary (i.e. header) index, used to
+    /// associate additional metadata with the index
+    associatedtype SupplementaryIndex: IndexPathIndexType
+
+    /// The type of the block used to configure supplementary views
+    associatedtype SupplementaryViewConfigurationBlock = (supplementaryView: SupplementaryView, index: SupplementaryIndex) -> Void
 
     /// - returns: a key used by default when there is only one supplementary view to register
     var defaultSupplementaryKey: String { get }
@@ -76,11 +70,17 @@ public protocol FactorySupplementaryViewRegistrarType: FactoryType {
      - parameter key: a String used to look up the registration
      - parameter configuration: a block which is used to configure the view.
     */
-    mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: ViewType, withKey key: String, configuration: SupplementaryViewConfigurationBlock)
+    mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: View, withKey key: String, configuration: SupplementaryViewConfigurationBlock)
 }
 
 /// A protocol which defines the interface used by a factory to register a supplementary text.
-public protocol FactorySupplementaryTextRegistrarType: FactoryType {
+public protocol FactorySupplementaryTextRegistrarType: FactorySupplementaryViewRegistrarType {
+
+    /// The type of any associated text, e.g. String, or NSAttributedString
+    associatedtype Text
+
+    /// The type of the block used to configure/get supplementary text
+    associatedtype SupplementaryTextConfigurationBlock = (index: SupplementaryIndex) -> Text?
 
     /**
      Register a supplementary text.
@@ -92,7 +92,7 @@ public protocol FactorySupplementaryTextRegistrarType: FactoryType {
 }
 
 /// A protocol which defines how the factory vends cells.
-public protocol FactoryCellVendorType: FactoryType {
+public protocol FactoryCellVendorType: FactoryCellRegistrarType {
 
     /**
      Vends a configured cell for the item at the index.
@@ -102,11 +102,11 @@ public protocol FactoryCellVendorType: FactoryType {
      - parameter index: the index of the cell
      - returns: the configured cell
      */
-    func cellForItem(item: ItemType, inView view: ViewType, atIndex index: CellIndexType) throws -> CellType
+    func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) throws -> Cell
 }
 
 /// A protocol which defines how the factory vends supplementary view.
-public protocol FactorySupplementaryViewVendorType: FactoryType {
+public protocol FactorySupplementaryViewVendorType: FactorySupplementaryViewRegistrarType {
 
     /**
      Vends a configured view for the supplementary kind.
@@ -116,11 +116,11 @@ public protocol FactorySupplementaryViewVendorType: FactoryType {
      - parameter index: the index of the cell
      - returns: the configured supplementary view
      */
-    func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: ViewType, atIndex index: SupplementaryIndexType) -> SupplementaryViewType?
+    func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: View, atIndex index: SupplementaryIndex) -> SupplementaryView?
 }
 
 /// A protocol which defines how the factory supplementary text
-public protocol FactorySupplementaryTextVendorType: FactoryType {
+public protocol FactorySupplementaryTextVendorType: FactorySupplementaryTextRegistrarType {
 
     /**
      Vends the configured text for the supplementary kind.
@@ -129,8 +129,23 @@ public protocol FactorySupplementaryTextVendorType: FactoryType {
      - parameter index: the index of the cell
      - returns: the configured text
      */
-    func supplementaryTextForKind(kind: SupplementaryElementKind, atIndex index: SupplementaryIndexType) -> TextType?
+    func supplementaryTextForKind(kind: SupplementaryElementKind, atIndex index: SupplementaryIndex) -> Text?
 }
+
+/**
+ FactoryType is a protocol collection. It is used to define the interface for factories in
+ TaylorSource. Factories are used to manage cell based views. These are views, such as UITableView,
+ which dequeue other views to display content. 
+ 
+ The Factory uses generics to defines the types of the Cell, the Item which is a view model used 
+ to display each Cell, the CellIndex which defines how where in the View the Cell appears.
+ 
+ Similarly, the View will likely have SupplementaryView capabilities, which are views which appear
+ in the view, such as headers and footers. SupplementaryIndex defines their location in the View.
+ 
+ Finally, a view may support supplementary text of type Text. 
+ */
+public typealias FactoryType = protocol<FactoryCellVendorType, FactorySupplementaryViewVendorType, FactorySupplementaryTextVendorType>
 
 public protocol IndexPathIndexType: Equatable {
 
@@ -195,7 +210,7 @@ public extension FactoryCellRegistrarType {
      - parameter view: the view in which to register.
      - parameter configuration: a block which is used to configure the cell.
      */
-    mutating func registerCell(descriptor: ReusableViewDescriptor, inView view: ViewType, configuration: CellConfigurationBlock) {
+    mutating func registerCell(descriptor: ReusableViewDescriptor, inView view: View, configuration: CellConfigurationBlock) {
         registerCell(descriptor, inView: view, withKey: defaultCellKey, configuration: configuration)
     }
 }
@@ -222,7 +237,7 @@ public extension FactorySupplementaryViewRegistrarType {
      - parameter view: the view in which to register.
      - parameter configuration: a block which is used to configure the view.
      */
-    mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: ViewType, configuration: SupplementaryViewConfigurationBlock) {
+    mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: View, configuration: SupplementaryViewConfigurationBlock) {
         registerSupplementaryView(descriptor, kind: kind, inView: view, withKey: defaultSupplementaryKey, configuration: configuration)
     }
 }

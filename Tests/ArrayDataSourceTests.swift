@@ -12,9 +12,9 @@ import XCTest
 class ArrayDataSourceTests: XCTestCase {
 
     typealias TypeUnderTest = BasicDataSource<TestableFactory>
-    typealias Cell = TypeUnderTest.Factory.CellType
-    typealias Item = TypeUnderTest.Factory.ItemType
-    typealias Index = TypeUnderTest.Factory.CellIndexType
+    typealias Cell = TypeUnderTest.Factory.Cell
+    typealias Item = TypeUnderTest.Factory.Item
+    typealias Index = TypeUnderTest.Factory.CellIndex
 
     var tableView: TestableTable!
     var factory: TypeUnderTest.Factory!

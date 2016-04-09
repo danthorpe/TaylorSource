@@ -19,11 +19,10 @@ public class ArrayDataSource<
     Factory, Item
     where
     Factory: FactoryCellVendorType,
-    Factory.CellIndexType == NSIndexPath,
+    Factory.CellIndex == NSIndexPath,
     Factory: FactorySupplementaryViewVendorType,
-    Factory.SupplementaryIndexType == NSIndexPath,
-    Factory: FactorySupplementaryTextVendorType,
-    Factory.TextType == String>: CellDataSourceType {
+    Factory.SupplementaryIndex == NSIndexPath,
+    Factory: FactorySupplementaryTextVendorType>: CellDataSourceType {
 
     public typealias ItemIndexType = Int
     public typealias ItemType = Item
@@ -38,9 +37,9 @@ public class ArrayDataSource<
     public var title: String?
 
     /// - returns: mapper  which maps the cell index to the data source index
-    public let transformCellIndexToItemIndex: Factory.CellIndexType -> Int = { $0.item }
+    public let transformCellIndexToItemIndex: Factory.CellIndex -> Int = { $0.item }
 
-    public let transformItemToCellItem: Item throws -> Factory.ItemType
+    public let transformItemToCellItem: Item throws -> Factory.Item
 
     private var items: [Item]
 
@@ -53,7 +52,7 @@ public class ArrayDataSource<
      - parameter items: an Array of Factory.ItemType
      - parameter transform: a throwing block which maps from Item to Factory.ItemType
     */
-    public init(identifier: String? = .None, factory: Factory, items: [Item], transform: Item throws -> Factory.ItemType) {
+    public init(identifier: String? = .None, factory: Factory, items: [Item], transform: Item throws -> Factory.Item) {
         self.identifier = identifier
         self.factory = factory
         self.items = items
@@ -89,11 +88,10 @@ public final class BasicDataSource<
     Factory
     where
     Factory: FactoryCellVendorType,
-    Factory.CellIndexType == NSIndexPath,
+    Factory.CellIndex == NSIndexPath,
     Factory: FactorySupplementaryViewVendorType,
-    Factory.SupplementaryIndexType == NSIndexPath,
-    Factory: FactorySupplementaryTextVendorType,
-    Factory.TextType == String>: ArrayDataSource<Factory, Factory.ItemType> {
+    Factory.SupplementaryIndex == NSIndexPath,
+    Factory: FactorySupplementaryTextVendorType>: ArrayDataSource<Factory, Factory.Item> {
 
     /**
      Initializes an ArrayDataSource. It requires a factory, with an
@@ -103,7 +101,7 @@ public final class BasicDataSource<
      - parameter factory: the factory instance
      - parameter items: an Array of Factory.ItemType
      */
-    public init(identifier: String? = .None, factory: Factory, items: [Factory.ItemType]) {
+    public init(identifier: String? = .None, factory: Factory, items: [Factory.Item]) {
         super.init(identifier: identifier, factory: factory, items: items, transform: { $0 })
     }
 }
