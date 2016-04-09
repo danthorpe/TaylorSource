@@ -8,7 +8,7 @@
 
 import XCTest
 
-func XCTAssertThrowsErrorEqual<E, T where E: ErrorType, E: Equatable>(@autoclosure expression: () throws -> T, @autoclosure _ expectedError: () -> E, @autoclosure _ message: () -> String = "", file: StaticString = #file, line: UInt = #line) {
+func XCTAssertThrowsError<E, T where E: ErrorType, E: Equatable>(@autoclosure expression: () throws -> T, @autoclosure _ expectedError: () -> E, @autoclosure _ message: () -> String = "", file: StaticString = #file, line: UInt = #line) {
 
     var didCatchCorrectError = false
 

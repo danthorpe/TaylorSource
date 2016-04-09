@@ -87,7 +87,7 @@ class FactoryCellRegistrarTypeTests: FactoryTests {
 class FactoryCellVendorTypeTests: FactoryTests {
 
     func test__cellForItem__no_cell_registered__throws_error() {
-        XCTAssertThrowsErrorEqual(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.NoCellRegisteredAtIndex(indexPath))
+        XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.NoCellRegisteredAtIndex(indexPath))
     }
 
     func test__cellForItem__incorrect_cell_type_registered__throws_error() {
@@ -182,7 +182,6 @@ class FactoryErrorTests: XCTestCase {
     func test__equality__different_case() {
         XCTAssertNotEqual(Error.NoCellRegisteredAtIndex(indexPath1), Error.InvalidCellRegisteredAtIndexWithIdentifier(indexPath2, "Hello"))
     }
-
 }
 
 class SupplementaryElementKindTests: XCTestCase {

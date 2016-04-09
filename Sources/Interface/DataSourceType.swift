@@ -17,9 +17,7 @@ public protocol DataSourceType {
     /// The associated index type
     associatedtype Index
 
-    associatedtype CellIndexMap = Index -> Factory.CellIndexType
-
-    associatedtype SupplementaryViewIndexMap = Index -> Factory.CellIndexType
+    associatedtype CellIndexMap = Factory.CellIndexType -> Index
 
     /// - returns: an optional identifier
     var identifier: String? { get }
@@ -55,7 +53,7 @@ public protocol DataSourceType {
      - parameter view: the cell based view (i.e. table view, or collection view)
      - parameter index: the index for the cell.
     */
-    func cellForItemInView(view: Factory.ViewType, atIndex index: Index) throws -> Factory.CellType
+    func cellForItemInView(view: Factory.ViewType, atIndex index: Factory.CellIndexType) throws -> Factory.CellType
 
     /**
      Vends an optional configured supplementary view for the correct element at index.
@@ -93,7 +91,7 @@ public extension DataSourceType {
 
 public extension DataSourceType where Factory.CellIndexType == Index {
 
-    var cellIndexMapper: Index -> Factory.CellIndexType {
+    var cellIndexMapper: Factory.CellIndexType -> Index {
         return { $0 }
     }
 }

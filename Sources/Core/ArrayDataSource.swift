@@ -24,16 +24,16 @@ public final class ArrayDataSource<
 
     public var title: String?
 
-    public var cellIndexMapper: Int -> NSIndexPath {
-        return { NSIndexPath(forItem: $0, inSection: 0) }
-    }
+    public let cellIndexMapper: NSIndexPath -> Int = { $0.item }
 
     private var items: [Factory.ItemType]
+    private var range: Range<Int>
 
     public init(id: String? = .None, factory: Factory, items: [Factory.ItemType]) {
         self.identifier = id
         self.factory = factory
         self.items = items
+        self.range = items.startIndex..<items.endIndex
     }
 
     public func numberOfItemsInSection(section: Int) -> Int {
@@ -41,13 +41,13 @@ public final class ArrayDataSource<
     }
 
     public func itemAtIndex(index: Int) throws -> Factory.ItemType {
-        guard startIndex <= index && index < endIndex else { throw DataSourceError.NoItemAtIndex(index) }
+        guard range.contains(index) else { throw DataSourceError.NoItemAtIndex(index) }
         return items[index]
     }
 
-    public func cellForItemInView(view: Factory.ViewType, atIndex index: Int) throws -> Factory.CellType {
-        let item = try itemAtIndex(index)
-        return try factory.cellForItem(item, inView: view, atIndex: cellIndexMapper(index))
+    public func cellForItemInView(view: Factory.ViewType, atIndex index: Factory.CellIndexType) throws -> Factory.CellType {
+        let item = try itemAtIndex(cellIndexMapper(index))
+        return try factory.cellForItem(item, inView: view, atIndex: index)
     }
 
     public func supplementaryViewForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.SupplementaryViewType? {
