@@ -10,11 +10,12 @@ import Foundation
 
 /**
  ArrayDataSource is a DataSourceType which is backed
- by a Swift Array.
+ by a Swift Array. the type of its items may differ from
+ those of the Factory's ItemType.
  
  By definition, it only has one "section".
 */
-public final class ArrayDataSource<
+public class ArrayDataSource<
     Factory, Item
     where
     Factory: FactoryCellVendorType,
@@ -37,7 +38,7 @@ public final class ArrayDataSource<
     public var title: String?
 
     /// - returns: mapper  which maps the cell index to the data source index
-    public let transformCellIndexToItemIndex: NSIndexPath -> Int = { $0.item }
+    public let transformCellIndexToItemIndex: Factory.CellIndexType -> Int = { $0.item }
 
     public let transformItemToCellItem: Item throws -> Factory.ItemType
 
@@ -50,6 +51,7 @@ public final class ArrayDataSource<
      - parameter identifier: an optiona; string identifier, defaults to .None
      - parameter factory: the factory instance
      - parameter items: an Array of Factory.ItemType
+     - parameter transform: a throwing block which maps from Item to Factory.ItemType
     */
     public init(identifier: String? = .None, factory: Factory, items: [Item], transform: Item throws -> Factory.ItemType) {
         self.identifier = identifier
@@ -78,10 +80,30 @@ public final class ArrayDataSource<
     }
 }
 
-//extension ArrayDataSource where ItemType == Factory.ItemType {
-//
-//    public convenience init(identifier: String? = .None, factory: Factory, items: [Item]) {
-//        self.dynamicType.init(identifier: identifier, factory: factory, items: items, transform: { $0 })
-//    }
-//}
+/**
+ The BasicDataSource is an ArrayDataSource subclass where the
+ ItemType is the same as the Factory's ItemType, no transform
+ is required.
+ */
+public final class BasicDataSource<
+    Factory
+    where
+    Factory: FactoryCellVendorType,
+    Factory.CellIndexType == NSIndexPath,
+    Factory: FactorySupplementaryViewVendorType,
+    Factory.SupplementaryIndexType == NSIndexPath,
+    Factory: FactorySupplementaryTextVendorType,
+    Factory.TextType == String>: ArrayDataSource<Factory, Factory.ItemType> {
 
+    /**
+     Initializes an ArrayDataSource. It requires a factory, with an
+     Array of values.
+
+     - parameter identifier: an optiona; string identifier, defaults to .None
+     - parameter factory: the factory instance
+     - parameter items: an Array of Factory.ItemType
+     */
+    public init(identifier: String? = .None, factory: Factory, items: [Factory.ItemType]) {
+        super.init(identifier: identifier, factory: factory, items: items, transform: { $0 })
+    }
+}
