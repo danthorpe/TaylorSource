@@ -82,6 +82,8 @@ public extension DataSourceType {
     }
 }
 
+
+/// Error type used by types which conform to DataSourceType
 public enum DataSourceError<Index: Equatable>: ErrorType, Equatable {
     case NoItemAtIndex(Index)
 }

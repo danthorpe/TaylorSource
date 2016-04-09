@@ -15,14 +15,7 @@ import Foundation
  
  By definition, it only has one "section".
 */
-public class ArrayDataSource<
-    Factory, Item
-    where
-    Factory: FactoryCellVendorType,
-    Factory.CellIndex == NSIndexPath,
-    Factory: FactorySupplementaryViewVendorType,
-    Factory.SupplementaryIndex == NSIndexPath,
-    Factory: FactorySupplementaryTextVendorType>: CellDataSourceType {
+public class ArrayDataSource<Factory, Item where Factory: FactoryType>: CellDataSourceType {
 
     public typealias ItemIndexType = Int
     public typealias ItemType = Item
@@ -37,7 +30,7 @@ public class ArrayDataSource<
     public var title: String?
 
     /// - returns: mapper  which maps the cell index to the data source index
-    public let transformCellIndexToItemIndex: Factory.CellIndex -> Int = { $0.item }
+    public let transformCellIndexToItemIndex: Factory.CellIndex -> Int = { $0.indexPath.item }
 
     public let transformItemToCellItem: Item throws -> Factory.Item
 
@@ -76,6 +69,20 @@ public class ArrayDataSource<
     public func itemAtIndex(index: Int) throws -> Item {
         guard range.contains(index) else { throw DataSourceError.NoItemAtIndex(index) }
         return items[index]
+    }
+}
+
+extension ArrayDataSource: CollectionType {
+
+    public subscript(i: Int) -> Item {
+        return items[i]
+    }
+}
+
+extension ArrayDataSource: SequenceType {
+
+    public func generate() -> Array<Item>.Generator {
+        return items.generate()
     }
 }
 

@@ -54,6 +54,31 @@ extension ArrayDataSourceTests {
 
 extension ArrayDataSourceTests {
 
+    func test__subscript() {
+        XCTAssertEqual(dataSource[0], "Hello")
+        XCTAssertEqual(dataSource[1], "World")
+    }
+}
+
+extension ArrayDataSourceTests {
+
+    func test__generator() {
+        for (i, item) in dataSource.enumerate() {
+            switch i {
+            case 0:
+                XCTAssertEqual(item, "Hello")
+            case 1:
+                XCTAssertEqual(item, "World")
+            default:
+                XCTFail("Unexpected item: \(item)")
+            }
+        }
+    }
+}
+
+
+extension ArrayDataSourceTests {
+
     func test__cellForItemInView__returns_configured_cell() {
         let indexPath = NSIndexPath(forRow: 1, inSection: 0)
         var didConfigureCellWithItemAtIndex: (Cell, Item, Index)? = .None
