@@ -68,41 +68,13 @@ public final class ArrayDataSource<
     }
 
     /**
-     The item at index path
+     The data item at index
      - parameter index: An index.
-     - returns: An optional item at this index path
+     - returns: the item at this index, else throws a DataSourceError
      */
     public func itemAtIndex(index: Int) throws -> Item {
         guard range.contains(index) else { throw DataSourceError.NoItemAtIndex(index) }
         return items[index]
-    }
-
-    /**
-     The item at index path
-     - parameter index: An index.
-     - returns: An optional item at this index path
-     */
-    public func itemAtIndex(index: Factory.CellIndexType) throws -> Factory.ItemType {
-        let item = try itemAtIndex(transformCellIndexToItemIndex(index))
-        return try transformItemToCellItem(item)
-    }
-
-    /**
-     Vends a configured cell for the item at this index.
-     - parameter view: the cell based view (i.e. table view, or collection view)
-     - parameter index: the index for the cell.
-     */
-    public func cellForItemInView(view: Factory.ViewType, atIndex index: Factory.CellIndexType) throws -> Factory.CellType {
-        let item = try itemAtIndex(index)
-        return try factory.cellForItem(item, inView: view, atIndex: index)
-    }
-
-    public func supplementaryViewForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.SupplementaryViewType? {
-        return factory.supplementaryViewForKind(kind, inView: view, atIndex: index)
-    }
-
-    public func supplementaryTextForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.TextType? {
-        return factory.supplementaryTextForKind(kind, atIndex: index)
     }
 }
 

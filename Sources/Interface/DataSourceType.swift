@@ -91,20 +91,14 @@ public protocol CellDataSourceType: DataSourceType {
     /// The associated factory type
     associatedtype Factory: FactoryType
 
-    /// An associated block type to map from the cell index type to the item index type
-    associatedtype TransformCellIndexToItemIndex = Factory.CellIndexType -> ItemIndexType
-
-    /// An associated block type to map from the item type to the factory cell item type
-    associatedtype TransformItemToCellItem = ItemType throws -> Factory.ItemType
-
     /// - returns: the Factory
     var factory: Factory { get }
 
     /// - returns: transform which maps the cell index to the data source index
-    var transformCellIndexToItemIndex: TransformCellIndexToItemIndex { get }
+    var transformCellIndexToItemIndex: Factory.CellIndexType -> ItemIndexType { get }
 
     /// - returns: transform which maps the item to the cell item
-    var transformItemToCellItem: TransformItemToCellItem { get }
+    var transformItemToCellItem: ItemType throws -> Factory.ItemType { get }
 
     /**
      The item at index path
@@ -139,6 +133,48 @@ public protocol CellDataSourceType: DataSourceType {
     func supplementaryTextForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.TextType?
 }
 
+public extension CellDataSourceType {
+
+    /**
+     The cell item at the cell index. This method will transform the cell
+     index into an index into the data source, try to get the data item,
+     and then transform that into a cell item.
+     - parameter index: A cell index.
+     - returns: an item for the cell.
+     */
+    public func itemAtIndex(index: Factory.CellIndexType) throws -> Factory.ItemType {
+        let item = try itemAtIndex(transformCellIndexToItemIndex(index))
+        return try transformItemToCellItem(item)
+    }
+}
+
+public extension CellDataSourceType where Factory: FactoryCellVendorType {
+
+    /**
+     Vends a configured cell for the item at this index.
+     - parameter view: the cell based view (i.e. table view, or collection view)
+     - parameter index: the index for the cell.
+     */
+    public func cellForItemInView(view: Factory.ViewType, atIndex index: Factory.CellIndexType) throws -> Factory.CellType {
+        let item = try itemAtIndex(index)
+        return try factory.cellForItem(item, inView: view, atIndex: index)
+    }
+}
+
+public extension CellDataSourceType where Factory: FactorySupplementaryViewVendorType {
+
+    public func supplementaryViewForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.SupplementaryViewType? {
+        return factory.supplementaryViewForKind(kind, inView: view, atIndex: index)
+    }
+}
+
+public extension CellDataSourceType where Factory: FactorySupplementaryTextVendorType {
+
+    public func supplementaryTextForElementKind(kind: SupplementaryElementKind, inView view: Factory.ViewType, atIndex index: Factory.SupplementaryIndexType) -> Factory.TextType? {
+        return factory.supplementaryTextForKind(kind, atIndex: index)
+    }
+}
+
 public extension CellDataSourceType where Factory.CellIndexType == ItemIndexType {
 
     var transformCellIndexToItemIndex: Factory.CellIndexType -> ItemIndexType {
@@ -152,7 +188,6 @@ public extension CellDataSourceType where Factory.ItemType == ItemType {
         return { $0 }
     }
 }
-
 
 public enum DataSourceError<Index: Equatable>: ErrorType, Equatable {
     case NoItemAtIndex(Index)
