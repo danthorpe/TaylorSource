@@ -43,6 +43,8 @@ public struct TableViewDataSourceProvider<
     public init(_ provider: DataSourceProvider) {
         self.provider = provider
 
+        var bridged: BridgedTableViewDataSource
+
         let basicTableViewDataSource = BasicTableViewDataSource(
             numberOfSections: provider.dataSource.numberOfSections,
             numberOfRowsInSection: provider.dataSource.numberOfRowsInSection,
@@ -50,7 +52,17 @@ public struct TableViewDataSourceProvider<
             titleForHeaderInSection: provider.dataSource.titleForHeaderInSection,
             titleForFooterInSection: provider.dataSource.titleForFooterInSection)
 
-        self.bridgedTableViewDataSource = .Readonly(basicTableViewDataSource)
+        bridged = .Readonly(basicTableViewDataSource)
+
+        if provider.editor.capability.contains(Edit.Capability.InsertDelete) {
+            bridged = bridged.addInsertDeleteCapability(provider.editor)
+        }
+
+        if provider.editor.capability.contains(Edit.Capability.Full) {
+            bridged = bridged.addFullEditableCapability(provider.editor)
+        }
+
+        self.bridgedTableViewDataSource = bridged
     }
 }
 
@@ -68,6 +80,12 @@ extension TableViewDataSourceProvider: DataSourceProviderType {
     }
 }
 
+extension TableViewDataSourceProvider: UITableViewDataSourceProvider {
+
+    public var tableViewDataSource: UITableViewDataSource {
+        return bridgedTableViewDataSource.tableViewDataSource
+    }
+}
 
 internal class BasicTableViewDataSource: NSObject, UITableViewDataSource {
 
@@ -123,6 +141,96 @@ internal class BasicTableViewDataSource: NSObject, UITableViewDataSource {
     }
 }
 
+internal class InsertDeleteTableViewDataSource: BasicTableViewDataSource {
+
+    typealias CanEditRowAtIndexPath = (UITableView, NSIndexPath) -> Bool
+    typealias CommitEditingStyleForRowAtIndexPath = (UITableView, UITableViewCellEditingStyle, NSIndexPath) -> Void
+
+    let canEditRowAtIndexPath: CanEditRowAtIndexPath
+    let commitEditingStyleForRowAtIndexPath: CommitEditingStyleForRowAtIndexPath
+
+    init(basicTableViewDataSource basic: BasicTableViewDataSource, canEditRowAtIndexPath: CanEditRowAtIndexPath, commitEditingStyleForRowAtIndexPath: CommitEditingStyleForRowAtIndexPath) {
+
+        self.canEditRowAtIndexPath = canEditRowAtIndexPath
+        self.commitEditingStyleForRowAtIndexPath = commitEditingStyleForRowAtIndexPath
+        super.init(numberOfSections: basic.numberOfSections, numberOfRowsInSection: basic.numberOfRowsInSection, cellForRowAtIndexPath: basic.cellForRowAtIndexPath, titleForHeaderInSection: basic.titleForHeaderInSection, titleForFooterInSection: basic.titleForFooterInSection)
+    }
+
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return canEditRowAtIndexPath(tableView, indexPath)
+    }
+
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        commitEditingStyleForRowAtIndexPath(tableView, editingStyle, indexPath)
+    }
+}
+
+internal class EditableTableViewDataSource: InsertDeleteTableViewDataSource {
+
+    typealias CanMoveRowAtIndexPath = (UITableView, NSIndexPath) -> Bool
+    typealias MoveRowAtIndexPathToIndexPath = (UITableView, NSIndexPath, NSIndexPath) -> Void
+
+    let canMoveRowAtIndexPath: CanMoveRowAtIndexPath
+    let moveRowAtIndexPathToIndexPath: MoveRowAtIndexPathToIndexPath
+
+    init(insertDeleteTableViewDataSource edit: InsertDeleteTableViewDataSource, canMoveRowAtIndexPath: CanMoveRowAtIndexPath, moveRowAtIndexPathToIndexPath: MoveRowAtIndexPathToIndexPath) {
+        self.canMoveRowAtIndexPath = canMoveRowAtIndexPath
+        self.moveRowAtIndexPathToIndexPath = moveRowAtIndexPathToIndexPath
+        super.init(basicTableViewDataSource: edit, canEditRowAtIndexPath: edit.canEditRowAtIndexPath, commitEditingStyleForRowAtIndexPath: edit.commitEditingStyleForRowAtIndexPath)
+    }
+}
+
+internal enum BridgedTableViewDataSource: UITableViewDataSourceProvider {
+    case Readonly(BasicTableViewDataSource)
+    case InsertDelete(InsertDeleteTableViewDataSource)
+    case Editable(EditableTableViewDataSource)
+
+    var tableViewDataSource: UITableViewDataSource {
+        switch self {
+        case .Readonly(let readonly):
+            return readonly
+        case .InsertDelete(let insertDelete):
+            return insertDelete
+        case .Editable(let editable):
+            return editable
+        }
+    }
+
+    func addInsertDeleteCapability(editor: DataSourceEditorType) -> BridgedTableViewDataSource {
+        guard editor.capability.contains(Edit.Capability.InsertDelete), case let .Readonly(basic) = self else { return self }
+
+        let insertDeleteTableViewDataSource = InsertDeleteTableViewDataSource(
+            basicTableViewDataSource: basic,
+            canEditRowAtIndexPath: { [unowned editor] _, indexPath in
+                editor.canEditItemAtIndexPath!(indexPath: indexPath)
+            },
+            commitEditingStyleForRowAtIndexPath: { [unowned editor] _, editingStyle, indexPath in
+                if let action = Edit.Action(rawValue: editingStyle) {
+                    editor.commitEditActionForItemAtIndexPath?(action: action, indexPath: indexPath)
+                }
+            }
+        )
+
+        return .InsertDelete(insertDeleteTableViewDataSource)
+    }
+
+    func addFullEditableCapability(editor: DataSourceEditorType) -> BridgedTableViewDataSource {
+        guard editor.capability.contains(Edit.Capability.InsertDelete), case let .InsertDelete(insertDelete) = self else { return self }
+
+        let editableTableViewDataSource = EditableTableViewDataSource(
+            insertDeleteTableViewDataSource: insertDelete,
+            canMoveRowAtIndexPath: { [unowned editor] _, indexPath in
+                editor.canMoveItemAtIndexPath!(indexPath: indexPath)
+            },
+            moveRowAtIndexPathToIndexPath: { [unowned editor] _, from, to in
+                editor.moveItemAtIndexPathToIndexPath?(from: from, to: to)
+            }
+        )
+
+        return .Editable(editableTableViewDataSource)
+    }
+}
+
 internal extension CellDataSourceType {
 
     var numberOfSections: BasicTableViewDataSource.NumberOfSections {
@@ -158,17 +266,5 @@ internal extension CellDataSourceType where Factory.View: TableViewType, Factory
     }
 }
 
-
-
-internal enum BridgedTableViewDataSource: UITableViewDataSourceProvider {
-    case Readonly(BasicTableViewDataSource)
-
-    var tableViewDataSource: UITableViewDataSource {
-        switch self {
-        case .Readonly(let readonly):
-            return readonly
-        }
-    }
-}
 
 

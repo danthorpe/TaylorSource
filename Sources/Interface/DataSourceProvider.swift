@@ -23,7 +23,7 @@ public protocol DataSourceProviderType {
     associatedtype DataSource: DataSourceType
 
     /// The associated editor type
-    associatedtype Editor: DataSourceEditor
+    associatedtype Editor: DataSourceEditorType
 
     /// - returns: the datasource
     var dataSource: DataSource { get }

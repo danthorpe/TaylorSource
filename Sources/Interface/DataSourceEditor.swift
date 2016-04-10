@@ -8,77 +8,107 @@
 
 import Foundation
 
-/**
- Enum which describes edit actions for a data source. It uses
- UITableViewCellEditingStyle as it's rawValue.
-*/
-public enum DataSourceEditAction: RawRepresentable {
-    case None, Insert, Delete
+/// Namespace for Edit related types
+public struct Edit {
 
-    /// - returns: the rawValue is a UITableViewCellEditingStyle
-    public var rawValue: UITableViewCellEditingStyle {
-        switch self {
-        case .None: return .None
-        case .Insert: return .Insert
-        case .Delete: return .Delete
+    /**
+     Enum which describes edit actions for a data source. It uses
+     UITableViewCellEditingStyle as it's rawValue.
+     */
+    public enum Action: RawRepresentable {
+        case None, Insert, Delete
+
+        /// - returns: the rawValue is a UITableViewCellEditingStyle
+        public var rawValue: UITableViewCellEditingStyle {
+            switch self {
+            case .None: return .None
+            case .Insert: return .Insert
+            case .Delete: return .Delete
+            }
+        }
+
+        /// init with a rawValue of UITableViewCellEditingStyle
+        public init?(rawValue: UITableViewCellEditingStyle) {
+            switch rawValue {
+            case .None:
+                self = .None
+            case .Insert:
+                self = .Insert
+            case .Delete:
+                self = .Delete
+            }
         }
     }
 
-    /// init with a rawValue of UITableViewCellEditingStyle
-    public init?(rawValue: UITableViewCellEditingStyle) {
-        switch rawValue {
-        case .None:
-            self = .None
-        case .Insert:
-            self = .Insert
-        case .Delete:
-            self = .Delete
+    public struct Capability: OptionSetType {
+        public static let None = Capability(rawValue: 0)
+        public static let InsertDelete = Capability(rawValue: 1)
+        public static let Move = Capability(rawValue: 2)
+        public static let Full: Capability = [InsertDelete, Move]
+
+        public let rawValue: Int
+
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
         }
     }
+
+    /// Block type which returns a bool indicating whether the item at the index path is editable
+    public typealias CanEditItemAtIndexPath = (indexPath: NSIndexPath) -> Bool
+
+    /// Block type which commits the edit action for the item at the index path
+    public typealias CommitEditActionForItemAtIndexPath = (action: Action, indexPath: NSIndexPath) -> Void
+
+    /// Block type which returns the edit action for the item at index path
+    public typealias EditActionForItemAtIndexPath = (indexPath: NSIndexPath) -> Action
+
+    /// Block type which returns a bool indicating whether the item at index path can be moved
+    public typealias CanMoveItemAtIndexPath = (indexPath: NSIndexPath) -> Bool
+
+    /// Block type which commits the move of an item from one index path to another.
+    public typealias MoveItemAtIndexPathToIndexPath = (from: NSIndexPath, to: NSIndexPath) -> Void
 }
-
-/// Block type which returns a bool indicating whether the item at the index path is editable
-public typealias CanEditItemAtIndexPath = (indexPath: NSIndexPath) -> Bool
-
-/// Block type which commits the edit action for the item at the index path
-public typealias CommitEditActionForItemAtIndexPath = (action: DataSourceEditAction, indexPath: NSIndexPath) -> Void
-
-/// Block type which returns the edit action for the item at index path
-public typealias EditActionForItemAtIndexPath = (indexPath: NSIndexPath) -> DataSourceEditAction
-
-/// Block type which returns a bool indicating whether the item at index path can be moved
-public typealias CanMoveItemAtIndexPath = (indexPath: NSIndexPath) -> Bool
-
-/// Block type which commits the move of an item from one index path to another.
-public typealias CommitMoveItemAtIndexPathToIndexPath = (from: NSIndexPath, to: NSIndexPath) -> Void
 
 /// An interface for a DataSource Editor
-public protocol DataSourceEditor {
+public protocol DataSourceEditorType: class {
 
     /// - returns: an optional CanEditItemAtIndexPath block
-    var canEditItemAtIndexPath: CanEditItemAtIndexPath? { get }
+    var canEditItemAtIndexPath: Edit.CanEditItemAtIndexPath? { get }
 
     /// - returns: an optional CommitEditActionForItemAtIndexPath block
-    var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? { get }
+    var commitEditActionForItemAtIndexPath: Edit.CommitEditActionForItemAtIndexPath? { get }
 
     /// - returns: an optional EditActionForItemAtIndexPath block
-    var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? { get }
+    var editActionForItemAtIndexPath: Edit.EditActionForItemAtIndexPath? { get }
 
     /// - returns: an optional CanMoveItemAtIndexPath block
-    var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? { get }
+    var canMoveItemAtIndexPath: Edit.CanMoveItemAtIndexPath? { get }
 
     /// - returns: an optional CommitMoveItemAtIndexPathToIndexPath block
-    var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? { get }
+    var moveItemAtIndexPathToIndexPath: Edit.MoveItemAtIndexPathToIndexPath? { get }
 }
 
-public extension DataSourceEditor {
+extension DataSourceEditorType {
 
-    /// - returns: a Bool to indicate whether editing is fully supported
-    var supportsEditing: Bool {
-        return canEditItemAtIndexPath != nil &&
-            commitEditActionForItemAtIndexPath != nil &&
-            canMoveItemAtIndexPath != nil &&
-            commitMoveItemAtIndexPathToIndexPath != nil
+    var supportsEdit: Bool {
+        return canEditItemAtIndexPath != nil && commitEditActionForItemAtIndexPath != nil
+    }
+
+    var supportsMove: Bool {
+        return canMoveItemAtIndexPath != nil && moveItemAtIndexPathToIndexPath != nil
+    }
+
+    public var capability: Edit.Capability {
+        switch (supportsEdit, supportsMove) {
+        case (true, false):
+            return Edit.Capability.InsertDelete
+        case (false, true):
+            return Edit.Capability.Move
+        case (true, true):
+            return Edit.Capability.Full
+        default:
+            return Edit.Capability.None
+        }
     }
 }
 
@@ -86,22 +116,22 @@ public extension DataSourceEditor {
  Creates a NoEditor which can be used to make types conform to DataSourceProvider
  when the underlying data source does not support editing.
 */
-public struct NoEditor: DataSourceEditor {
+public class NoEditor: DataSourceEditorType {
 
     /// - returns: .None
-    public let canEditItemAtIndexPath: CanEditItemAtIndexPath? = .None
+    public let canEditItemAtIndexPath: Edit.CanEditItemAtIndexPath? = .None
 
     /// returns: .None
-    public let commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? = .None
+    public let commitEditActionForItemAtIndexPath: Edit.CommitEditActionForItemAtIndexPath? = .None
 
     /// returns: .None
-    public let editActionForItemAtIndexPath: EditActionForItemAtIndexPath? = .None
+    public let editActionForItemAtIndexPath: Edit.EditActionForItemAtIndexPath? = .None
 
     /// returns: .None
-    public let canMoveItemAtIndexPath: CanMoveItemAtIndexPath? = .None
+    public let canMoveItemAtIndexPath: Edit.CanMoveItemAtIndexPath? = .None
 
     /// returns: .None
-    public let commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? = .None
+    public let moveItemAtIndexPathToIndexPath: Edit.MoveItemAtIndexPathToIndexPath? = .None
 
     /// - returns: a NoEditor value
     public init() { }
@@ -111,22 +141,22 @@ public struct NoEditor: DataSourceEditor {
  Creates a Editor which can be used to make types conform to DataSourceProvider
  when the underlying data source supports editing.
  */
-public struct Editor: DataSourceEditor {
+public class Editor: DataSourceEditorType {
 
     /// - returns: an optional CanEditItemAtIndexPath block
-    public let canEditItemAtIndexPath: CanEditItemAtIndexPath?
+    public let canEditItemAtIndexPath: Edit.CanEditItemAtIndexPath?
 
     /// returns: an optional CommitEditActionForItemAtIndexPath block
-    public let commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath?
+    public let commitEditActionForItemAtIndexPath: Edit.CommitEditActionForItemAtIndexPath?
 
     /// returns: an optional CommitEditActionForItemAtIndexPath block
-    public let editActionForItemAtIndexPath: EditActionForItemAtIndexPath?
+    public let editActionForItemAtIndexPath: Edit.EditActionForItemAtIndexPath?
 
     /// returns: an optional CanMoveItemAtIndexPath block
-    public let canMoveItemAtIndexPath: CanMoveItemAtIndexPath?
+    public let canMoveItemAtIndexPath: Edit.CanMoveItemAtIndexPath?
 
     /// returns: an optional CommitMoveItemAtIndexPathToIndexPath block
-    public let commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath?
+    public let moveItemAtIndexPathToIndexPath: Edit.MoveItemAtIndexPathToIndexPath?
 
     /**
      Creates an Editor value.
@@ -138,16 +168,16 @@ public struct Editor: DataSourceEditor {
      - returns: an Editor value with the provided blocks
     */
     public init(
-        canEdit: CanEditItemAtIndexPath? = .None,
-        commitEdit: CommitEditActionForItemAtIndexPath? = .None,
-        editAction: EditActionForItemAtIndexPath? = .None,
-        canMove: CanMoveItemAtIndexPath? = .None,
-        commitMove: CommitMoveItemAtIndexPathToIndexPath? = .None) {
+        canEdit: Edit.CanEditItemAtIndexPath? = .None,
+        commitEdit: Edit.CommitEditActionForItemAtIndexPath? = .None,
+        editAction: Edit.EditActionForItemAtIndexPath? = .None,
+        canMove: Edit.CanMoveItemAtIndexPath? = .None,
+        move: Edit.MoveItemAtIndexPathToIndexPath? = .None) {
         canEditItemAtIndexPath = canEdit
         commitEditActionForItemAtIndexPath = commitEdit
         editActionForItemAtIndexPath = editAction
         canMoveItemAtIndexPath = canMove
-        commitMoveItemAtIndexPathToIndexPath = commitMove
+        moveItemAtIndexPathToIndexPath = move
     }
 }
 
