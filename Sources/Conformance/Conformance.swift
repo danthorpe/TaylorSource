@@ -44,6 +44,7 @@ extension Int: ConfigurationIndexType {
 // MARK: - UITableView
 
 extension UITableView: ReusableCellBasedViewType {
+    public typealias Cell = UITableViewCell
 
     public func registerNib(nib: UINib, withIdentifier reuseIdentifier: String) {
         registerNib(nib, forCellReuseIdentifier: reuseIdentifier)
@@ -53,8 +54,8 @@ extension UITableView: ReusableCellBasedViewType {
         registerClass(aClass, forCellReuseIdentifier: reuseIdentifier)
     }
 
-    public func dequeueCellWithIdentifier(identifier: String, atIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath)
+    public func dequeueCellWithIdentifier(identifier: String, atIndex index: CellIndex) -> UITableViewCell {
+        return dequeueReusableCellWithIdentifier(identifier, forIndexPath: index)
     }
 }
 
@@ -68,7 +69,7 @@ extension UITableView: ReusableSupplementaryViewBasedViewType {
         registerClass(aClass, forHeaderFooterViewReuseIdentifier: reuseIdentifier)
     }
 
-    public func dequeueSupplementaryViewWithIdentifier(identifier: String, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> UITableViewHeaderFooterView? {
+    public func dequeueSupplementaryViewWithIdentifier(identifier: String, kind: SupplementaryElementKind, atIndex index: SupplementaryIndex) -> UITableViewHeaderFooterView? {
         return dequeueReusableHeaderFooterViewWithIdentifier(identifier)
     }
 }

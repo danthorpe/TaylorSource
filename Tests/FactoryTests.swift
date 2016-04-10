@@ -17,7 +17,8 @@ class FactoryTests: XCTestCase {
     var tableView: TestableFactory.View!
     var cellIdentifier: String!
     var viewIdentifier: String!
-    var indexPath: TestableFactory.CellIndex!
+    var cellIndex: TestableFactory.CellIndex!
+    var supplementaryIndex: TestableFactory.SupplementaryIndex!
     var cell: TestableFactory.Cell!
     var supplementaryView: TestableFactory.SupplementaryView!
     var item: TestableFactory.Item!
@@ -28,7 +29,8 @@ class FactoryTests: XCTestCase {
         tableView = TestableFactory.View()
         cellIdentifier = "Test Cell Identifier"
         viewIdentifier = "Test Header View Identifier"
-        indexPath = NSIndexPath(forRow: 0, inSection: 0)
+        cellIndex = NSIndexPath(forRow: 0, inSection: 0)
+        supplementaryIndex = 0
         cell = TestableFactory.Cell(style: .Default, reuseIdentifier: cellIdentifier)
         supplementaryView = TestableFactory.SupplementaryView(reuseIdentifier: cellIdentifier)
         item = "Hello World"
@@ -38,7 +40,7 @@ class FactoryTests: XCTestCase {
         factory = nil
         tableView = nil
         cellIdentifier = nil
-        indexPath = nil
+        cellIndex = nil
         cell = nil
         supplementaryView = nil
         super.tearDown()
@@ -81,7 +83,7 @@ class FactoryCellRegistrarTypeTests: FactoryTests {
         }
 
         XCTAssertEqual(identifier, self.cellIdentifier)
-        configuration(cell: cell, item: "The Item", index: indexPath)
+        configuration(cell: cell, item: "The Item", index: cellIndex)
         XCTAssertTrue(didExecuteConfiguration)
     }
 }
@@ -117,7 +119,7 @@ class FactorySupplementaryViewRegistrarTypeTests: FactoryTests {
         }
 
         XCTAssertEqual(identifier, self.cellIdentifier)
-        configuration(supplementaryView: supplementaryView, index: indexPath)
+        configuration(supplementaryView: supplementaryView, index: supplementaryIndex)
         XCTAssertTrue(didExecuteConfiguration)
     }
 
@@ -143,14 +145,14 @@ class FactorySupplementaryTextRegistrarTypeTests: FactoryTests {
 class FactoryCellVendorTypeTests: FactoryTests {
 
     func test__cellForItem__no_cell_registered__throws_error() {
-        XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: indexPath), TestableFactory.Error.NoCellRegisteredAtIndex(indexPath))
+        XCTAssertThrowsError(try factory.cellForItem(item, inView: tableView, atIndex: cellIndex), TestableFactory.Error.NoCellRegisteredAtIndex(cellIndex))
     }
 
     func test__cellForItem__configureBlockReceivesCell() {
         factory.registerCell(.ClassWithIdentifier(TestableFactory.Cell.self, cellIdentifier), inView: tableView) { cell, item, index in
             cell.textLabel!.text = item
         }
-        let cell = XCTAssertNoThrows(try factory.cellForItem(item, inView: tableView, atIndex: indexPath))
+        let cell = XCTAssertNoThrows(try factory.cellForItem(item, inView: tableView, atIndex: cellIndex))
         XCTAssertEqual(cell.textLabel?.text ?? "Not Correct", item)
     }
 }

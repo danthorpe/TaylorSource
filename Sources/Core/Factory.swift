@@ -106,7 +106,7 @@ extension Factory {
             throw Error.NoCellRegisteredAtIndex(index)
         }
 
-        guard let cell = view.dequeueCellWithIdentifier(identifier, atIndexPath: index.indexInView) as? Cell else {
+        guard let cell = view.dequeueCellWithIdentifier(identifier, atIndex: index.indexInView) as? Cell else {
             throw Error.InvalidCellRegisteredAtIndexWithIdentifier(index, identifier)
         }
 
@@ -124,7 +124,7 @@ extension Factory {
 
         guard let
             (identifier, configure) = views[SupplementaryElementIndex(kind: kind, key: key)],
-            supplementaryView = view.dequeueSupplementaryViewWithIdentifier(identifier, kind: kind, atIndexPath: index.indexInView) as? SupplementaryView
+            supplementaryView = view.dequeueSupplementaryViewWithIdentifier(identifier, kind: kind, atIndex: index.indexInView) as? SupplementaryView
         else { return .None }
 
         configure(supplementaryView: supplementaryView, index: index)
@@ -154,8 +154,8 @@ public class BasicFactory<V, C, SV, I
     where
     V: CellBasedViewType,
     V.CellIndex == NSIndexPath,
-    V.SupplementaryIndex == NSIndexPath
-    >: Factory<V, C, NSIndexPath, SV, NSIndexPath, I, String> {
+    V.SupplementaryIndex == Int
+    >: Factory<V, C, NSIndexPath, SV, Int, I, String> {
 
     public override init(cell: GetCellKey? = .None, supplementary: GetSupplementaryKey? = .None) {
         super.init(cell: cell, supplementary: supplementary)

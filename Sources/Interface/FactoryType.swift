@@ -158,7 +158,7 @@ public protocol ReusableCellBasedViewType: class {
 
     func registerClass(aClass: AnyClass, withIdentifier reuseIdentifier: String)
 
-    func dequeueCellWithIdentifier(identifier: String, atIndexPath indexPath: CellIndex) -> Cell
+    func dequeueCellWithIdentifier(identifier: String, atIndex index: CellIndex) -> Cell
 }
 
 public protocol ReusableSupplementaryViewBasedViewType: class {
@@ -170,7 +170,7 @@ public protocol ReusableSupplementaryViewBasedViewType: class {
 
     func registerClass(aClass: AnyClass, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String)
 
-    func dequeueSupplementaryViewWithIdentifier(identifier: String, kind: SupplementaryElementKind, atIndexPath indexPath: SupplementaryIndex) -> SupplementaryView?
+    func dequeueSupplementaryViewWithIdentifier(identifier: String, kind: SupplementaryElementKind, atIndex index: SupplementaryIndex) -> SupplementaryView?
 }
 
 public protocol CellBasedViewType: ReusableCellBasedViewType, ReusableSupplementaryViewBasedViewType {

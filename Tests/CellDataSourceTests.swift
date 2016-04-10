@@ -11,50 +11,52 @@ import XCTest
 
 class CellDataSourceTests: DataSourceTests {
 
-    var indexPath: NSIndexPath!
+    var cellIndex: NSIndexPath!
+    var supplementaryIndex: Int!
 
     override func setUp() {
         super.setUp()
-        indexPath = NSIndexPath(forRow: 0, inSection: 0)
+        cellIndex = NSIndexPath(forRow: 0, inSection: 0)
+        supplementaryIndex = 0
     }
 }
 
 extension CellDataSourceTests {
 
     func test__itemAtIndex__returns_item() {
-        let item: TypeUnderTest.Factory.Item = XCTAssertNoThrows(try dataSource.itemAtIndex(indexPath))
+        let item: DataSource.Factory.Item = XCTAssertNoThrows(try dataSource.itemAtIndex(cellIndex))
         XCTAssertEqual(item, "Hello")
     }
 
     func test__itemAtIndex__transforms_data_item() {
-        var didTransformItem: TypeUnderTest.Item? = .None
+        var didTransformItem: DataSource.Item? = .None
         dataSource.transformItemToCellItem = { item in
             didTransformItem = item
             return item
         }
 
-        let _: TypeUnderTest.Factory.Item = XCTAssertNoThrows(try dataSource.itemAtIndex(indexPath))
+        let _: DataSource.Factory.Item = XCTAssertNoThrows(try dataSource.itemAtIndex(cellIndex))
         XCTAssertEqual(didTransformItem ?? "Not Hello", "Hello")
     }
 
     func test__itemAtIndex__throws_error_in_transform() {
         let error = TestError()
         dataSource.transformItemToCellItem = { _ in throw error }
-        XCTAssertThrowsError(try dataSource.cellForItemInView(tableView, atIndex: indexPath), error)
+        XCTAssertThrowsError(try dataSource.cellForItemInView(tableView, atIndex: cellIndex), error)
     }
 }
 
 extension CellDataSourceTests {
 
     func test__cellForItemInViewAtIndex__returns_configured_cell() {
-        indexPath = NSIndexPath(forRow: 1, inSection: 0)
+        cellIndex = NSIndexPath(forRow: 1, inSection: 0)
         var didConfigureCellWithItemAtIndex: (Cell, Item, Index)? = .None
 
         factory.registerCell(.ClassWithIdentifier(UITableViewCell.self, "cell identifier"), inView: tableView) { cell, item, index in
             didConfigureCellWithItemAtIndex = (cell, item, index)
         }
 
-        let cell = XCTAssertNoThrows(try dataSource.cellForItemInView(tableView, atIndex: indexPath))
+        let cell = XCTAssertNoThrows(try dataSource.cellForItemInView(tableView, atIndex: cellIndex))
 
         XCTAssertNotNil(cell)
 
@@ -64,12 +66,12 @@ extension CellDataSourceTests {
 
         XCTAssertEqual(cell, configuredCell)
         XCTAssertEqual(item, "World")
-        XCTAssertEqual(configuredIndexPath, indexPath)
+        XCTAssertEqual(configuredIndexPath, cellIndex)
     }
 
     func test__cellForItemInViewAtIndex__invalid_index__throws_error() {
-        indexPath = NSIndexPath(forRow: 10, inSection: 0)
-        XCTAssertThrowsError(try dataSource.cellForItemInView(tableView, atIndex: indexPath), DataSourceError.NoItemAtIndex(indexPath))
+        cellIndex = NSIndexPath(forRow: 10, inSection: 0)
+        XCTAssertThrowsError(try dataSource.cellForItemInView(tableView, atIndex: cellIndex), DataSourceError.NoItemAtIndex(cellIndex))
     }
 }
 
@@ -81,7 +83,7 @@ extension CellDataSourceTests {
             didConfigureSupplementaryViewAtIndex = (supplementaryView, index)
         }
 
-        guard let view = dataSource.supplementaryViewForElementKind(.Header, inView: tableView, atIndex: indexPath) else {
+        guard let view = dataSource.supplementaryViewForElementKind(.Header, inView: tableView, atIndex: supplementaryIndex) else {
             XCTFail("Supplementary view not returned"); return
         }
 
@@ -90,20 +92,20 @@ extension CellDataSourceTests {
         }
 
         XCTAssertEqual(view, configuredView)
-        XCTAssertEqual(indexPath, configuredIndex)
+        XCTAssertEqual(supplementaryIndex, configuredIndex)
     }
 
     func test__supplementaryViewForElementKindInViewAtIndex__returns_nil_if_not_registered() {
-        XCTAssertNil(dataSource.supplementaryViewForElementKind(.Header, inView: tableView, atIndex: indexPath))
+        XCTAssertNil(dataSource.supplementaryViewForElementKind(.Header, inView: tableView, atIndex: supplementaryIndex))
     }
 }
 
 extension CellDataSourceTests {
 
     func test__supplementaryTextForElementKindInViewAtIndex__returns_supplementary_text() {
-        factory.registerSupplementaryTextWithKind(.Footer) { "Footer Text: \($0.section)" }
+        factory.registerSupplementaryTextWithKind(.Footer) { "Footer Text: \($0)" }
 
-        guard let text = dataSource.supplementaryTextForElementKind(.Footer, inView: tableView, atIndex: indexPath) else {
+        guard let text = dataSource.supplementaryTextForElementKind(.Footer, inView: tableView, atIndex: supplementaryIndex) else {
             XCTFail("Supplementary text not returned"); return
         }
 
@@ -111,7 +113,7 @@ extension CellDataSourceTests {
     }
 
     func test__supplementaryTextForElementKindInViewAtIndex__returns_nil_if_not_registered() {
-        XCTAssertNil(dataSource.supplementaryTextForElementKind(.Footer, inView: tableView, atIndex: indexPath))
+        XCTAssertNil(dataSource.supplementaryTextForElementKind(.Footer, inView: tableView, atIndex: supplementaryIndex))
     }
 }
 

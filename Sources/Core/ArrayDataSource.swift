@@ -19,8 +19,8 @@ public class ArrayDataSource<
     Factory, Item
     where
     Factory: FactoryType,
-    Factory.CellIndex.ViewIndex == Factory.CellIndex,
-    Factory.SupplementaryIndex.ViewIndex == Factory.SupplementaryIndex>: CellDataSourceType {
+    Factory.CellIndex == Factory.CellIndex.ViewIndex,
+    Factory.SupplementaryIndex == Factory.SupplementaryIndex.ViewIndex>: CellDataSourceType {
 
     /// - returns: the Factory
     public let factory: Factory
@@ -101,7 +101,7 @@ public final class BasicDataSource<
     Factory: FactoryCellVendorType,
     Factory.CellIndex == NSIndexPath,
     Factory: FactorySupplementaryViewVendorType,
-    Factory.SupplementaryIndex == NSIndexPath,
+    Factory.SupplementaryIndex == Int,
     Factory: FactorySupplementaryTextVendorType>: ArrayDataSource<Factory, Factory.Item> {
 
     /**
@@ -112,7 +112,7 @@ public final class BasicDataSource<
      - parameter factory: the factory instance
      - parameter items: an Array of Factory.ItemType
      */
-    public init(identifier: String? = .None, factory: Factory, items: [Factory.Item]) {
+    public init(identifier: String? = NSUUID().UUIDString, factory: Factory, items: [Factory.Item]) {
         super.init(identifier: identifier, factory: factory, items: items, itemTransform: { $0 }, indexTransform: { $0.item })
     }
 }

@@ -20,7 +20,8 @@ public protocol UITableViewDataSourceProvider {
 
 public protocol TableViewType: CellBasedViewType { }
 extension UITableView: TableViewType {
-    typealias Index = NSIndexPath
+    public typealias CellIndex = NSIndexPath
+    public typealias SupplementaryIndex = Int
 }
 
 public struct TableViewDataSourceProvider<
@@ -177,6 +178,14 @@ internal class EditableTableViewDataSource: InsertDeleteTableViewDataSource {
         self.canMoveRowAtIndexPath = canMoveRowAtIndexPath
         self.moveRowAtIndexPathToIndexPath = moveRowAtIndexPathToIndexPath
         super.init(basicTableViewDataSource: edit, canEditRowAtIndexPath: edit.canEditRowAtIndexPath, commitEditingStyleForRowAtIndexPath: edit.commitEditingStyleForRowAtIndexPath)
+    }
+
+    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return canMoveRowAtIndexPath(tableView, indexPath)
+    }
+
+    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        moveRowAtIndexPathToIndexPath(tableView, sourceIndexPath, destinationIndexPath)
     }
 }
 
