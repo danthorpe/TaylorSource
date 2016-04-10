@@ -15,10 +15,12 @@ import Foundation
  
  By definition, it only has one "section".
 */
-public class ArrayDataSource<Factory, Item where Factory: FactoryType>: CellDataSourceType {
-
-    public typealias ItemIndexType = Int
-    public typealias ItemType = Item
+public class ArrayDataSource<
+    Factory, Item
+    where
+    Factory: FactoryType,
+    Factory.CellIndex.ViewIndex == Factory.CellIndex,
+    Factory.SupplementaryIndex.ViewIndex == Factory.SupplementaryIndex>: CellDataSourceType {
 
     /// - returns: the Factory
     public let factory: Factory
@@ -27,14 +29,15 @@ public class ArrayDataSource<Factory, Item where Factory: FactoryType>: CellData
     public let identifier: String?
 
     /// - returns: an optional String, for the title
-    public var title: String?
+    public var title: String? = .None
 
-    /// - returns: mapper  which maps the cell index to the data source index
-    public let transformCellIndexToItemIndex: Factory.CellIndex -> Int = { $0.indexPath.item }
+    /// - returns: a closure which maps the cell index to the data source index
+    public let transformCellIndexToItemIndex: Factory.CellIndex.ViewIndex -> Int
 
+    /// - returns: a closure which maps the data item to what the Factory requires
     public let transformItemToCellItem: Item throws -> Factory.Item
 
-    private var items: [Item]
+    private let items: [Item]
 
     /**
      Initializes an ArrayDataSource. It requires a factory, with an
@@ -45,11 +48,12 @@ public class ArrayDataSource<Factory, Item where Factory: FactoryType>: CellData
      - parameter items: an Array of Factory.ItemType
      - parameter transform: a throwing block which maps from Item to Factory.ItemType
     */
-    public init(identifier: String? = .None, factory: Factory, items: [Item], transform: Item throws -> Factory.Item) {
+    public init(identifier: String? = .None, factory: Factory, items: [Item], itemTransform: Item throws -> Factory.Item, indexTransform: Factory.CellIndex.ViewIndex -> Int) {
         self.identifier = identifier
         self.factory = factory
         self.items = items
-        self.transformItemToCellItem = transform
+        self.transformItemToCellItem = itemTransform
+        self.transformCellIndexToItemIndex = indexTransform
     }
 
     /**
@@ -109,6 +113,6 @@ public final class BasicDataSource<
      - parameter items: an Array of Factory.ItemType
      */
     public init(identifier: String? = .None, factory: Factory, items: [Factory.Item]) {
-        super.init(identifier: identifier, factory: factory, items: items, transform: { $0 })
+        super.init(identifier: identifier, factory: factory, items: items, itemTransform: { $0 }, indexTransform: { $0.item })
     }
 }

@@ -23,13 +23,13 @@ public protocol FactoryCellRegistrarType: ViewFactoryType {
 
     /// The type of the cell index, used to associate additional metadata
     /// with the index
-    associatedtype CellIndex: IndexPathIndexType
+    associatedtype CellIndex: ConfigurationIndexType
 
     /// The type of the model item behind each cell
     associatedtype Item
 
     /// The type of the block used to configure cells
-    associatedtype CellConfigurationBlock = (cell: Cell, item: Item, index: CellIndex) -> Void
+    associatedtype CellConfigurationBlock = (cell: Cell, item: Item, index: ConfigurationIndexType) -> Void
 
     /// - returns: a key used by default when there is only one cell to register
     var defaultCellKey: String { get }
@@ -43,52 +43,6 @@ public protocol FactoryCellRegistrarType: ViewFactoryType {
      - parameter configuration: a block which is used to configure the cell.
     */
     mutating func registerCell(descriptor: ReusableViewDescriptor, inView view: View, withKey key: String, configuration: CellConfigurationBlock)
-}
-
-/// A protocol which defines the interface used by a factory to register a supplementary view.
-public protocol FactorySupplementaryViewRegistrarType: ViewFactoryType {
-
-    /// The type of the supplementary view
-    associatedtype SupplementaryView
-
-    /// The type of the supplementary (i.e. header) index, used to
-    /// associate additional metadata with the index
-    associatedtype SupplementaryIndex: IndexPathIndexType
-
-    /// The type of the block used to configure supplementary views
-    associatedtype SupplementaryViewConfigurationBlock = (supplementaryView: SupplementaryView, index: SupplementaryIndex) -> Void
-
-    /// - returns: a key used by default when there is only one supplementary view to register
-    var defaultSupplementaryKey: String { get }
-
-    /**
-     Register a supplementary view with the factory.
-
-     - parameter descriptor: a value which describes the view
-     - parameter kind: the kind of the supplementary element
-     - parameter view: the view in which to register.
-     - parameter key: a String used to look up the registration
-     - parameter configuration: a block which is used to configure the view.
-    */
-    mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: View, withKey key: String, configuration: SupplementaryViewConfigurationBlock)
-}
-
-/// A protocol which defines the interface used by a factory to register a supplementary text.
-public protocol FactorySupplementaryTextRegistrarType: FactorySupplementaryViewRegistrarType {
-
-    /// The type of any associated text, e.g. String, or NSAttributedString
-    associatedtype Text
-
-    /// The type of the block used to configure/get supplementary text
-    associatedtype SupplementaryTextConfigurationBlock = (index: SupplementaryIndex) -> Text?
-
-    /**
-     Register a supplementary text.
-
-     - parameter kind: the kind of the supplementary element
-     - parameter configuration: a block which is used to configure the view.
-    */
-    mutating func registerSupplementaryTextWithKind(kind: SupplementaryElementKind, configuration: SupplementaryTextConfigurationBlock)
 }
 
 /// A protocol which defines how the factory vends cells.
@@ -105,6 +59,34 @@ public protocol FactoryCellVendorType: FactoryCellRegistrarType {
     func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) throws -> Cell
 }
 
+/// A protocol which defines the interface used by a factory to register a supplementary view.
+public protocol FactorySupplementaryViewRegistrarType: ViewFactoryType {
+
+    /// The type of the supplementary view
+    associatedtype SupplementaryView
+
+    /// The type of the supplementary (i.e. header) index, used to
+    /// associate additional metadata with the index
+    associatedtype SupplementaryIndex: ConfigurationIndexType
+
+    /// The type of the block used to configure supplementary views
+    associatedtype SupplementaryViewConfigurationBlock = (supplementaryView: SupplementaryView, index: View.SupplementaryIndex) -> Void
+
+    /// - returns: a key used by default when there is only one supplementary view to register
+    var defaultSupplementaryKey: String { get }
+
+    /**
+     Register a supplementary view with the factory.
+
+     - parameter descriptor: a value which describes the view
+     - parameter kind: the kind of the supplementary element
+     - parameter view: the view in which to register.
+     - parameter key: a String used to look up the registration
+     - parameter configuration: a block which is used to configure the view.
+    */
+    mutating func registerSupplementaryView(descriptor: ReusableViewDescriptor, kind: SupplementaryElementKind, inView view: View, withKey key: String, configuration: SupplementaryViewConfigurationBlock)
+}
+
 /// A protocol which defines how the factory vends supplementary view.
 public protocol FactorySupplementaryViewVendorType: FactorySupplementaryViewRegistrarType {
 
@@ -117,6 +99,24 @@ public protocol FactorySupplementaryViewVendorType: FactorySupplementaryViewRegi
      - returns: the configured supplementary view
      */
     func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: View, atIndex index: SupplementaryIndex) -> SupplementaryView?
+}
+
+/// A protocol which defines the interface used by a factory to register a supplementary text.
+public protocol FactorySupplementaryTextRegistrarType: FactorySupplementaryViewRegistrarType {
+
+    /// The type of any associated text, e.g. String, or NSAttributedString
+    associatedtype Text
+
+    /// The type of the block used to configure/get supplementary text
+    associatedtype SupplementaryTextConfigurationBlock = (index: SupplementaryIndex) -> Text?
+
+    /**
+     Register a supplementary text.
+
+     - parameter kind: the kind of the supplementary element
+     - parameter configuration: a block which is used to configure the view.
+     */
+    mutating func registerSupplementaryTextWithKind(kind: SupplementaryElementKind, configuration: SupplementaryTextConfigurationBlock)
 }
 
 /// A protocol which defines how the factory supplementary text
@@ -147,31 +147,30 @@ public protocol FactorySupplementaryTextVendorType: FactorySupplementaryTextRegi
  */
 public typealias FactoryType = protocol<FactoryCellVendorType, FactorySupplementaryViewVendorType, FactorySupplementaryTextVendorType>
 
-public protocol IndexPathIndexType: Equatable {
 
-    var indexPath: NSIndexPath { get }
-}
 
 public protocol ReusableCellBasedViewType: class {
 
-    associatedtype CellType
+    associatedtype Cell
+    associatedtype CellIndex
 
     func registerNib(nib: UINib, withIdentifier reuseIdentifier: String)
 
     func registerClass(aClass: AnyClass, withIdentifier reuseIdentifier: String)
 
-    func dequeueCellWithIdentifier(identifier: String, atIndexPath indexPath: NSIndexPath) -> CellType
+    func dequeueCellWithIdentifier(identifier: String, atIndexPath indexPath: CellIndex) -> Cell
 }
 
 public protocol ReusableSupplementaryViewBasedViewType: class {
 
-    associatedtype SupplementaryViewType
+    associatedtype SupplementaryView
+    associatedtype SupplementaryIndex
 
     func registerNib(nib: UINib, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String)
 
     func registerClass(aClass: AnyClass, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String)
 
-    func dequeueSupplementaryViewWithIdentifier(identifier: String, kind: SupplementaryElementKind, atIndexPath indexPath: NSIndexPath) -> SupplementaryViewType?
+    func dequeueSupplementaryViewWithIdentifier(identifier: String, kind: SupplementaryElementKind, atIndexPath indexPath: SupplementaryIndex) -> SupplementaryView?
 }
 
 public protocol CellBasedViewType: ReusableCellBasedViewType, ReusableSupplementaryViewBasedViewType {

@@ -58,17 +58,28 @@ public protocol DataSourceEditor {
     /// - returns: an optional CanEditItemAtIndexPath block
     var canEditItemAtIndexPath: CanEditItemAtIndexPath? { get }
 
-    /// returns: an optional CommitEditActionForItemAtIndexPath block
+    /// - returns: an optional CommitEditActionForItemAtIndexPath block
     var commitEditActionForItemAtIndexPath: CommitEditActionForItemAtIndexPath? { get }
 
-    /// returns: an optional EditActionForItemAtIndexPath block
+    /// - returns: an optional EditActionForItemAtIndexPath block
     var editActionForItemAtIndexPath: EditActionForItemAtIndexPath? { get }
 
-    /// returns: an optional CanMoveItemAtIndexPath block
+    /// - returns: an optional CanMoveItemAtIndexPath block
     var canMoveItemAtIndexPath: CanMoveItemAtIndexPath? { get }
 
-    /// returns: an optional CommitMoveItemAtIndexPathToIndexPath block
+    /// - returns: an optional CommitMoveItemAtIndexPathToIndexPath block
     var commitMoveItemAtIndexPathToIndexPath: CommitMoveItemAtIndexPathToIndexPath? { get }
+}
+
+public extension DataSourceEditor {
+
+    /// - returns: a Bool to indicate whether editing is fully supported
+    var supportsEditing: Bool {
+        return canEditItemAtIndexPath != nil &&
+            commitEditActionForItemAtIndexPath != nil &&
+            canMoveItemAtIndexPath != nil &&
+            commitMoveItemAtIndexPathToIndexPath != nil
+    }
 }
 
 /**

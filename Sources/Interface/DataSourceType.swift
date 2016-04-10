@@ -17,7 +17,7 @@ import Foundation
  other items for things like `UIPageViewController` or similar where the
  `ItemType` may even be other data sources.
  */
-public protocol DataSourceType {
+public protocol DataSourceType: class {
 
     /// The associated index type
     associatedtype ItemIndex

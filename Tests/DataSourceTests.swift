@@ -11,13 +11,13 @@ import XCTest
 
 class DataSourceTests: XCTestCase {
     
-    typealias TypeUnderTest = ArrayDataSource<TestableFactory, String>
+    typealias TypeUnderTest = BasicDataSource<TestableFactory>
     
     var dataSource: TypeUnderTest!
 
     override func setUp() {
         super.setUp()
-        dataSource = TypeUnderTest(factory: TypeUnderTest.Factory(), items: [ "Hello", "World" ]) { $0 }
+        dataSource = TypeUnderTest(factory: TypeUnderTest.Factory(), items: [ "Hello", "World" ])
     }
 
     override func tearDown() {

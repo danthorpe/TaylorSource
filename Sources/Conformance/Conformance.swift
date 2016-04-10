@@ -27,6 +27,20 @@ extension NSIndexPath: IndexPathIndexType {
     }
 }
 
+extension NSIndexPath: ConfigurationIndexType {
+
+    public var indexInView: NSIndexPath {
+        return self
+    }
+}
+
+extension Int: ConfigurationIndexType {
+
+    public var indexInView: Int {
+        return self
+    }
+}
+
 // MARK: - UITableView
 
 extension UITableView: ReusableCellBasedViewType {

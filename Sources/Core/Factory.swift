@@ -9,12 +9,12 @@
 import Foundation
 
 /// Errors used by Factory classes
-public enum FactoryError<CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathIndexType>: ErrorType, Equatable {
+public enum FactoryError<CellIndex: Equatable, SupplementaryIndex: Equatable>: ErrorType, Equatable {
     case NoCellRegisteredAtIndex(CellIndex)
     case InvalidCellRegisteredAtIndexWithIdentifier(CellIndex, String)
 }
 
-public func == <CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathIndexType>(lhs: FactoryError<CellIndex, SupplementaryIndex>, rhs: FactoryError<CellIndex, SupplementaryIndex>) -> Bool {
+public func == <CellIndex: Equatable, SupplementaryIndex: Equatable>(lhs: FactoryError<CellIndex, SupplementaryIndex>, rhs: FactoryError<CellIndex, SupplementaryIndex>) -> Bool {
     switch (lhs, rhs) {
     case let (.NoCellRegisteredAtIndex(lhsIndex), .NoCellRegisteredAtIndex(rhsIndex)):
         return lhsIndex == rhsIndex
@@ -30,7 +30,13 @@ public func == <CellIndex: IndexPathIndexType, SupplementaryIndex: IndexPathInde
  
  - see: FactoryType
 */
-public class Factory<V, C, CI, SV, SI, I, T where V: CellBasedViewType, CI: IndexPathIndexType, SI: IndexPathIndexType>: FactoryType {
+public class Factory<V, C, CI, SV, SI, I, T
+    where
+    V: CellBasedViewType,
+    CI: ConfigurationIndexType,
+    SI: ConfigurationIndexType,
+    V.CellIndex == CI.ViewIndex,
+    V.SupplementaryIndex == SI.ViewIndex>: FactoryType {
 
     public typealias View = V
 
@@ -47,6 +53,7 @@ public class Factory<V, C, CI, SV, SI, I, T where V: CellBasedViewType, CI: Inde
     public typealias CellConfig = (cell: Cell, item: Item, index: CellIndex) -> Void
     public typealias SupplementaryViewConfig = (supplementaryView: SupplementaryView, index: SupplementaryIndex) -> Void
     public typealias SupplementaryTextConfig = (index: SupplementaryIndex) -> Text?
+
     public typealias GetCellKey = (item: Item, index: CellIndex) -> String
     public typealias GetSupplementaryKey = (index: SupplementaryIndex) -> String
 
@@ -94,13 +101,12 @@ extension Factory {
     public func cellForItem(item: Item, inView view: View, atIndex index: CellIndex) throws -> Cell {
 
         let key = getCellKey?(item: item, index: index) ?? defaultCellKey
-        let indexPath = index.indexPath
 
         guard let (identifier, configure) = cells[key] else {
             throw Error.NoCellRegisteredAtIndex(index)
         }
 
-        guard let cell = view.dequeueCellWithIdentifier(identifier, atIndexPath: indexPath) as? Cell else {
+        guard let cell = view.dequeueCellWithIdentifier(identifier, atIndexPath: index.indexInView) as? Cell else {
             throw Error.InvalidCellRegisteredAtIndexWithIdentifier(index, identifier)
         }
 
@@ -115,11 +121,10 @@ extension Factory {
     public func supplementaryViewForKind(kind: SupplementaryElementKind, inView view: View, atIndex index: SupplementaryIndex) -> SupplementaryView? {
 
         let key = getSupplementaryKey?(index: index) ?? defaultSupplementaryKey
-        let indexPath = index.indexPath
 
         guard let
             (identifier, configure) = views[SupplementaryElementIndex(kind: kind, key: key)],
-            supplementaryView = view.dequeueSupplementaryViewWithIdentifier(identifier, kind: kind, atIndexPath: indexPath) as? SupplementaryView
+            supplementaryView = view.dequeueSupplementaryViewWithIdentifier(identifier, kind: kind, atIndexPath: index.indexInView) as? SupplementaryView
         else { return .None }
 
         configure(supplementaryView: supplementaryView, index: index)
@@ -145,7 +150,12 @@ extension Factory {
  - see: Factory
  - see: FactoryType
 */
-public class BasicFactory<V, C, SV, I where V: CellBasedViewType>: Factory<V, C, NSIndexPath, SV, NSIndexPath, I, String> {
+public class BasicFactory<V, C, SV, I
+    where
+    V: CellBasedViewType,
+    V.CellIndex == NSIndexPath,
+    V.SupplementaryIndex == NSIndexPath
+    >: Factory<V, C, NSIndexPath, SV, NSIndexPath, I, String> {
 
     public override init(cell: GetCellKey? = .None, supplementary: GetSupplementaryKey? = .None) {
         super.init(cell: cell, supplementary: supplementary)

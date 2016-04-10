@@ -17,7 +17,7 @@ import Foundation
  UITableViewDataSource, yet maintain full type fidelity of the
  underlying datasource.
  */
-public protocol DataSourceProvider {
+public protocol DataSourceProviderType {
 
     /// The associated datasource type
     associatedtype DataSource: DataSourceType
