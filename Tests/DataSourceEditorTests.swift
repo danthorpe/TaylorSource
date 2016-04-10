@@ -11,21 +11,21 @@ import XCTest
 
 class DataSourceEditActionTests: XCTestCase {
     
-    var action: DataSourceEditAction!
+    var action: Edit.Action!
     
     func test__none() {
-        action = DataSourceEditAction(rawValue: .None)
-        XCTAssertEqual(action, DataSourceEditAction.None)
+        action = Edit.Action(rawValue: .None)
+        XCTAssertEqual(action, Edit.Action.None)
     }
     
     func test__insert() {
-        action = DataSourceEditAction(rawValue: .Insert)
-        XCTAssertEqual(action, DataSourceEditAction.Insert)
+        action = Edit.Action(rawValue: .Insert)
+        XCTAssertEqual(action, Edit.Action.Insert)
     }
     
     func test__delete() {
-        action = DataSourceEditAction(rawValue: .Delete)
-        XCTAssertEqual(action, DataSourceEditAction.Delete)
+        action = Edit.Action(rawValue: .Delete)
+        XCTAssertEqual(action, Edit.Action.Delete)
     }
 }
 
