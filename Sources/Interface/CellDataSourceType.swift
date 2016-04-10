@@ -75,8 +75,14 @@ public extension CellDataSourceType {
      - returns: an item for the cell.
      */
     public func itemAtIndex(index: Factory.CellIndex.ViewIndex) throws -> Factory.Item {
-        let item = try itemAtIndex(transformCellIndexToItemIndex(index))
-        return try transformItemToCellItem(item)
+        let itemIndex = transformCellIndexToItemIndex(index)
+        do {
+            let item = try itemAtIndex(itemIndex)
+            return try transformItemToCellItem(item)
+        }
+        catch DataSourceError<ItemIndex>.NoItemAtIndex(itemIndex) {
+            throw DataSourceError.NoItemAtIndex(index)
+        }
     }
 }
 

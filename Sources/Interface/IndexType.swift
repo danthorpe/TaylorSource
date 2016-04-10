@@ -16,7 +16,7 @@ import Foundation
 public protocol ConfigurationIndexType: Equatable {
 
     /// The index used by the view, e.g. NSIndexPath
-    associatedtype ViewIndex
+    associatedtype ViewIndex: Equatable
 
     /// - returns: the index in the view
     var indexInView: ViewIndex { get }

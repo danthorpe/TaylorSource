@@ -19,7 +19,7 @@ func XCTAssertThrowsError<E, T where E: ErrorType, E: Equatable>(@autoclosure ex
         didCatchCorrectError = true
     }
     catch {
-        XCTFail("Incorrect error type thrown", file: file, line: line)
+        XCTFail("Incorrect error type thrown: \(error)", file: file, line: line)
     }
     XCTAssertTrue(didCatchCorrectError, message, file: file, line: line)
 }
@@ -35,6 +35,13 @@ func XCTAssertNoThrows<T>(@autoclosure expression: () throws -> T, @autoclosure 
     return nil
 }
 
+struct TestError: ErrorType, Equatable {
+    let uuid: String = NSUUID().UUIDString
+}
+
+func == (lhs: TestError, rhs: TestError) -> Bool {
+    return lhs.uuid == rhs.uuid
+}
 
 
 

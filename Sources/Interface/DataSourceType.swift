@@ -20,7 +20,7 @@ import Foundation
 public protocol DataSourceType: class {
 
     /// The associated index type
-    associatedtype ItemIndex
+    associatedtype ItemIndex: Equatable
 
     /// The associated item type
     associatedtype Item

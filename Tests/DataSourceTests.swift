@@ -12,21 +12,32 @@ import XCTest
 class DataSourceTests: XCTestCase {
     
     typealias TypeUnderTest = BasicDataSource<TestableFactory>
-    
+    typealias Cell = TypeUnderTest.Factory.Cell
+    typealias Item = TypeUnderTest.Factory.Item
+    typealias Index = TypeUnderTest.Factory.CellIndex
+    typealias SupplementaryView = TypeUnderTest.Factory.SupplementaryView
+    typealias SupplementaryIndex = TypeUnderTest.Factory.SupplementaryIndex
+
+    var tableView: TestableTable!
+    var factory: TypeUnderTest.Factory!
     var dataSource: TypeUnderTest!
 
     override func setUp() {
         super.setUp()
-        dataSource = TypeUnderTest(factory: TypeUnderTest.Factory(), items: [ "Hello", "World" ])
+        tableView = TestableTable()
+        factory = TypeUnderTest.Factory()
+        dataSource = TypeUnderTest(factory: factory, items: [ "Hello", "World" ])
     }
 
     override func tearDown() {
+        tableView = nil
+        factory = nil
         dataSource = nil
         super.tearDown()
     }
 }
 
-class DataSourceTypeDefaultImplementation: DataSourceTests {
+extension DataSourceTests {
 
     func test__numberOfSections() {
         XCTAssertEqual(dataSource.numberOfSections, 1)

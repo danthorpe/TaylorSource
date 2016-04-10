@@ -9,31 +9,7 @@
 import XCTest
 @testable import TaylorSource
 
-class ArrayDataSourceTests: XCTestCase {
-
-    typealias TypeUnderTest = BasicDataSource<TestableFactory>
-    typealias Cell = TypeUnderTest.Factory.Cell
-    typealias Item = TypeUnderTest.Factory.Item
-    typealias Index = TypeUnderTest.Factory.CellIndex
-
-    var tableView: TestableTable!
-    var factory: TypeUnderTest.Factory!
-    var dataSource: TypeUnderTest!
-
-    override func setUp() {
-        super.setUp()
-        tableView = TestableTable()
-        factory = TypeUnderTest.Factory()
-        dataSource = TypeUnderTest(factory: factory, items: [ "Hello", "World" ])
-    }
-
-    override func tearDown() {
-        tableView = nil
-        factory = nil
-        dataSource = nil
-        super.tearDown()
-    }
-}
+class ArrayDataSourceTests: DataSourceTests { }
 
 extension ArrayDataSourceTests {
     
@@ -75,7 +51,6 @@ extension ArrayDataSourceTests {
         }
     }
 }
-
 
 extension ArrayDataSourceTests {
 

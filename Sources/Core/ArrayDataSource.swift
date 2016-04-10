@@ -32,10 +32,10 @@ public class ArrayDataSource<
     public var title: String? = .None
 
     /// - returns: a closure which maps the cell index to the data source index
-    public let transformCellIndexToItemIndex: Factory.CellIndex.ViewIndex -> Int
+    public internal(set) var transformCellIndexToItemIndex: Factory.CellIndex.ViewIndex -> Int
 
     /// - returns: a closure which maps the data item to what the Factory requires
-    public let transformItemToCellItem: Item throws -> Factory.Item
+    public internal(set) var transformItemToCellItem: Item throws -> Factory.Item
 
     private let items: [Item]
 
