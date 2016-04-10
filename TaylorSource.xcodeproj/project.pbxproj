@@ -30,6 +30,7 @@
 		65E3FC771CBAAA2900479E0C /* CellDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E3FC761CBAAA2900479E0C /* CellDataSourceTests.swift */; };
 		65E3FC791CBABC0D00479E0C /* ConformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E3FC781CBABC0D00479E0C /* ConformanceTests.swift */; };
 		65E3FC7B1CBAC4F000479E0C /* TestTableViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65E3FC7A1CBAC4F000479E0C /* TestTableViewHeader.xib */; };
+		65E3FC7D1CBADCD900479E0C /* TableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E3FC7C1CBADCD900479E0C /* TableViewTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		65E3FC761CBAAA2900479E0C /* CellDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellDataSourceTests.swift; sourceTree = "<group>"; };
 		65E3FC781CBABC0D00479E0C /* ConformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConformanceTests.swift; sourceTree = "<group>"; };
 		65E3FC7A1CBAC4F000479E0C /* TestTableViewHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestTableViewHeader.xib; sourceTree = "<group>"; };
+		65E3FC7C1CBADCD900479E0C /* TableViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 				6508498C1CB15C94005C7E6F /* DataSourceTests.swift */,
 				6508498D1CB15C94005C7E6F /* FactoryTests.swift */,
 				6590FABB1CB1743400694DAF /* Helpers.swift */,
+				65E3FC7C1CBADCD900479E0C /* TableViewTests.swift */,
 				6590FABD1CB17CAA00694DAF /* Testable.swift */,
 				6590FABF1CB1819A00694DAF /* TestCell.xib */,
 				65E3FC7A1CBAC4F000479E0C /* TestTableViewHeader.xib */,
@@ -324,6 +327,7 @@
 				6508498F1CB15C94005C7E6F /* DataSourceTests.swift in Sources */,
 				6590FAC21CB1A2C900694DAF /* ArrayDataSourceTests.swift in Sources */,
 				65E3FC791CBABC0D00479E0C /* ConformanceTests.swift in Sources */,
+				65E3FC7D1CBADCD900479E0C /* TableViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
