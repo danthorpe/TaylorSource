@@ -101,6 +101,13 @@ public extension CellDataSourceType where Factory: FactoryCellVendorType, Factor
 
 public extension CellDataSourceType where Factory: FactorySupplementaryViewVendorType, Factory.SupplementaryIndex.ViewIndex == Factory.SupplementaryIndex {
 
+    /**
+     Vends a configured supplementary view for the kind at this index.
+     - parameter kind: the SupplementaryElementKind
+     - parameter view: the Factory.View
+     - parameter index: the index of the supplementary view
+     - returns: an optional supplementary view
+     */
     public func supplementaryViewForElementKind(kind: SupplementaryElementKind, inView view: Factory.View, atIndex index: Factory.SupplementaryIndex.ViewIndex) -> Factory.SupplementaryView? {
         return factory.supplementaryViewForKind(kind, inView: view, atIndex: index)
     }
@@ -116,13 +123,6 @@ public extension CellDataSourceType where Factory: FactorySupplementaryTextVendo
 public extension CellDataSourceType where Factory.CellIndex.ViewIndex == ItemIndex {
 
     var transformCellIndexToItemIndex: Factory.CellIndex.ViewIndex -> ItemIndex {
-        return { $0 }
-    }
-}
-
-public extension CellDataSourceType where Factory.Item == Item {
-
-    var transformItemToCellItem: Item -> Factory.Item {
         return { $0 }
     }
 }
