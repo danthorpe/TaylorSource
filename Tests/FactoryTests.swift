@@ -63,7 +63,7 @@ class FactoryCellRegistrarTypeTests: FactoryTests {
     }
 
     func test__registerCell__nibWithIdentifier__viewRegistersNibWithIdentifier() {
-        factory.registerCell(.NibWithIdentifier(TestCell.nib, cellIdentifier), inView: tableView) { _, _, _ in }
+        factory.registerCell(.NibWithIdentifier(TestTableViewCell.nib, cellIdentifier), inView: tableView) { _, _, _ in }
         guard let (registeredNib, withIdentifier) = tableView.didRegisterNibWithIdentifier else {
             XCTFail("Table View did not register class with identifier"); return
         }

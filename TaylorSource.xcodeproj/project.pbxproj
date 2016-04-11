@@ -21,7 +21,7 @@
 		657AE2F51CB2DAE70076D15B /* DataSourceEditorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657AE2F41CB2DAE70076D15B /* DataSourceEditorTests.swift */; };
 		6590FABC1CB1743400694DAF /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6590FABB1CB1743400694DAF /* Helpers.swift */; };
 		6590FABE1CB17CAA00694DAF /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6590FABD1CB17CAA00694DAF /* Testable.swift */; };
-		6590FAC01CB1819A00694DAF /* TestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6590FABF1CB1819A00694DAF /* TestCell.xib */; };
+		6590FAC01CB1819A00694DAF /* TestTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6590FABF1CB1819A00694DAF /* TestTableViewCell.xib */; };
 		6590FAC21CB1A2C900694DAF /* ArrayDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6590FAC11CB1A2C900694DAF /* ArrayDataSourceTests.swift */; };
 		659354491CBB76F7000FAE70 /* FetchedResultsDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659354481CBB76F7000FAE70 /* FetchedResultsDataSourceTests.swift */; };
 		6593544B1CBC1959000FAE70 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6593544A1CBC1959000FAE70 /* CollectionView.swift */; };
@@ -33,6 +33,9 @@
 		65E3FC791CBABC0D00479E0C /* ConformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E3FC781CBABC0D00479E0C /* ConformanceTests.swift */; };
 		65E3FC7B1CBAC4F000479E0C /* TestTableViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65E3FC7A1CBAC4F000479E0C /* TestTableViewHeader.xib */; };
 		65E3FC7D1CBADCD900479E0C /* TableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E3FC7C1CBADCD900479E0C /* TableViewTests.swift */; };
+		65E3FC7F1CBC47C600479E0C /* CollectionViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E3FC7E1CBC47C600479E0C /* CollectionViewTests.swift */; };
+		65E3FC811CBC47FD00479E0C /* TestCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65E3FC801CBC47FD00479E0C /* TestCollectionViewCell.xib */; };
+		65E3FC831CBC484500479E0C /* TestCollectionViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65E3FC821CBC484500479E0C /* TestCollectionViewHeader.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +67,7 @@
 		657AE2F41CB2DAE70076D15B /* DataSourceEditorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSourceEditorTests.swift; sourceTree = "<group>"; };
 		6590FABB1CB1743400694DAF /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		6590FABD1CB17CAA00694DAF /* Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Testable.swift; sourceTree = "<group>"; };
-		6590FABF1CB1819A00694DAF /* TestCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestCell.xib; sourceTree = "<group>"; };
+		6590FABF1CB1819A00694DAF /* TestTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestTableViewCell.xib; sourceTree = "<group>"; };
 		6590FAC11CB1A2C900694DAF /* ArrayDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayDataSourceTests.swift; sourceTree = "<group>"; };
 		659354481CBB76F7000FAE70 /* FetchedResultsDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsDataSourceTests.swift; sourceTree = "<group>"; };
 		6593544A1CBC1959000FAE70 /* CollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CollectionView.swift; path = Providers/CollectionView.swift; sourceTree = "<group>"; };
@@ -76,6 +79,9 @@
 		65E3FC781CBABC0D00479E0C /* ConformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConformanceTests.swift; sourceTree = "<group>"; };
 		65E3FC7A1CBAC4F000479E0C /* TestTableViewHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestTableViewHeader.xib; sourceTree = "<group>"; };
 		65E3FC7C1CBADCD900479E0C /* TableViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewTests.swift; sourceTree = "<group>"; };
+		65E3FC7E1CBC47C600479E0C /* CollectionViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewTests.swift; sourceTree = "<group>"; };
+		65E3FC801CBC47FD00479E0C /* TestCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestCollectionViewCell.xib; sourceTree = "<group>"; };
+		65E3FC821CBC484500479E0C /* TestCollectionViewHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestCollectionViewHeader.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +151,7 @@
 				6508498E1CB15C94005C7E6F /* Info.plist */,
 				6590FAC11CB1A2C900694DAF /* ArrayDataSourceTests.swift */,
 				65E3FC761CBAAA2900479E0C /* CellDataSourceTests.swift */,
+				65E3FC7E1CBC47C600479E0C /* CollectionViewTests.swift */,
 				65E3FC781CBABC0D00479E0C /* ConformanceTests.swift */,
 				657AE2F41CB2DAE70076D15B /* DataSourceEditorTests.swift */,
 				6508498C1CB15C94005C7E6F /* DataSourceTests.swift */,
@@ -153,8 +160,10 @@
 				6590FABB1CB1743400694DAF /* Helpers.swift */,
 				65E3FC7C1CBADCD900479E0C /* TableViewTests.swift */,
 				6590FABD1CB17CAA00694DAF /* Testable.swift */,
-				6590FABF1CB1819A00694DAF /* TestCell.xib */,
+				6590FABF1CB1819A00694DAF /* TestTableViewCell.xib */,
 				65E3FC7A1CBAC4F000479E0C /* TestTableViewHeader.xib */,
+				65E3FC801CBC47FD00479E0C /* TestCollectionViewCell.xib */,
+				65E3FC821CBC484500479E0C /* TestCollectionViewHeader.xib */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -296,7 +305,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				65E3FC7B1CBAC4F000479E0C /* TestTableViewHeader.xib in Resources */,
-				6590FAC01CB1819A00694DAF /* TestCell.xib in Resources */,
+				65E3FC831CBC484500479E0C /* TestCollectionViewHeader.xib in Resources */,
+				6590FAC01CB1819A00694DAF /* TestTableViewCell.xib in Resources */,
+				65E3FC811CBC47FD00479E0C /* TestCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +342,7 @@
 				657AE2F51CB2DAE70076D15B /* DataSourceEditorTests.swift in Sources */,
 				6590FABE1CB17CAA00694DAF /* Testable.swift in Sources */,
 				6590FABC1CB1743400694DAF /* Helpers.swift in Sources */,
+				65E3FC7F1CBC47C600479E0C /* CollectionViewTests.swift in Sources */,
 				6508498F1CB15C94005C7E6F /* DataSourceTests.swift in Sources */,
 				6590FAC21CB1A2C900694DAF /* ArrayDataSourceTests.swift in Sources */,
 				65E3FC791CBABC0D00479E0C /* ConformanceTests.swift in Sources */,

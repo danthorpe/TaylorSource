@@ -9,11 +9,19 @@
 import XCTest
 @testable import TaylorSource
 
-class TestCell: UITableViewCell, ReusableViewType {
+class TestTableViewCell: UITableViewCell, ReusableViewType {
     static let reuseIdentifier = "Test Cell Identifier"
 }
 
 class TestTableViewHeader: UITableViewHeaderFooterView, ReusableViewType {
+    static let reuseIdentifier = "Test Header View Identifier"
+}
+
+class TestCollectionViewCell: UITableViewCell, ReusableViewType {
+    static let reuseIdentifier = "Test Cell Identifier"
+}
+
+class TestCollectionViewHeader: UITableViewHeaderFooterView, ReusableViewType {
     static let reuseIdentifier = "Test Header View Identifier"
 }
 
