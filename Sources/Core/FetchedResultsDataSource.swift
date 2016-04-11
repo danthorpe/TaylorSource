@@ -16,8 +16,16 @@ public protocol FetchedResultsController {
     var sections: [NSFetchedResultsSectionInfo]? { get }
 
     func objectAtIndexPath(indexPath: NSIndexPath) -> AnyObject
+}
 
-    func itemAtIndexPath<T>(indexPath: NSIndexPath) throws -> T
+public extension FetchedResultsController {
+
+    func itemAtIndexPath<T>(indexPath: NSIndexPath) throws -> T {
+        guard let item = objectAtIndexPath(indexPath) as? T else {
+            throw DataSourceError<NSIndexPath>.UnexpectedTypeAtIndex(indexPath)
+        }
+        return item
+    }
 }
 
 public class FetchedResultsDataSource<
@@ -69,12 +77,4 @@ public extension FetchedResultsDataSource {
     }
 }
 
-extension NSFetchedResultsController: FetchedResultsController {
-    
-    public func itemAtIndexPath<T>(indexPath: NSIndexPath) throws -> T {
-        guard let item = objectAtIndexPath(indexPath) as? T else {
-            throw DataSourceError<NSIndexPath>.UnexpectedTypeAtIndex(indexPath)
-        }
-        return item
-    }
-}
+extension NSFetchedResultsController: FetchedResultsController { }
