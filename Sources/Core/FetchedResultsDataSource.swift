@@ -24,10 +24,10 @@ public class FetchedResultsDataSource<
     Factory, Item
     where
     Factory: FactoryType,
+    Factory.CellIndex == Factory.CellIndex.ViewIndex,
     Factory.CellIndex.ViewIndex == NSIndexPath,
-    Factory.CellIndex == NSIndexPath,
-    Factory.SupplementaryIndex.ViewIndex == Int,
-    Factory.SupplementaryIndex == Int>: CellDataSourceType {
+    Factory.SupplementaryIndex == Factory.SupplementaryIndex.ViewIndex,
+    Factory.SupplementaryIndex.ViewIndex == Int>: CellDataSourceType {
 
     public typealias ItemIndex = NSIndexPath
 
@@ -69,3 +69,12 @@ public extension FetchedResultsDataSource {
     }
 }
 
+extension NSFetchedResultsController: FetchedResultsController {
+    
+    public func itemAtIndexPath<T>(indexPath: NSIndexPath) throws -> T {
+        guard let item = objectAtIndexPath(indexPath) as? T else {
+            throw DataSourceError<NSIndexPath>.UnexpectedTypeAtIndex(indexPath)
+        }
+        return item
+    }
+}

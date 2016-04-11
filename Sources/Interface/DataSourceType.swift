@@ -86,12 +86,17 @@ public extension DataSourceType {
 /// Error type used by types which conform to DataSourceType
 public enum DataSourceError<Index: Equatable>: ErrorType, Equatable {
     case NoItemAtIndex(Index)
+    case UnexpectedTypeAtIndex(Index)
 }
 
 public func == <Index: Equatable> (lhs: DataSourceError<Index>, rhs: DataSourceError<Index>) -> Bool {
     switch (lhs, rhs) {
     case let (.NoItemAtIndex(lhsIndex), .NoItemAtIndex(rhsIndex)):
         return lhsIndex == rhsIndex
+    case let (.UnexpectedTypeAtIndex(lhsIndex), .UnexpectedTypeAtIndex(rhsIndex)):
+        return lhsIndex == rhsIndex
+    default:
+        return false
     }
 }
 
