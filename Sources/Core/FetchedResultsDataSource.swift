@@ -28,6 +28,8 @@ public extension FetchedResultsController {
     }
 }
 
+extension NSFetchedResultsController: FetchedResultsController { }
+
 public class FetchedResultsDataSource<
     Factory, Item
     where
@@ -77,4 +79,3 @@ public extension FetchedResultsDataSource {
     }
 }
 
-extension NSFetchedResultsController: FetchedResultsController { }
