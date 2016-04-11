@@ -19,6 +19,7 @@ public protocol UITableViewDataSourceProvider {
 }
 
 public protocol TableViewType: CellBasedViewType { }
+
 extension UITableView: TableViewType {
     public typealias CellIndex = NSIndexPath
     public typealias SupplementaryIndex = Int

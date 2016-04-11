@@ -44,7 +44,6 @@ extension Int: ConfigurationIndexType {
 // MARK: - UITableView
 
 extension UITableView: ReusableCellBasedViewType {
-    public typealias Cell = UITableViewCell
 
     public func registerNib(nib: UINib, withIdentifier reuseIdentifier: String) {
         registerNib(nib, forCellReuseIdentifier: reuseIdentifier)
@@ -54,7 +53,7 @@ extension UITableView: ReusableCellBasedViewType {
         registerClass(aClass, forCellReuseIdentifier: reuseIdentifier)
     }
 
-    public func dequeueCellWithIdentifier(identifier: String, atIndex index: CellIndex) -> UITableViewCell {
+    public func dequeueCellWithIdentifier(identifier: String, atIndex index: NSIndexPath) -> UITableViewCell {
         return dequeueReusableCellWithIdentifier(identifier, forIndexPath: index)
     }
 }
@@ -77,3 +76,33 @@ extension UITableView: ReusableSupplementaryViewBasedViewType {
 extension UITableView: CellBasedViewType { }
 
 // MARK: - UICollectionView
+
+extension UICollectionView: ReusableCellBasedViewType {
+    
+    public func registerNib(nib: UINib, withIdentifier reuseIdentifier: String) {
+        registerNib(nib, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    
+    public func registerClass(aClass: AnyClass, withIdentifier reuseIdentifier: String) {
+        registerClass(aClass, forCellWithReuseIdentifier: reuseIdentifier)
+    }
+    
+    public func dequeueCellWithIdentifier(identifier: String, atIndex index: NSIndexPath) -> UICollectionViewCell {
+        return dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: index)
+    }
+}
+
+extension UICollectionView: ReusableSupplementaryViewBasedViewType {
+    
+    public func registerNib(nib: UINib, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String) {
+        registerNib(nib, forSupplementaryViewOfKind: kind.description, withReuseIdentifier: reuseIdentifier)
+    }
+    
+    public func registerClass(aClass: AnyClass, forSupplementaryViewKind kind: SupplementaryElementKind, withIdentifier reuseIdentifier: String) {
+        registerClass(aClass, forSupplementaryViewOfKind: kind.description, withReuseIdentifier: reuseIdentifier)
+    }
+    
+    public func dequeueSupplementaryViewWithIdentifier(identifier: String, kind: SupplementaryElementKind, atIndex index: NSIndexPath) -> UICollectionReusableView? {
+        return dequeueReusableSupplementaryViewOfKind(kind.description, withReuseIdentifier: identifier, forIndexPath: index)
+    }
+}
