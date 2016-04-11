@@ -23,6 +23,7 @@
 		6590FABE1CB17CAA00694DAF /* Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6590FABD1CB17CAA00694DAF /* Testable.swift */; };
 		6590FAC01CB1819A00694DAF /* TestCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6590FABF1CB1819A00694DAF /* TestCell.xib */; };
 		6590FAC21CB1A2C900694DAF /* ArrayDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6590FAC11CB1A2C900694DAF /* ArrayDataSourceTests.swift */; };
+		659354491CBB76F7000FAE70 /* FetchedResultsDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659354481CBB76F7000FAE70 /* FetchedResultsDataSourceTests.swift */; };
 		65B9E08A1CB9AB1D009161AD /* CellDataSourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9E0891CB9AB1D009161AD /* CellDataSourceType.swift */; };
 		65B9E08F1CB9BB59009161AD /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9E08E1CB9BB59009161AD /* TableView.swift */; };
 		65E3FC731CBA64CD00479E0C /* IndexType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E3FC721CBA64CD00479E0C /* IndexType.swift */; };
@@ -64,6 +65,7 @@
 		6590FABD1CB17CAA00694DAF /* Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Testable.swift; sourceTree = "<group>"; };
 		6590FABF1CB1819A00694DAF /* TestCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestCell.xib; sourceTree = "<group>"; };
 		6590FAC11CB1A2C900694DAF /* ArrayDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayDataSourceTests.swift; sourceTree = "<group>"; };
+		659354481CBB76F7000FAE70 /* FetchedResultsDataSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsDataSourceTests.swift; sourceTree = "<group>"; };
 		65B9E0891CB9AB1D009161AD /* CellDataSourceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellDataSourceType.swift; sourceTree = "<group>"; };
 		65B9E08E1CB9BB59009161AD /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableView.swift; path = Providers/TableView.swift; sourceTree = "<group>"; };
 		65E3FC721CBA64CD00479E0C /* IndexType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexType.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				657AE2F41CB2DAE70076D15B /* DataSourceEditorTests.swift */,
 				6508498C1CB15C94005C7E6F /* DataSourceTests.swift */,
 				6508498D1CB15C94005C7E6F /* FactoryTests.swift */,
+				659354481CBB76F7000FAE70 /* FetchedResultsDataSourceTests.swift */,
 				6590FABB1CB1743400694DAF /* Helpers.swift */,
 				65E3FC7C1CBADCD900479E0C /* TableViewTests.swift */,
 				6590FABD1CB17CAA00694DAF /* Testable.swift */,
@@ -328,6 +331,7 @@
 				6590FAC21CB1A2C900694DAF /* ArrayDataSourceTests.swift in Sources */,
 				65E3FC791CBABC0D00479E0C /* ConformanceTests.swift in Sources */,
 				65E3FC7D1CBADCD900479E0C /* TableViewTests.swift in Sources */,
+				659354491CBB76F7000FAE70 /* FetchedResultsDataSourceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
