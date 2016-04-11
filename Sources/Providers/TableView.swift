@@ -32,13 +32,24 @@ public struct TableViewDataSourceProvider<
     DataSourceProvider.DataSource: CellDataSourceType,
     DataSourceProvider.DataSource.Factory.View: TableViewType,
     DataSourceProvider.DataSource.Factory.Cell: UITableViewCell,
+    DataSourceProvider.DataSource.Factory.SupplementaryView: UITableViewHeaderFooterView,
     DataSourceProvider.DataSource.Factory.CellIndex.ViewIndex == NSIndexPath,
     DataSourceProvider.DataSource.Factory.SupplementaryIndex.ViewIndex == Int,
-    DataSourceProvider.DataSource.Factory.Text == String> {
+    DataSourceProvider.DataSource.Factory.Text == String>: DataSourceProviderType {
 
-    typealias TableView = DataSource.Factory.View
+    public typealias DataSource = DataSourceProvider.DataSource
+    public typealias Editor = DataSourceProvider.Editor
+    internal typealias TableView = DataSource.Factory.View
 
     public let provider: DataSourceProvider
+
+    public var dataSource: DataSource {
+        return provider.dataSource
+    }
+
+    public var editor: Editor {
+        return provider.editor
+    }
 
     private let bridgedTableViewDataSource: BridgedTableViewDataSource
 
@@ -47,38 +58,24 @@ public struct TableViewDataSourceProvider<
 
         var bridged: BridgedTableViewDataSource
 
-        let basicTableViewDataSource = BasicTableViewDataSource(
-            numberOfSections: provider.dataSource.numberOfSections,
-            numberOfRowsInSection: provider.dataSource.numberOfRowsInSection,
-            cellForRowAtIndexPath: provider.dataSource.cellForRowAtIndexPath,
-            titleForHeaderInSection: provider.dataSource.titleForHeaderInSection,
-            titleForFooterInSection: provider.dataSource.titleForFooterInSection)
+        let tableViewDataSource = TableViewDataSource(
+            numberOfSections: provider.dataSource.numberOfSectionsInTableView,
+            numberOfRowsInSection: provider.dataSource.numberOfRowsInSectionInTableView,
+            cellForRowAtIndexPath: provider.dataSource.cellForRowAtIndexPathInTableView,
+            titleForHeaderInSection: provider.dataSource.titleForHeaderInSectionInTableView,
+            titleForFooterInSection: provider.dataSource.titleForFooterInSectionInTableView)
 
-        bridged = .Readonly(basicTableViewDataSource)
+        bridged = .Readonly(tableViewDataSource)
 
         if provider.editor.capability.contains(Edit.Capability.InsertDelete) {
             bridged = bridged.addInsertDeleteCapability(provider.editor)
         }
 
-        if provider.editor.capability.contains(Edit.Capability.Full) {
+        if provider.editor.capability.contains([Edit.Capability.InsertDelete, Edit.Capability.Reorder]) {
             bridged = bridged.addFullEditableCapability(provider.editor)
         }
 
-        self.bridgedTableViewDataSource = bridged
-    }
-}
-
-extension TableViewDataSourceProvider: DataSourceProviderType {
-
-    public typealias DataSource = DataSourceProvider.DataSource
-    public typealias Editor = DataSourceProvider.Editor
-
-    public var dataSource: DataSource {
-        return provider.dataSource
-    }
-
-    public var editor: Editor {
-        return provider.editor
+        bridgedTableViewDataSource = bridged
     }
 }
 
@@ -89,7 +86,7 @@ extension TableViewDataSourceProvider: UITableViewDataSourceProvider {
     }
 }
 
-internal class BasicTableViewDataSource: NSObject, UITableViewDataSource {
+internal class TableViewDataSource: NSObject, UITableViewDataSource {
 
     typealias NumberOfSections = UITableView -> Int
     typealias NumberOfRowsInSection = (UITableView, Int) -> Int
@@ -143,7 +140,7 @@ internal class BasicTableViewDataSource: NSObject, UITableViewDataSource {
     }
 }
 
-internal class InsertDeleteTableViewDataSource: BasicTableViewDataSource {
+internal class InsertDeleteTableViewDataSource: TableViewDataSource {
 
     typealias CanEditRowAtIndexPath = (UITableView, NSIndexPath) -> Bool
     typealias CommitEditingStyleForRowAtIndexPath = (UITableView, UITableViewCellEditingStyle, NSIndexPath) -> Void
@@ -151,11 +148,11 @@ internal class InsertDeleteTableViewDataSource: BasicTableViewDataSource {
     let canEditRowAtIndexPath: CanEditRowAtIndexPath
     let commitEditingStyleForRowAtIndexPath: CommitEditingStyleForRowAtIndexPath
 
-    init(basicTableViewDataSource basic: BasicTableViewDataSource, canEditRowAtIndexPath: CanEditRowAtIndexPath, commitEditingStyleForRowAtIndexPath: CommitEditingStyleForRowAtIndexPath) {
+    init(tableViewDataSource: TableViewDataSource, canEditRowAtIndexPath: CanEditRowAtIndexPath, commitEditingStyleForRowAtIndexPath: CommitEditingStyleForRowAtIndexPath) {
 
         self.canEditRowAtIndexPath = canEditRowAtIndexPath
         self.commitEditingStyleForRowAtIndexPath = commitEditingStyleForRowAtIndexPath
-        super.init(numberOfSections: basic.numberOfSections, numberOfRowsInSection: basic.numberOfRowsInSection, cellForRowAtIndexPath: basic.cellForRowAtIndexPath, titleForHeaderInSection: basic.titleForHeaderInSection, titleForFooterInSection: basic.titleForFooterInSection)
+        super.init(numberOfSections: tableViewDataSource.numberOfSections, numberOfRowsInSection: tableViewDataSource.numberOfRowsInSection, cellForRowAtIndexPath: tableViewDataSource.cellForRowAtIndexPath, titleForHeaderInSection: tableViewDataSource.titleForHeaderInSection, titleForFooterInSection: tableViewDataSource.titleForFooterInSection)
     }
 
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -178,7 +175,7 @@ internal class EditableTableViewDataSource: InsertDeleteTableViewDataSource {
     init(insertDeleteTableViewDataSource edit: InsertDeleteTableViewDataSource, canMoveRowAtIndexPath: CanMoveRowAtIndexPath, moveRowAtIndexPathToIndexPath: MoveRowAtIndexPathToIndexPath) {
         self.canMoveRowAtIndexPath = canMoveRowAtIndexPath
         self.moveRowAtIndexPathToIndexPath = moveRowAtIndexPathToIndexPath
-        super.init(basicTableViewDataSource: edit, canEditRowAtIndexPath: edit.canEditRowAtIndexPath, commitEditingStyleForRowAtIndexPath: edit.commitEditingStyleForRowAtIndexPath)
+        super.init(tableViewDataSource: edit, canEditRowAtIndexPath: edit.canEditRowAtIndexPath, commitEditingStyleForRowAtIndexPath: edit.commitEditingStyleForRowAtIndexPath)
     }
 
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -191,7 +188,7 @@ internal class EditableTableViewDataSource: InsertDeleteTableViewDataSource {
 }
 
 internal enum BridgedTableViewDataSource: UITableViewDataSourceProvider {
-    case Readonly(BasicTableViewDataSource)
+    case Readonly(TableViewDataSource)
     case InsertDelete(InsertDeleteTableViewDataSource)
     case Editable(EditableTableViewDataSource)
 
@@ -207,10 +204,10 @@ internal enum BridgedTableViewDataSource: UITableViewDataSourceProvider {
     }
 
     func addInsertDeleteCapability(editor: DataSourceEditorType) -> BridgedTableViewDataSource {
-        guard editor.capability.contains(Edit.Capability.InsertDelete), case let .Readonly(basic) = self else { return self }
+        guard editor.capability.contains(Edit.Capability.InsertDelete), case let .Readonly(readonly) = self else { return self }
 
         let insertDeleteTableViewDataSource = InsertDeleteTableViewDataSource(
-            basicTableViewDataSource: basic,
+            tableViewDataSource: readonly,
             canEditRowAtIndexPath: { [unowned editor] _, indexPath in
                 editor.canEditItemAtIndexPath!(indexPath: indexPath)
             },
@@ -243,18 +240,18 @@ internal enum BridgedTableViewDataSource: UITableViewDataSourceProvider {
 
 internal extension CellDataSourceType {
 
-    var numberOfSections: BasicTableViewDataSource.NumberOfSections {
+    var numberOfSectionsInTableView: TableViewDataSource.NumberOfSections {
         return { [unowned self] _ in self.numberOfSections }
     }
 
-    var numberOfRowsInSection: BasicTableViewDataSource.NumberOfRowsInSection {
+    var numberOfRowsInSectionInTableView: TableViewDataSource.NumberOfRowsInSection {
         return { [unowned self] _, section in self.numberOfItemsInSection(section) }
     }
 }
 
 internal extension CellDataSourceType where Factory.View: TableViewType, Factory.Cell: UITableViewCell, Factory.CellIndex.ViewIndex == NSIndexPath {
 
-    var cellForRowAtIndexPath: BasicTableViewDataSource.CellForRowAtIndexPath {
+    var cellForRowAtIndexPathInTableView: TableViewDataSource.CellForRowAtIndexPath {
         return { [unowned self] (tableView: UITableView, indexPath: NSIndexPath) in
             return try self.cellForItemInView(tableView as! Factory.View, atIndex: indexPath) as UITableViewCell
         }
@@ -263,13 +260,13 @@ internal extension CellDataSourceType where Factory.View: TableViewType, Factory
 
 internal extension CellDataSourceType where Factory.View: TableViewType, Factory.SupplementaryIndex.ViewIndex == Int, Factory.Text == String {
 
-    var titleForHeaderInSection: BasicTableViewDataSource.TitleInSection {
+    var titleForHeaderInSectionInTableView: TableViewDataSource.TitleInSection {
         return { [unowned self] (tableView: UITableView, section: Int) in
             return self.supplementaryTextForElementKind(.Header, inView: tableView as! Factory.View, atIndex: section)
         }
     }
 
-    var titleForFooterInSection: BasicTableViewDataSource.TitleInSection {
+    var titleForFooterInSectionInTableView: TableViewDataSource.TitleInSection {
         return { [unowned self] (tableView: UITableView, section: Int) in
             return self.supplementaryTextForElementKind(.Footer, inView: tableView as! Factory.View, atIndex: section)
         }

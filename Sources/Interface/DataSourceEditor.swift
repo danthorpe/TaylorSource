@@ -43,8 +43,7 @@ public struct Edit {
     public struct Capability: OptionSetType {
         public static let None = Capability(rawValue: 0)
         public static let InsertDelete = Capability(rawValue: 1)
-        public static let Move = Capability(rawValue: 2)
-        public static let Full: Capability = [InsertDelete, Move]
+        public static let Reorder = Capability(rawValue: 2)
 
         public let rawValue: Int
 
@@ -94,18 +93,18 @@ extension DataSourceEditorType {
         return canEditItemAtIndexPath != nil && commitEditActionForItemAtIndexPath != nil
     }
 
-    var supportsMove: Bool {
+    var supportsReorder: Bool {
         return canMoveItemAtIndexPath != nil && moveItemAtIndexPathToIndexPath != nil
     }
 
     public var capability: Edit.Capability {
-        switch (supportsEdit, supportsMove) {
+        switch (supportsEdit, supportsReorder) {
         case (true, false):
             return Edit.Capability.InsertDelete
         case (false, true):
-            return Edit.Capability.Move
+            return Edit.Capability.Reorder
         case (true, true):
-            return Edit.Capability.Full
+            return [Edit.Capability.InsertDelete, Edit.Capability.Reorder]
         default:
             return Edit.Capability.None
         }
