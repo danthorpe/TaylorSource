@@ -48,7 +48,11 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
     public func addUpdateObserver(observer: NSFRCIndexedUpdateConsumer) {
         observers.append(WeakObserver(observer))
     }
-    
+
+    public func sendFullUpdate() {
+        sendUpdate(.FullUpdate)
+    }
+
     private func sendUpdate(update: NSFRCIndexedUpdate) {
         observers = observers.filter { $0.value != nil } // Remove orphaned observers
         observers.forEach { $0.value?.handleIndexedUpdate(update) }
