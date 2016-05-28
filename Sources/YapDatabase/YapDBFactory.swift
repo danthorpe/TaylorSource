@@ -5,7 +5,7 @@
 import YapDatabase
 
 public protocol UpdatableView {
-    typealias ProcessChangesType
+    associatedtype ProcessChangesType
     var processChanges: ProcessChangesType { get }
 }
 

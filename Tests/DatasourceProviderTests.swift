@@ -10,6 +10,19 @@ import UIKit
 import XCTest
 import TaylorSource
 
+// Convenience shorthands for commonly used selectors.
+private extension Selector {
+
+    // UITableViewDataSource methods
+    static let canEditRow = #selector(UITableViewDataSource.tableView(_:canEditRowAtIndexPath:))
+    static let commitEditingStyle = #selector(UITableViewDataSource.tableView(_:commitEditingStyle:forRowAtIndexPath:))
+    static let canMoveRow = #selector(UITableViewDataSource.tableView(_:canMoveRowAtIndexPath:))
+    static let moveRow = #selector(UITableViewDataSource.tableView(_:moveRowAtIndexPath:toIndexPath:))
+    static let numberOfSectionsInTableView = #selector(UITableViewDataSource.numberOfSectionsInTableView(_:))
+    static let numberOfRowsInSection = #selector(UITableViewDataSource.tableView(_:numberOfRowsInSection:))
+    static let cellForRowAtIndexPath = #selector(UITableViewDataSource.tableView(_:cellForRowAtIndexPath:))
+}
+
 class DatasourceProviderTests: XCTestCase {
 
     struct EditableEventDatasourceProvider: DatasourceProviderType {
@@ -49,11 +62,10 @@ class DatasourceProviderTests: XCTestCase {
         wrapper = TableViewDataSourceProvider(EditableEventDatasourceProvider(data: data))
         let tableViewDataSource = wrapper.tableViewDataSource
         assertTableViewDataSourceImplementsBaseMethods(tableViewDataSource)
-        XCTAssertFalse(tableViewDataSource.respondsToSelector("tableView:canEditRowAtIndexPath:"))
-        XCTAssertFalse(tableViewDataSource.respondsToSelector("tableView:commitEditingStyle:forRowAtIndexPath:"))
-        XCTAssertFalse(tableViewDataSource.respondsToSelector("tableView:canMoveRowAtIndexPath:"))
-        XCTAssertFalse(tableViewDataSource.respondsToSelector("tableView:moveRowAtIndexPath:toIndexPath:"))
-
+        XCTAssertFalse(tableViewDataSource.respondsToSelector(.canEditRow))
+        XCTAssertFalse(tableViewDataSource.respondsToSelector(.commitEditingStyle))
+        XCTAssertFalse(tableViewDataSource.respondsToSelector(.canMoveRow))
+        XCTAssertFalse(tableViewDataSource.respondsToSelector(.moveRow))
     }
 
     func test__provider_with_edit_closures__table_view_datasource_is_editable() {
@@ -67,10 +79,10 @@ class DatasourceProviderTests: XCTestCase {
 
         let tableViewDataSource = wrapper.tableViewDataSource
         assertTableViewDataSourceImplementsBaseMethods(tableViewDataSource)
-        XCTAssertTrue(tableViewDataSource.respondsToSelector("tableView:canEditRowAtIndexPath:"))
-        XCTAssertTrue(tableViewDataSource.respondsToSelector("tableView:commitEditingStyle:forRowAtIndexPath:"))
-        XCTAssertTrue(tableViewDataSource.respondsToSelector("tableView:canMoveRowAtIndexPath:"))
-        XCTAssertTrue(tableViewDataSource.respondsToSelector("tableView:moveRowAtIndexPath:toIndexPath:"))
+        XCTAssertTrue(tableViewDataSource.respondsToSelector(.canEditRow))
+        XCTAssertTrue(tableViewDataSource.respondsToSelector(.commitEditingStyle))
+        XCTAssertTrue(tableViewDataSource.respondsToSelector(.canMoveRow))
+        XCTAssertTrue(tableViewDataSource.respondsToSelector(.moveRow))
     }
 
     func test__editable_provider__receives_calls_for__can_edit() {
@@ -180,8 +192,8 @@ class DatasourceProviderTests: XCTestCase {
     // MARK: - Helpers
 
     func assertTableViewDataSourceImplementsBaseMethods(tableViewDataSource: UITableViewDataSource) {
-        XCTAssertTrue(tableViewDataSource.respondsToSelector("tableView:numberOfRowsInSection:"))
-        XCTAssertTrue(tableViewDataSource.respondsToSelector("tableView:cellForRowAtIndexPath:"))
-        XCTAssertTrue(tableViewDataSource.respondsToSelector("numberOfSectionsInTableView:"))
+        XCTAssertTrue(tableViewDataSource.respondsToSelector(.numberOfRowsInSection))
+        XCTAssertTrue(tableViewDataSource.respondsToSelector(.cellForRowAtIndexPath))
+        XCTAssertTrue(tableViewDataSource.respondsToSelector(.numberOfSectionsInTableView))
     }
 }

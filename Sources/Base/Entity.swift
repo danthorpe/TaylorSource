@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol EntityType {
-    typealias ItemType
+    associatedtype ItemType
 
     var numberOfSections: Int { get }
 

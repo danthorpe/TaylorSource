@@ -89,6 +89,10 @@ class NotificationCenterHandler: NSObject {
     let name: String
     let callback: Callback
 
+    class var selector: Selector {
+        return #selector(NotificationCenterHandler.handleNotification(_:))
+    }
+
     init(name n: String, callback c: Callback) {
         name = n
         callback = c
@@ -109,7 +113,7 @@ extension NSNotificationCenter {
         let handler = NotificationCenterHandler(name: name, callback: callback)
         let center = NSNotificationCenter.defaultCenter()
         center.removeObserver(handler, name: name, object: object)
-        center.addObserver(handler, selector: "handleNotification:", name: name, object: object)
+        center.addObserver(handler, selector: NotificationCenterHandler.selector, name: name, object: object)
         return handler
     }
 }
@@ -120,7 +124,7 @@ public class TargetActionHandler: NSObject {
     public typealias Callback = (sender: AnyObject?) -> Void
 
     public class var selector: Selector {
-        return "handleAction:"
+        return #selector(TargetActionHandler.handleAction(_:))
     }
 
     private let callback: Callback

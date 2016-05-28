@@ -239,7 +239,7 @@ public struct Mapper<T>: SequenceType, CollectionType {
 
     public func generate() -> AnyGenerator<T> {
         let mappingsGenerator = mappings.generate()
-        return anyGenerator {
+        return AnyGenerator {
             if let indexPath = mappingsGenerator.next() {
                 return self.itemAtIndexPath(indexPath)
             }
@@ -461,7 +461,7 @@ extension Observer: SequenceType {
 
     public func generate() -> AnyGenerator<T> {
         let mappingsGenerator = mappings.generate()
-        return anyGenerator { () -> T? in
+        return AnyGenerator { () -> T? in
             if let indexPath = mappingsGenerator.next() {
                 return self.itemAtIndexPath(indexPath)
             }
@@ -513,15 +513,19 @@ extension YapDatabaseViewMappings: SequenceType {
     public func generate() -> AnyGenerator<NSIndexPath> {
         let countSections = Int(numberOfSections())
         var next = (section: 0, item: 0)
-        return anyGenerator {
+        return AnyGenerator {
             let countItemsInSection = Int(self.numberOfItemsInSection(UInt(next.section)))
             if next.item < countItemsInSection {
-                return NSIndexPath(forItem: next.item++, inSection: next.section)
+                let result = NSIndexPath(forItem: next.item, inSection: next.section)
+                next.item += 1
+                return result
             }
             else if next.section < countSections - 1 {
                 next.item = 0
-                next.section++
-                return NSIndexPath(forItem: next.item++, inSection: next.section)
+                let result = NSIndexPath(forItem: next.item, inSection: next.section)
+                next.section += 1
+                next.item += 1
+                return result
             }
             return .None
         }
@@ -552,7 +556,7 @@ extension YapDatabaseViewMappings: CollectionType {
                 if (accumulator + count - 1) < target {
                     accumulator += count
                     remainder -= count
-                    section++
+                    section += 1
                 }
                 else {
                     break
@@ -566,7 +570,8 @@ extension YapDatabaseViewMappings: CollectionType {
     }
 
     public subscript(bounds: Range<Int>) -> [NSIndexPath] {
-        return bounds.reduce(Array<NSIndexPath>()) { (var acc, index) in
+        return bounds.reduce(Array<NSIndexPath>()) { (acc, index) in
+            var acc = acc
             acc.append(self[index])
             return acc
         }

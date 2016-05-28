@@ -24,9 +24,8 @@ func numberOfItemChangesOfType(type: YapDatabaseViewChangeType, inChangeset chan
 
 func validateChangeset(expectation: XCTestExpectation, validations: [YapDatabaseViewMappings.Changes]) -> YapDatabaseViewMappings.Changes {
     return { changeset in
-
         for validation in validations {
-            validation(changeset)
+            validation((sections: changeset.sections, items: changeset.items))
         }
         expectation.fulfill()
     }

@@ -22,7 +22,7 @@ datasources. Coupled with DatasourceProviderType, datasources can be
 composed and extended with ease. See SegmentedDatasource for example.
 */
 public protocol DatasourceType {
-    typealias FactoryType: _FactoryType
+    associatedtype FactoryType: _FactoryType
 
     /// Access the factory from the datasource, likely should be a stored property.
     var factory: FactoryType { get }
@@ -129,8 +129,8 @@ the view controller initalizes and owns.
 */
 public protocol DatasourceProviderType {
 
-    typealias Datasource: DatasourceType
-    typealias Editor: DatasourceEditorType
+    associatedtype Datasource: DatasourceType
+    associatedtype Editor: DatasourceEditorType
 
     /// The underlying Datasource.
     var datasource: Datasource { get }

@@ -65,7 +65,7 @@ TaylorSource has implementations for UITableView and UICollectionView.
 public protocol ReusableCellBasedView: class {
 
     /// The generic type of the Cell.
-    typealias CellType
+    associatedtype CellType
 
     /**
     Registers a nib in the view.
@@ -96,7 +96,7 @@ public protocol ReusableCellBasedView: class {
 public protocol ReusableSupplementaryViewBasedView: class {
 
     /// The generic type of the SupplementaryView.
-    typealias SupplementaryViewType
+    associatedtype SupplementaryViewType
 
     /**
     Registers a nib in the view for a supplementary element kind, with a reuse identifier.
@@ -161,24 +161,24 @@ parameter of the configuration blocks to be generic.
 */
 public protocol _FactoryType {
 
-    typealias ItemType
-    typealias CellType
-    typealias SupplementaryViewType
-    typealias ViewType: CellBasedView
-    typealias CellIndexType: IndexPathIndexType
-    typealias SupplementaryIndexType: IndexPathIndexType
+    associatedtype ItemType
+    associatedtype CellType
+    associatedtype SupplementaryViewType
+    associatedtype ViewType: CellBasedView
+    associatedtype CellIndexType: IndexPathIndexType
+    associatedtype SupplementaryIndexType: IndexPathIndexType
 
     /// Cell configuration closure typealias.
-    typealias CellConfiguration = (cell: CellType, item: ItemType, index: CellIndexType) -> Void
+    associatedtype CellConfiguration = (cell: CellType, item: ItemType, index: CellIndexType) -> Void
 
     /// Supplmentary view configuration closure typealias.
-    typealias SupplementaryViewConfiguration = (supplementaryView: SupplementaryViewType, index: SupplementaryIndexType) -> Void
+    associatedtype SupplementaryViewConfiguration = (supplementaryView: SupplementaryViewType, index: SupplementaryIndexType) -> Void
 
     /// Supplmentary text configuration closure typealias.
-    typealias SupplementaryTextConfiguration = (index: SupplementaryIndexType) -> TextType?
+    associatedtype SupplementaryTextConfiguration = (index: SupplementaryIndexType) -> TextType?
 
     /// The type of the text returned, could be a String, or NSAttributedString for instance.
-    typealias TextType
+    associatedtype TextType
 
     // Registration
 
