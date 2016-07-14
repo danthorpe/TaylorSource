@@ -19,7 +19,7 @@ pod ’TaylorSource’
 ```
 
 ## Usage
-Taylor Source defines a `DatasourceType` protocol, which has an associated `FactoryType` protocol. These two protocols are the building blocks of the framework. Each has basic concrete implementation classes, `StaticDatasource` and `BasicFactory`, and have been designed to be easily implemented.
+Taylor Source defines a `DatasourceType` protocol, which has an associated `FactoryType` protocol. These two protocols are the building blocks of the framework. Each has basic concrete implementation classes: `StaticDatasource` and `StaticSectionDatasource` for `DatasourceType`, and `BasicFactory` for `FactoryType`. Both protocols have been designed to be easily implemented.
 
 ### The Basics
 The factory is responsible for registering and vending views. It is a generic protocol, which allows you to configure the base type for cell & view types etc.
@@ -47,11 +47,18 @@ The cell is described with either, a reuse identifier and class:
 .ClassWithIdentifier(EventCell.self, EventCell.reuseIdentifier)
 ```
 
- or a reuse identifier and nib:
+ with a reuse identifier and nib:
 
 ```swift
 .NibWithIdentifier(EventCell.nib, EventCell.reuseIdentifier)
 ```
+
+ or with just a reuse identifier, when the cell is already accessible to the view (such as storyboard prototype cells):
+
+```swift
+.DynamicWithIdentifier(EventCell.reuseIdentifier)
+```
+
 (see `ReusableView` and `ResuableViewDescriptor`)
 
 The key is just a string used to associate the configuration closure with the cell. Putting this all together means registering and configuring cells is as easy as:

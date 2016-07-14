@@ -12,6 +12,24 @@ import YapDatabaseExtensions
 import YapDatabase
 @testable import TaylorSource
 
+struct EventSection: SectionType {
+    typealias ItemType = Event
+    let title: String
+    let items: [Event]
+}
+
+extension EventSection: CustomStringConvertible {
+    var description: String {
+        return "\(title) (\(items.count) items)"
+    }
+}
+
+extension EventSection: Equatable { }
+
+func == (lhs: EventSection, rhs: EventSection) -> Bool {
+    return lhs.title == rhs.title && lhs.items == rhs.items
+}
+
 struct Event {
 
     enum Color {

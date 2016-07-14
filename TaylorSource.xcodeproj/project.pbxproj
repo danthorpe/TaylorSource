@@ -25,7 +25,7 @@
 		650265FD1C8E370F0003ECB9 /* YapDBEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650265EB1C8E370F0003ECB9 /* YapDBEntity.swift */; };
 		650265FE1C8E370F0003ECB9 /* YapDBFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650265EC1C8E370F0003ECB9 /* YapDBFactory.swift */; };
 		650266141C8E37320003ECB9 /* DatasourceProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650266001C8E37170003ECB9 /* DatasourceProviderTests.swift */; };
-		650266151C8E37320003ECB9 /* DatasourcesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650266011C8E37170003ECB9 /* DatasourcesTests.swift */; };
+		650266151C8E37320003ECB9 /* StaticDatasourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650266011C8E37170003ECB9 /* StaticDatasourceTests.swift */; };
 		650266161C8E37320003ECB9 /* EntityDatasourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650266021C8E37170003ECB9 /* EntityDatasourceTests.swift */; };
 		650266171C8E37320003ECB9 /* FactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650266031C8E37170003ECB9 /* FactoryTests.swift */; };
 		650266181C8E37320003ECB9 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650266041C8E37170003ECB9 /* Helpers.swift */; };
@@ -43,6 +43,12 @@
 		650266301C8F81360003ECB9 /* YapDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 650266271C8E38B20003ECB9 /* YapDatabase.framework */; };
 		650266311C8F81360003ECB9 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 650266251C8E38A90003ECB9 /* CocoaLumberjack.framework */; };
 		650266321C8F81360003ECB9 /* ValueCoding.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 650266231C8E389E0003ECB9 /* ValueCoding.framework */; };
+		C4369AF21CF9BE8600CDA535 /* StaticSectionDatasourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4369AF11CF9BE8600CDA535 /* StaticSectionDatasourceTests.swift */; };
+		C44F8F521CF99A0E008A8478 /* NSFRCDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F8F4E1CF99A0E008A8478 /* NSFRCDatasource.swift */; };
+		C44F8F531CF99A0E008A8478 /* NSFRCFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F8F4F1CF99A0E008A8478 /* NSFRCFactory.swift */; };
+		C44F8F541CF99A0E008A8478 /* NSFRCIndexedUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F8F501CF99A0E008A8478 /* NSFRCIndexedUpdates.swift */; };
+		C44F8F551CF99A0E008A8478 /* NSFRCUpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F8F511CF99A0E008A8478 /* NSFRCUpdateHandler.swift */; };
+		C44F8F571CF99AC9008A8478 /* Sectioned.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44F8F561CF99AC9008A8478 /* Sectioned.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +81,7 @@
 		650265EB1C8E370F0003ECB9 /* YapDBEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBEntity.swift; sourceTree = "<group>"; };
 		650265EC1C8E370F0003ECB9 /* YapDBFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YapDBFactory.swift; sourceTree = "<group>"; };
 		650266001C8E37170003ECB9 /* DatasourceProviderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatasourceProviderTests.swift; sourceTree = "<group>"; };
-		650266011C8E37170003ECB9 /* DatasourcesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatasourcesTests.swift; sourceTree = "<group>"; };
+		650266011C8E37170003ECB9 /* StaticDatasourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticDatasourceTests.swift; sourceTree = "<group>"; };
 		650266021C8E37170003ECB9 /* EntityDatasourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityDatasourceTests.swift; sourceTree = "<group>"; };
 		650266031C8E37170003ECB9 /* FactoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FactoryTests.swift; sourceTree = "<group>"; };
 		650266041C8E37170003ECB9 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
@@ -92,6 +98,12 @@
 		650266271C8E38B20003ECB9 /* YapDatabase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YapDatabase.framework; path = Carthage/Build/iOS/YapDatabase.framework; sourceTree = "<group>"; };
 		650266291C8E39AA0003ECB9 /* YapDatabaseExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YapDatabaseExtensions.framework; path = Carthage/Build/iOS/YapDatabaseExtensions.framework; sourceTree = "<group>"; };
 		6502662D1C8F78700003ECB9 /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		C4369AF11CF9BE8600CDA535 /* StaticSectionDatasourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticSectionDatasourceTests.swift; sourceTree = "<group>"; };
+		C44F8F4E1CF99A0E008A8478 /* NSFRCDatasource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFRCDatasource.swift; sourceTree = "<group>"; };
+		C44F8F4F1CF99A0E008A8478 /* NSFRCFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFRCFactory.swift; sourceTree = "<group>"; };
+		C44F8F501CF99A0E008A8478 /* NSFRCIndexedUpdates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFRCIndexedUpdates.swift; sourceTree = "<group>"; };
+		C44F8F511CF99A0E008A8478 /* NSFRCUpdateHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFRCUpdateHandler.swift; sourceTree = "<group>"; };
+		C44F8F561CF99AC9008A8478 /* Sectioned.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sectioned.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +158,7 @@
 			children = (
 				650265D91C8E370F0003ECB9 /* Base */,
 				650265E81C8E370F0003ECB9 /* YapDatabase */,
+				C44F8F4D1CF99A0E008A8478 /* CoreData */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -158,6 +171,7 @@
 				650265E11C8E370F0003ECB9 /* UICollectionView+TaylorSource.m */,
 				650265E31C8E370F0003ECB9 /* UITableView+TaylorSource.m */,
 				650265DA1C8E370F0003ECB9 /* Basic.swift */,
+				C44F8F561CF99AC9008A8478 /* Sectioned.swift */,
 				650265DB1C8E370F0003ECB9 /* Datasource.swift */,
 				650265DC1C8E370F0003ECB9 /* Entity.swift */,
 				650265DD1C8E370F0003ECB9 /* Factory.swift */,
@@ -184,7 +198,8 @@
 			isa = PBXGroup;
 			children = (
 				650266001C8E37170003ECB9 /* DatasourceProviderTests.swift */,
-				650266011C8E37170003ECB9 /* DatasourcesTests.swift */,
+				650266011C8E37170003ECB9 /* StaticDatasourceTests.swift */,
+				C4369AF11CF9BE8600CDA535 /* StaticSectionDatasourceTests.swift */,
 				650266021C8E37170003ECB9 /* EntityDatasourceTests.swift */,
 				650266031C8E37170003ECB9 /* FactoryTests.swift */,
 				650266041C8E37170003ECB9 /* Helpers.swift */,
@@ -218,6 +233,18 @@
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
+		};
+		C44F8F4D1CF99A0E008A8478 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				C44F8F4E1CF99A0E008A8478 /* NSFRCDatasource.swift */,
+				C44F8F4F1CF99A0E008A8478 /* NSFRCFactory.swift */,
+				C44F8F501CF99A0E008A8478 /* NSFRCIndexedUpdates.swift */,
+				C44F8F511CF99A0E008A8478 /* NSFRCUpdateHandler.swift */,
+			);
+			name = CoreData;
+			path = Sources/CoreData;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -351,18 +378,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				650265FB1C8E370F0003ECB9 /* YapDB.swift in Sources */,
+				C44F8F531CF99A0E008A8478 /* NSFRCFactory.swift in Sources */,
 				650265F41C8E370F0003ECB9 /* UICollectionView+TaylorSource.m in Sources */,
 				650265F21C8E370F0003ECB9 /* Selection.swift in Sources */,
 				650265F01C8E370F0003ECB9 /* Factory.swift in Sources */,
 				650265EE1C8E370F0003ECB9 /* Datasource.swift in Sources */,
 				650265FD1C8E370F0003ECB9 /* YapDBEntity.swift in Sources */,
+				C44F8F571CF99AC9008A8478 /* Sectioned.swift in Sources */,
 				650265ED1C8E370F0003ECB9 /* Basic.swift in Sources */,
+				C44F8F551CF99A0E008A8478 /* NSFRCUpdateHandler.swift in Sources */,
 				650265F61C8E370F0003ECB9 /* UITableView+TaylorSource.m in Sources */,
 				650265F71C8E370F0003ECB9 /* Utilities.swift in Sources */,
 				650265EF1C8E370F0003ECB9 /* Entity.swift in Sources */,
 				650265F81C8E370F0003ECB9 /* Views.swift in Sources */,
 				650265F11C8E370F0003ECB9 /* Segmented.swift in Sources */,
 				650265FC1C8E370F0003ECB9 /* YapDBDatasource.swift in Sources */,
+				C44F8F521CF99A0E008A8478 /* NSFRCDatasource.swift in Sources */,
+				C44F8F541CF99A0E008A8478 /* NSFRCIndexedUpdates.swift in Sources */,
 				650265FE1C8E370F0003ECB9 /* YapDBFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,8 +405,9 @@
 			files = (
 				650266171C8E37320003ECB9 /* FactoryTests.swift in Sources */,
 				6502661B1C8E37320003ECB9 /* YapDBMapperTests.swift in Sources */,
+				C4369AF21CF9BE8600CDA535 /* StaticSectionDatasourceTests.swift in Sources */,
 				650266161C8E37320003ECB9 /* EntityDatasourceTests.swift in Sources */,
-				650266151C8E37320003ECB9 /* DatasourcesTests.swift in Sources */,
+				650266151C8E37320003ECB9 /* StaticDatasourceTests.swift in Sources */,
 				650266181C8E37320003ECB9 /* Helpers.swift in Sources */,
 				6502661C1C8E37320003ECB9 /* YapDBObserverTests.swift in Sources */,
 				650266141C8E37320003ECB9 /* DatasourceProviderTests.swift in Sources */,
