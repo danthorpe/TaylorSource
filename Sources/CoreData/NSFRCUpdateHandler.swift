@@ -10,22 +10,14 @@ extension NSIndexSet {
 }
 
 public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
-    
-    private class WeakObserver {
-        private(set) weak var value: NSFRCIndexedUpdateConsumer?
-        
-        init(_ observer: NSFRCIndexedUpdateConsumer) {
-            value = observer
-        }
-    }
-    
+
     private struct PendingUpdates {
         var insertedSections = Set<Int>()
         var deletedSections = Set<Int>()
         var insertedRows = Set<NSIndexPath>()
         var updatedRows = Set<NSIndexPath>()
         var deletedRows = Set<NSIndexPath>()
-        
+
         func createUpdate() -> NSFRCIndexedUpdate {
             let update: NSFRCIndexedUpdate = .DeltaUpdate(
                 insertedSections: NSIndexSet.indexSetFromSet(insertedSections),
@@ -38,15 +30,15 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
         }
     }
 
-    private var observers = [WeakObserver]()
+    private var observers = [IndexedUpdateProcessor]()
     private var pendingUpdates = PendingUpdates()
-    
+
     deinit {
         observers.removeAll()
     }
-    
-    public func addUpdateObserver(observer: NSFRCIndexedUpdateConsumer) {
-        observers.append(WeakObserver(observer))
+
+    public func addUpdateObserver(observer: IndexedUpdateProcessor) {
+        observers.append(observer)
     }
 
     public func sendFullUpdate() {
@@ -54,12 +46,11 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
     }
 
     private func sendUpdate(update: NSFRCIndexedUpdate) {
-        observers = observers.filter { $0.value != nil } // Remove orphaned observers
-        observers.forEach { $0.value?.handleIndexedUpdate(update) }
+        observers.forEach { $0(update) }
     }
-    
+
     // MARK: NSFetchedResultsControllerDelegate
-    
+
     public func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
         switch (type) {
         case NSFetchedResultsChangeType.Delete:
@@ -70,7 +61,7 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
             break
         }
     }
-    
+
     public func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch (type) {
         case NSFetchedResultsChangeType.Insert:
@@ -97,7 +88,7 @@ public class NSFRCUpdateHandler: NSObject, NSFetchedResultsControllerDelegate {
             }
         }
     }
-    
+
     public func controllerDidChangeContent(controller: NSFetchedResultsController) {
         let update = pendingUpdates.createUpdate()
         sendUpdate(update)

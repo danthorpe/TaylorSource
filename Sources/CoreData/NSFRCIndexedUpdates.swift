@@ -11,40 +11,49 @@ public enum NSFRCIndexedUpdate {
     case FullUpdate
 }
 
-public protocol NSFRCIndexedUpdateConsumer: AnyObject {
-    func handleIndexedUpdate(update: NSFRCIndexedUpdate)
+public typealias IndexedUpdateProcessor = (NSFRCIndexedUpdate -> ())
+
+public protocol IndexedUpdateProcessing {
+    var updateProcessor: IndexedUpdateProcessor { get }
 }
 
-extension UITableView: NSFRCIndexedUpdateConsumer {
-    public func handleIndexedUpdate(update: NSFRCIndexedUpdate) {
-        switch update {
-        case .DeltaUpdate(let insertedSections, let deletedSections, let insertedRows, let updatedRows, let deletedRows):
-            beginUpdates()
-            insertSections(insertedSections, withRowAnimation: .Automatic)
-            deleteSections(deletedSections, withRowAnimation: .Automatic)
-            insertRowsAtIndexPaths(insertedRows, withRowAnimation: .Automatic)
-            deleteRowsAtIndexPaths(deletedRows, withRowAnimation: .Automatic)
-            reloadRowsAtIndexPaths(updatedRows, withRowAnimation: .Automatic)
-            endUpdates()
-        case .FullUpdate:
-            reloadData()
+extension UITableView: IndexedUpdateProcessing {
+
+    public var updateProcessor: IndexedUpdateProcessor {
+        return { [weak self] update in
+            switch update {
+            case .DeltaUpdate(let insertedSections, let deletedSections, let insertedRows, let updatedRows, let deletedRows):
+                self?.beginUpdates()
+                self?.insertSections(insertedSections, withRowAnimation: .Automatic)
+                self?.deleteSections(deletedSections, withRowAnimation: .Automatic)
+                self?.insertRowsAtIndexPaths(insertedRows, withRowAnimation: .Automatic)
+                self?.deleteRowsAtIndexPaths(deletedRows, withRowAnimation: .Automatic)
+                self?.reloadRowsAtIndexPaths(updatedRows, withRowAnimation: .Automatic)
+                self?.endUpdates()
+            case .FullUpdate:
+                self?.reloadData()
+            }
         }
     }
 }
 
-extension UICollectionView: NSFRCIndexedUpdateConsumer {
-    public func handleIndexedUpdate(update: NSFRCIndexedUpdate) {
-        switch update {
-        case .DeltaUpdate(let insertedSections, let deletedSections, let insertedRows, let updatedRows, let deletedRows):
-            performBatchUpdates({
-                self.insertSections(insertedSections)
-                self.deleteSections(deletedSections)
-                self.insertItemsAtIndexPaths(insertedRows)
-                self.deleteItemsAtIndexPaths(deletedRows)
-                self.reloadItemsAtIndexPaths(updatedRows)
-                }, completion: { _ in })
-        case .FullUpdate:
-            reloadData()
+extension UICollectionView: IndexedUpdateProcessing {
+
+    public var updateProcessor: IndexedUpdateProcessor {
+        return { [weak self] update in
+            switch update {
+            case .DeltaUpdate(let insertedSections, let deletedSections, let insertedRows, let updatedRows, let deletedRows):
+                guard let strongSelf = self else { return }
+                strongSelf.performBatchUpdates({
+                    strongSelf.insertSections(insertedSections)
+                    strongSelf.deleteSections(deletedSections)
+                    strongSelf.insertItemsAtIndexPaths(insertedRows)
+                    strongSelf.deleteItemsAtIndexPaths(deletedRows)
+                    strongSelf.reloadItemsAtIndexPaths(updatedRows)
+                    }, completion: { _ in })
+            case .FullUpdate:
+                self?.reloadData()
+            }
         }
     }
 }
